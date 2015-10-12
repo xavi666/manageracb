@@ -4,14 +4,42 @@ class StatisticsController < ApplicationController
   require 'open-uri'
 
   def index
-    puts "------index statistcs"
-    doc = Nokogiri::HTML(open("http://www.acb.com/fichas/LACB60005.php"))
-    @nodes = doc.search("//table[@class='estadisticasnew']/tr")
-    @partit = doc.css("table.estadisticasnew")[0]
-    @jugadors = doc.css("table.estadisticasnew")[1]
+    @teams{
+            "BALONCESTO SEVILLA", 
+            "CAI ZARAGOZA", 
+            "DOMINION BILBAO BASKET", 
+            "FIATC JOVENTUT", 
+            "FC BARCELONA LASSA", 
+            "HERBALIFE GRAN CANARIA", 
+            "ICL MANRESA", 
+            "IBEROSTAR TENERIFE", 
+            "LABORAL KUTXA BASKONIA", 
+            "MONTAKIT FUENLABRADA", 
+            "MORABANC ANDORRA",
+            "MOVISTAR ESTUDIANTES", 
+            "UCAM MURCIA", 
+            "UNICAJA", 
+            "REAL MADRID",
+            "RETABET.ES GBC", 
+            "RIO NATURA MONBUS OBRADOIRO", 
+            "VALENCIA BASKET CLUB"
+          }
 
-    rows = @jugadors.search('//tr')
-    @details = rows.collect do |row|
+
+    [1..2].each do |jornada|
+      puts "-----------> "
+      puts jornada
+    end
+    index_page = doc = Nokogiri::HTML(open("http://www.acb.com/resulcla.php?codigo=LACB-59&jornada=1&resultados="))
+
+    doc = Nokogiri::HTML(open("http://www.acb.com/fichas/LACB60005.php"))
+    #@nodes = doc.search("//table[@class='estadisticasnew']/tr")
+
+    # dades jugadors
+    taula_jugadors = doc.css("table.estadisticasnew")[1]
+
+    rows_jugadors = taula_jugadors.search('//tr')
+    @jugadors = rows_jugadors.collect do |row|
       detail = {}
       [
         [:dorsal, 'td[1]/text()'],
@@ -45,8 +73,49 @@ class StatisticsController < ApplicationController
         detail
       end
     end
-    @details.delete_if { |k, v| k.nil? }
-    puts @details.inspect
+    @jugadors.delete_if { |k, v| k.nil? }
+    ap @jugadors
+
+    # equips
+    taula_equips = doc.css("div.titulopartidonew")[0]
+    puts taula_equips
+    row_equips = taula_equips.search('tr')
+    puts row_equips
+    @equips = row_equips.collect do |row|
+      detail = {}
+      [
+        [:local, 'td[1]/text()'],
+        [:visitant, 'td[2]/text()']
+      ].each do |name, xpath|
+        detail[name] = row.at_xpath(xpath).to_s.strip
+      end
+      if detail[:local] != ''
+        detail
+      end
+    end
+
+    ap @equips
+
+    # resultat
+    taula_equips = doc.css("div.titulopartidonew")[0]
+    puts taula_equips
+    row_equips = taula_equips.search('tr')
+    puts row_equips
+    @equips = row_equips.collect do |row|
+      detail = {}
+      [
+        [:local, 'td[1]/text()'],
+        [:visitant, 'td[2]/text()']
+      ].each do |name, xpath|
+        detail[name] = row.at_xpath(xpath).to_s.strip
+      end
+      if detail[:local] != ''
+        detail
+      end
+    end
+
+    ap @equips
+
   end
 
   def is_number? string
