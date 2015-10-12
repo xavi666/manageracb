@@ -4,25 +4,25 @@ class StatisticsController < ApplicationController
   require 'open-uri'
 
   def index
-    @teams{
-            "BALONCESTO SEVILLA", 
-            "CAI ZARAGOZA", 
-            "DOMINION BILBAO BASKET", 
-            "FIATC JOVENTUT", 
-            "FC BARCELONA LASSA", 
-            "HERBALIFE GRAN CANARIA", 
-            "ICL MANRESA", 
-            "IBEROSTAR TENERIFE", 
-            "LABORAL KUTXA BASKONIA", 
-            "MONTAKIT FUENLABRADA", 
-            "MORABANC ANDORRA",
-            "MOVISTAR ESTUDIANTES", 
-            "UCAM MURCIA", 
-            "UNICAJA", 
-            "REAL MADRID",
-            "RETABET.ES GBC", 
-            "RIO NATURA MONBUS OBRADOIRO", 
-            "VALENCIA BASKET CLUB"
+    @teams = {
+            "BALONCESTO SEVILLA" => 1,
+            "CAI ZARAGOZA" => 2, 
+            "DOMINION BILBAO BASKET" => 3, 
+            "FIATC JOVENTUT" => 4, 
+            "FC BARCELONA LASSA" => 5, 
+            "HERBALIFE GRAN CANARIA" => 6, 
+            "ICL MANRESA" => 7, 
+            "IBEROSTAR TENERIFE" => 8, 
+            "LABORAL KUTXA BASKONIA" => 9, 
+            "MONTAKIT FUENLABRADA" => 10, 
+            "MORABANC ANDORRA" => 11,
+            "MOVISTAR ESTUDIANTES" => 12, 
+            "UCAM MURCIA" => 13, 
+            "UNICAJA" => 14, 
+            "REAL MADRID" => 15,
+            "RETABET.ES GBC" => 16, 
+            "RIO NATURA MONBUS OBRADOIRO" => 17, 
+            "VALENCIA BASKET CLUB" => 18
           }
 
 
@@ -94,27 +94,9 @@ class StatisticsController < ApplicationController
       end
     end
 
+    @equips.delete_if { |k, v| k.nil? }
     ap @equips
 
-    # resultat
-    taula_equips = doc.css("div.titulopartidonew")[0]
-    puts taula_equips
-    row_equips = taula_equips.search('tr')
-    puts row_equips
-    @equips = row_equips.collect do |row|
-      detail = {}
-      [
-        [:local, 'td[1]/text()'],
-        [:visitant, 'td[2]/text()']
-      ].each do |name, xpath|
-        detail[name] = row.at_xpath(xpath).to_s.strip
-      end
-      if detail[:local] != ''
-        detail
-      end
-    end
-
-    ap @equips
 
   end
 
