@@ -11,13 +11,6 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151014115425) do
-
-  create_table "teams", :force => true do |t|
-    t.string   "name"
-    t.boolean  "active",     :default => true
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
-  end
+ActiveRecord::Schema.define(:version => 0) do
 
 end
