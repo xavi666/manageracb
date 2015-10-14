@@ -28,8 +28,9 @@ class StatisticsController < ApplicationController
 
     cod_edicions = ["59"]
     cod_edicions.each_with_index {|cod_edicion, index| 
-      (1..2).each do |partido|
-        url_jornada = "http://www.acb.com/stspartido.php?cod_competicion=LACB&cod_edicion=59&partido="+partido.to_s
+      #totals partits => 9 * 34 = 306
+      (1..2).each do |partit|
+        url_jornada = "http://www.acb.com/stspartido.php?cod_competicion=LACB&cod_edicion=59&partido="+partit.to_s
         pagina_partit = Nokogiri::HTML(open(url_jornada))
         # dades jugadors
         taula_jugadors = pagina_partit.css("table.estadisticasnew")[1]
