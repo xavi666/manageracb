@@ -32,48 +32,8 @@ class StatisticsController < ApplicationController
       (1..2).each do |partit|
         url_jornada = "http://www.acb.com/stspartido.php?cod_competicion=LACB&cod_edicion=59&partido="+partit.to_s
         pagina_partit = Nokogiri::HTML(open(url_jornada))
-        # dades jugadors
-        taula_jugadors = pagina_partit.css("table.estadisticasnew")[1]
 
-        rows_jugadors = taula_jugadors.search('//tr')
-        @jugadors = rows_jugadors.collect do |row|
-          detail = {}
-          [
-            [:dorsal, 'td[1]/text()'],
-            [:nom, 'td[2]/a/text()'],
-            [:minuts, 'td[3]/text()'],
-            [:punts, 'td[4]/text()'],
-            [:t2, 'td[5]/text()'],
-            [:t2p, 'td[6]/text()'],
-            [:t3, 'td[7]/text()'],
-            [:t3p, 'td[8]/text()'],
-            [:t1, 'td[9]/text()'],
-            [:t1p, 'td[10]/text()'],
-            [:rebots, 'td[11]/text()'],
-            [:rebots_d, 'td[12]/text()'],
-            [:rebots_o, 'td[13]/text()'],
-            [:assistencies, 'td[14]/text()'],
-            [:recuperades, 'td[15]/text()'],
-            [:perdues, 'td[16]/text()'],
-            [:contratacs, 'td[17]/text()'],
-            [:taps_f, 'td[18]/text()'],
-            [:taps_r, 'td[19]/text()'],
-            [:mates, 'td[20]/text()'],
-            [:faltes_f, 'td[21]/text()'],
-            [:faltes_r, 'td[22]/text()'],
-            [:mes_menys, 'td[23]/text()'],
-            [:valoracio, 'td[24]/text()']
-          ].each do |name, xpath|
-            detail[name] = row.at_xpath(xpath).to_s.strip
-          end
-          if is_number?(detail[:dorsal])
-            detail
-          end
-        end
-        @jugadors.delete_if { |k, v| k.nil? }
-        ap @jugadors
-
-        # equips
+        # dades equips
         taula_equips = pagina_partit.css("div.titulopartidonew")[0]
         row_equips = taula_equips.search('tr')
         @equips = row_equips.collect do |row|
@@ -95,9 +55,86 @@ class StatisticsController < ApplicationController
 
         @equips.delete_if { |k, v| k.nil? }
         @partits.push(@equips)
-        #ap @equips
+
+        # dades jugadors
+        taula_jugadors = pagina_partit.css("table.estadisticasnew")[1]
+        rows_jugadors = taula_jugadors.search('//tr')
+        @jugadors = rows_jugadors.collect do |row|
+          detail = {}
+          [
+            [:number, 'td[1]/text()'],
+            [:name, 'td[2]/a/text()'],
+            [:seconds, 'td[3]/text()'],
+            [:points, 'td[4]/text()'],
+            [:two_p, 'td[5]/text()'],
+            [:two_pm, 'td[6]/text()'],
+            [:three_p, 'td[7]/text()'],
+            [:three_pm, 'td[8]/text()'],
+            [:one_p, 'td[9]/text()'],
+            [:one_pm, 'td[10]/text()'],
+            [:rebounds, 'td[11]/text()'],
+            [:drebounds, 'td[12]/text()'],
+            [:orebounds, 'td[13]/text()'],
+            [:assists, 'td[14]/text()'],
+            [:steals, 'td[15]/text()'],
+            [:turnovers, 'td[16]/text()'],
+            [:fastbreaks, 'td[17]/text()'],
+            [:mblocks, 'td[18]/text()'],
+            [:rbllocks, 'td[19]/text()'],
+            [:slunks, 'td[20]/text()'],
+            [:mfaults, 'td[21]/text()'],
+            [:rfaults, 'td[22]/text()'],
+            [:positive_negatives, 'td[23]/text()'],
+            [:value, 'td[24]/text()']
+          ].each do |name, xpath|
+            detail[name] = row.at_xpath(xpath).to_s.strip
+          end
+          if is_number?(detail[:number])
+            detail
+          end
+        end
+        @jugadors.delete_if { |k, v| k.nil? }
+        ap @jugadors
+
+        
+        create_from_list @jugadors, @equips
+        ap @equips
       end
     }
+  end
+
+  def create_from_list statistics, equips
+    puts "------> create_from_list"
+    puts statistics.inspect
+    statistics.each do |statistic|
+      jugador = Player.find_by_name statistic[:name]
+      local = Team.find_by_name equips[0][:local]
+      visitant = Team.find_by_name equips[0][:visitant]
+
+      puts local
+      puts visitant
+      puts jugador
+
+      
+
+      unless local
+        local = Team.create!(:name => equips[0][:local])
+      end
+
+      unless visitant
+        visitant = Team.create!(:name => equips[0][:visitant])
+      end
+
+      unless jugador
+        jugador = Player.create!(:name => statistic[:name], :team_id => local.id)
+      end
+
+
+
+      puts statistic.inspect
+      puts "--------"
+    end
+    puts "---- END "
   end
 
   def is_number? string

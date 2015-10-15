@@ -1,5 +1,5 @@
 class CreateTeams < ActiveRecord::Migration
-  def change
+  def up
     create_table :teams do |t|
       t.string :name
 
@@ -31,5 +31,9 @@ class CreateTeams < ActiveRecord::Migration
       puts key 
       Team.create!(name: key)
     end
+  end
+
+  def down
+    drop_table :teams
   end
 end
