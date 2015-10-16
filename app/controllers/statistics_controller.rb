@@ -59,7 +59,8 @@ class StatisticsController < ApplicationController
         # dades jugadors
         taula_jugadors = pagina_partit.css("table.estadisticasnew")[1]
         rows_jugadors = taula_jugadors.search('//tr')
-        @jugadors = rows_jugadors.collect do |row|
+        local_visitant = "local"
+        @statistics = rows_jugadors.collect do |row|
           detail = {}
           [
             [:number, 'td[1]/text()'],
@@ -85,20 +86,30 @@ class StatisticsController < ApplicationController
             [:mfaults, 'td[21]/text()'],
             [:rfaults, 'td[22]/text()'],
             [:positive_negatives, 'td[23]/text()'],
-            [:value, 'td[24]/text()']
+            [:value, 'td[24]/text()'],
+            [:team, local_visitant]
           ].each do |name, xpath|
-            detail[name] = row.at_xpath(xpath).to_s.strip
+            if name == :team
+              detail[name] = xpath
+            else
+              detail[name] = row.at_xpath(xpath).to_s.strip
+            end
           end
+          
+          
+          local_visitant = "visitant" if detail[:number] == "E"
           if is_number?(detail[:number])
             detail
           end
         end
-        @jugadors.delete_if { |k, v| k.nil? }
-        ap @jugadors
+        @statistics.delete_if { |k, v| k.nil? }
+        #ap @statistics
 
-        
-        create_from_list @jugadors, @equips
-        ap @equips
+        puts "statics _ INIT"
+        ap @statistics
+        puts "statics _ END"
+        create_from_list @statistics, @equips
+        #ap @equips
       end
     }
   end
@@ -107,9 +118,11 @@ class StatisticsController < ApplicationController
     puts "------> create_from_list"
     puts statistics.inspect
     statistics.each do |statistic|
+      puts "------------entra "
       jugador = Player.find_by_name statistic[:name]
       local = Team.find_by_name equips[0][:local]
       visitant = Team.find_by_name equips[0][:visitant]
+
 
       puts local
       puts visitant
@@ -124,6 +137,9 @@ class StatisticsController < ApplicationController
       unless visitant
         visitant = Team.create!(:name => equips[0][:visitant])
       end
+
+      team = statistic[:team] == "local" ? local : visitant
+      puts team.inspect
 
       unless jugador
         jugador = Player.create!(:name => statistic[:name], :team_id => local.id)
