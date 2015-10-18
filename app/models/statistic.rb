@@ -1,9 +1,51 @@
 # == Schema Information
 #
-# Statistic name: teams
+# Table name: teams
 #
 #
 
 class Statistic < ActiveRecord::Base
+  # !**************************************************
+  # !                Associations
+  # !**************************************************
+  belongs_to :player
+
+  # !**************************************************
+  # !                Validations
+  # !**************************************************
+
+  # !**************************************************
+  # !                Callbacks
+  # !**************************************************
+  before_save :set_nil_to_zero
+
+  # !**************************************************
+  # !                  Other
+  # !**************************************************
+
+  private
+
+    def set_nil_to_zero
+      self.points = 0 if points.nil?
+      self.two_p = 0 if two_p.nil?
+      self.two_pm = 0 if two_pm.nil?
+      self.three_p = 0 if three_p.nil?
+      self.three_pm = 0 if three_pm.nil?
+      self.one_p = 0 if one_p.nil?
+      self.one_pm = 0 if one_pm.nil?
+      self.rebounds = 0 if rebounds.nil?
+      self.orebounds = 0 if orebounds.nil?
+      self.drebounds = 0 if drebounds.nil?
+      self.assists = 0 if assists.nil?
+      self.steals = 0 if steals.nil?
+      self.turnovers = 0 if turnovers.nil?
+      self.fastbreaks = 0 if fastbreaks.nil?
+      self.mblocks = 0 if mblocks.nil?
+      self.rblocks = 0 if rblocks.nil?
+      self.mfaults = 0 if mfaults.nil?
+      self.rfaults = 0 if rfaults.nil?
+      self.positive_negative = 0 if positive_negative.nil?
+      self.value = 0 if value.nil?
+    end
 
 end

@@ -1,15 +1,15 @@
 # == Schema Information
 #
-# Table name: players
+# Table name: games
 #
 #
 
-class Player < ActiveRecord::Base
+class Game < ActiveRecord::Base
   # !**************************************************
   # !                Associations
   # !**************************************************
+  has_many :teams
   has_many :statistics
-  belongs_to :team
 
   # !**************************************************
   # !                Validations

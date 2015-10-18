@@ -1,19 +1,15 @@
 class CreateTablePlayer < ActiveRecord::Migration
-  def up
+  def change
     create_table :players do |t|
       t.string :name
-      t.integer :age
       t.date :date_of_birth
       t.integer :team_id
-
-
+      t.integer :number
+      t.integer :position
+      t.string :nationality
 
       t.boolean :active, default: true
       t.timestamps
     end
-  end
-
-  def down
-    drop_table :players
   end
 end

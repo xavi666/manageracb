@@ -49,6 +49,10 @@ Manageracb::Application.routes.draw do
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => 'statistics#index'
+  resources :games
+  resources :teams
+  resources :players
+  resources :statistics
 
   # See how all your routes lay out with "rake routes"
 

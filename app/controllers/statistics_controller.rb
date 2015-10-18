@@ -30,8 +30,8 @@ class StatisticsController < ApplicationController
     cod_edicions.each_with_index {|cod_edicion, index| 
       #totals partits => 9 * 34 = 306
       (1..2).each do |partit|
-        url_jornada = "http://www.acb.com/stspartido.php?cod_competicion=LACB&cod_edicion=59&partido="+partit.to_s
-        pagina_partit = Nokogiri::HTML(open(url_jornada))
+        url_partit = "http://www.acb.com/stspartido.php?cod_competicion=LACB&cod_edicion=59&partido="+partit.to_s
+        pagina_partit = Nokogiri::HTML(open(url_partit))
 
         # dades equips
         taula_equips = pagina_partit.css("div.titulopartidonew")[0]
@@ -60,6 +60,11 @@ class StatisticsController < ApplicationController
         taula_jugadors = pagina_partit.css("table.estadisticasnew")[1]
         rows_jugadors = taula_jugadors.search('//tr')
         local_visitant = "local"
+        temporada = "2014"
+        equips_jornada = 9
+
+        jornada = (partit / equips_jornada).round + 1
+
         @statistics = rows_jugadors.collect do |row|
           detail = {}
           [
@@ -74,61 +79,47 @@ class StatisticsController < ApplicationController
             [:one_p, 'td[9]/text()'],
             [:one_pm, 'td[10]/text()'],
             [:rebounds, 'td[11]/text()'],
-            [:drebounds, 'td[12]/text()'],
-            [:orebounds, 'td[13]/text()'],
-            [:assists, 'td[14]/text()'],
-            [:steals, 'td[15]/text()'],
-            [:turnovers, 'td[16]/text()'],
-            [:fastbreaks, 'td[17]/text()'],
-            [:mblocks, 'td[18]/text()'],
-            [:rbllocks, 'td[19]/text()'],
-            [:slunks, 'td[20]/text()'],
-            [:mfaults, 'td[21]/text()'],
-            [:rfaults, 'td[22]/text()'],
-            [:positive_negatives, 'td[23]/text()'],
-            [:value, 'td[24]/text()'],
-            [:team, local_visitant]
+            [:dorebounds, 'td[12]/text()'],
+            [:assists, 'td[13]/text()'],
+            [:steals, 'td[14]/text()'],
+            [:turnovers, 'td[15]/text()'],
+            [:fastbreaks, 'td[16]/text()'],
+            [:mblocks, 'td[17]/text()'],
+            [:rblocks, 'td[18]/text()'],
+            [:slunks, 'td[19]/text()'],
+            [:mfaults, 'td[20]/text()'],
+            [:rfaults, 'td[21]/text()'],
+            [:positive_negative, 'td[22]/text()'],
+            [:value, 'td[23]/text()'],
+            [:team, local_visitant],
+            [:game_number, jornada],
+            [:seasson, temporada]
           ].each do |name, xpath|
-            if name == :team
+            if name == :team || name == :game_number || name == :seasson
               detail[name] = xpath
             else
-              detail[name] = row.at_xpath(xpath).to_s.strip
+              detail[name] = row.at_xpath(xpath).to_s.strip || 0
             end
           end
-          
-          
           local_visitant = "visitant" if detail[:number] == "E"
           if is_number?(detail[:number])
             detail
           end
         end
         @statistics.delete_if { |k, v| k.nil? }
-        #ap @statistics
 
-        puts "statics _ INIT"
         ap @statistics
-        puts "statics _ END"
+
         create_from_list @statistics, @equips
-        #ap @equips
       end
     }
   end
 
   def create_from_list statistics, equips
-    puts "------> create_from_list"
-    puts statistics.inspect
     statistics.each do |statistic|
-      puts "------------entra "
       jugador = Player.find_by_name statistic[:name]
       local = Team.find_by_name equips[0][:local]
       visitant = Team.find_by_name equips[0][:visitant]
-
-
-      puts local
-      puts visitant
-      puts jugador
-
-      
 
       unless local
         local = Team.create!(:name => equips[0][:local])
@@ -139,22 +130,74 @@ class StatisticsController < ApplicationController
       end
 
       team = statistic[:team] == "local" ? local : visitant
-      puts team.inspect
+      team_against = statistic[:team] == "local" ? visitant : local
 
       unless jugador
-        jugador = Player.create!(:name => statistic[:name], :team_id => local.id)
+        jugador = Player.create!(:name => statistic[:name], :team_id => local.id, :number => statistic[:number])
       end
 
+      new_statistic = Statistic.where(:player_id => jugador.id, :seasson => statistic[:seasson], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).exists?
 
-
-      puts statistic.inspect
-      puts "--------"
+      unless new_statistic
+        new_statistic = Statistic.create!(:player_id => jugador.id, 
+                        :team_id => team.id, :team_against_id => team_against.id,
+                        :seasson => statistic[:seasson], :game_number => statistic[:game_number],
+                        :number => jugador.number, 
+                        :seconds => get_seconds(statistic[:seconds]), :points => statistic[:points], 
+                        :two_p => get_points_tried(statistic[:two_p]), :two_pm => get_points_made(statistic[:two_p]),
+                        :three_p => get_points_tried(statistic[:three_p]), :three_pm => get_points_made(statistic[:three_p]),
+                        :one_p => get_points_tried(statistic[:one_p]), :one_pm => get_points_made(statistic[:one_p]),
+                        :rebounds => statistic[:rebounds], :orebounds => get_o_rebounds(statistic[:dorebounds]),
+                        :drebounds => get_d_rebounds(statistic[:dorebounds]), :assists => statistic[:assists],
+                        :steals => statistic[:steals], :turnovers => statistic[:turnovers],
+                        :turnovers => statistic[:turnovers], :fastbreaks => statistic[:fastbreaks],
+                        :mblocks => statistic[:mblocks] , :rblocks => statistic[:rblocks],
+                        :mfaults => statistic[:mfaults], :rfaults => statistic[:rfaults],
+                        :positive_negative => statistic[:positive_negative], :value => statistic[:value])
+      end
     end
-    puts "---- END "
   end
 
   def is_number? string
     true if Float(string) rescue false
   end
+
+  def get_seconds minutes_seconds
+    return 0 if minutes_seconds.blank?
+    ms = Time.strptime(minutes_seconds, "%M:%S")
+    seconds = ms.min * 60 + ms.sec
+  end
+
+  def get_points_made points
+    a_points = points.split("/")
+    a_points[0]
+  end
+
+  def get_points_tried points
+    a_points = points.split("/")
+    a_points[1]
+  end
+
+  def get_tant_per_cent
+
+  end
+
+  def get_d_rebounds rebounds
+    a_rebounds = rebounds.split("+")
+    a_rebounds[0]
+  end
+
+  def get_o_rebounds rebounds
+    a_rebounds = rebounds.split("+")
+    a_rebounds[1]
+  end
+
+  private
+
+    def statistic_params
+      params.require(:statistic).permit(:player_id, :team_id, :team_against_id, :seasson, :game_number, :seconds, :points, :two_p, :two_pm, 
+                  :three_p, :three_pm, :one_p, :one_pm, :rebounds, :orebounds, :drebounds, :assists, :steals, :turnovers, 
+                  :fastbreaks, :mblocks, :rblocks, :faults, :rfaults, :positive_negative, :value)
+    end
 
 end

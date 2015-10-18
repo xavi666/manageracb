@@ -1,0 +1,16 @@
+.row
+  .col-xs-9
+    %h1= t(".title")
+  .col-xs-12
+    .table-responsive
+      %table.table.table-striped.table-condensed
+        %thead.sortable
+          %tr
+            %th.col-xs-2= "a"
+            %th.col-xs-2= "b"
+            %th= "c"
+            %th.col-xs-1= "c"
+            %th.col-xs-1= "d"
+            %th.col-xs-1= "e"
+            %th.col-xs-2= "f"
+        %tbody= render @players

@@ -20,7 +20,7 @@ class CreateTeams < ActiveRecord::Migration
             "MONTAKIT FUENLABRADA" => 10, 
             "MORABANC ANDORRA" => 11,
             "MOVISTAR ESTUDIANTES" => 12, 
-            "UCAM MURCIA" => 13, 
+            "UCAM MURCIA CB" => 13, 
             "UNICAJA" => 14, 
             "REAL MADRID" => 15,
             "RETABET.ES GBC" => 16, 
