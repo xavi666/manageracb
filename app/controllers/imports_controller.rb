@@ -25,94 +25,91 @@ class ImportsController < ApplicationController
             "VALENCIA BASKET CLUB" => 18
           }
     @partits = []
+    html_pages = HtmlPage.first(2)
 
-    cod_edicions = ["59"]
-    cod_edicions.each_with_index {|cod_edicion, index| 
-      #totals partits => 9 * 34 = 306
-      (1..2).each do |partit|
-        url_partit = "http://www.acb.com/stspartido.php?cod_competicion=LACB&cod_edicion=59&partido="+partit.to_s
-        pagina_partit = Nokogiri::HTML(open(url_partit))
+    html_pages.each do |html_page| 
+      pagina_partit = Nokogiri::XML(html_page.html)
+      puts pagina_partit
 
-        # dades equips
-        taula_equips = pagina_partit.css("div.titulopartidonew")[0]
-        row_equips = taula_equips.search('tr')
-        @equips = row_equips.collect do |row|
-          detail = {}
-          [
-            [:local, 'td[1]/text()'],
-            [:visitant, 'td[2]/text()']
-          ].each do |name, xpath|
-            equip = row.at_xpath(xpath).to_s.strip
-            equip.slice!(0) if name == :visitant
-            equip = equip[0..-3] if name == :local
+      # dades equips
+      taula_equips = pagina_partit.css("div.titulopartidonew")[0]
+      row_equips = taula_equips.search('tr')
+      @equips = row_equips.collect do |row|
+        detail = {}
+        [
+          [:local, 'td[1]/text()'],
+          [:visitant, 'td[2]/text()']
+        ].each do |name, xpath|
+          equip = row.at_xpath(xpath).to_s.strip
+          equip.slice!(0) if name == :visitant
+          equip = equip[0..-3] if name == :local
 
-            detail[name] = equip
-          end
-          if detail[:local] != ''
-            detail
-          end
+          detail[name] = equip
         end
-
-        @equips.delete_if { |k, v| k.nil? }
-        @partits.push(@equips)
-
-        # dades jugadors
-        taula_jugadors = pagina_partit.css("table.estadisticasnew")[1]
-        rows_jugadors = taula_jugadors.search('//tr')
-        local_visitant = "local"
-        temporada = "2014"
-        equips_jornada = 9
-
-        jornada = (partit / equips_jornada).round + 1
-
-        @statistics = rows_jugadors.collect do |row|
-          detail = {}
-          [
-            [:number, 'td[1]/text()'],
-            [:name, 'td[2]/a/text()'],
-            [:seconds, 'td[3]/text()'],
-            [:points, 'td[4]/text()'],
-            [:two_p, 'td[5]/text()'],
-            [:two_pm, 'td[6]/text()'],
-            [:three_p, 'td[7]/text()'],
-            [:three_pm, 'td[8]/text()'],
-            [:one_p, 'td[9]/text()'],
-            [:one_pm, 'td[10]/text()'],
-            [:rebounds, 'td[11]/text()'],
-            [:dorebounds, 'td[12]/text()'],
-            [:assists, 'td[13]/text()'],
-            [:steals, 'td[14]/text()'],
-            [:turnovers, 'td[15]/text()'],
-            [:fastbreaks, 'td[16]/text()'],
-            [:mblocks, 'td[17]/text()'],
-            [:rblocks, 'td[18]/text()'],
-            [:slunks, 'td[19]/text()'],
-            [:mfaults, 'td[20]/text()'],
-            [:rfaults, 'td[21]/text()'],
-            [:positive_negative, 'td[22]/text()'],
-            [:value, 'td[23]/text()'],
-            [:team, local_visitant],
-            [:game_number, jornada],
-            [:seasson, temporada]
-          ].each do |name, xpath|
-            if name == :team || name == :game_number || name == :seasson
-              detail[name] = xpath
-            else
-              detail[name] = row.at_xpath(xpath).to_s.strip || 0
-            end
-          end
-          local_visitant = "visitant" if detail[:number] == "E"
-          if is_number?(detail[:number])
-            detail
-          end
+        if detail[:local] != ''
+          detail
         end
-        @statistics.delete_if { |k, v| k.nil? }
-
-        ap @statistics
-
-        create_from_list @statistics, @equips
       end
-    }
+
+      @equips.delete_if { |k, v| k.nil? }
+      @partits.push(@equips)
+
+      # dades jugadors
+      taula_jugadors = pagina_partit.css("table.estadisticasnew")[1]
+      rows_jugadors = taula_jugadors.search('//tr')
+      local_visitant = "local"
+      temporada = "2014"
+      equips_jornada = 9
+
+      jornada = (html_page.game_number / equips_jornada).round + 1
+
+      @statistics = rows_jugadors.collect do |row|
+        detail = {}
+        [
+          [:number, 'td[1]/text()'],
+          [:name, 'td[2]/a/text()'],
+          [:seconds, 'td[3]/text()'],
+          [:points, 'td[4]/text()'],
+          [:two_p, 'td[5]/text()'],
+          [:two_pm, 'td[6]/text()'],
+          [:three_p, 'td[7]/text()'],
+          [:three_pm, 'td[8]/text()'],
+          [:one_p, 'td[9]/text()'],
+          [:one_pm, 'td[10]/text()'],
+          [:rebounds, 'td[11]/text()'],
+          [:dorebounds, 'td[12]/text()'],
+          [:assists, 'td[13]/text()'],
+          [:steals, 'td[14]/text()'],
+          [:turnovers, 'td[15]/text()'],
+          [:fastbreaks, 'td[16]/text()'],
+          [:mblocks, 'td[17]/text()'],
+          [:rblocks, 'td[18]/text()'],
+          [:slunks, 'td[19]/text()'],
+          [:mfaults, 'td[20]/text()'],
+          [:rfaults, 'td[21]/text()'],
+          [:positive_negative, 'td[22]/text()'],
+          [:value, 'td[23]/text()'],
+          [:team, local_visitant],
+          [:game_number, jornada],
+          [:seasson, temporada]
+        ].each do |name, xpath|
+          if name == :team || name == :game_number || name == :seasson
+            detail[name] = xpath
+          else
+            detail[name] = row.at_xpath(xpath).to_s.strip || 0
+          end
+        end
+        local_visitant = "visitant" if detail[:number] == "E"
+        if is_number?(detail[:number])
+          detail
+        end
+      end
+      @statistics.delete_if { |k, v| k.nil? }
+
+      ap @statistics
+
+      create_from_list @statistics, @equips
+    end
   end
 
   def create_from_list statistics, equips
@@ -161,12 +158,15 @@ class ImportsController < ApplicationController
 
   def html_pages
     cod_edicions = ["59"]
+    @count = 0
     cod_edicions.each_with_index {|cod_edicion, index| 
       #totals partits => 9 * 34 = 306
-      (1..2).each do |partit|
+
+      (1..306).each do |partit|
         url_partit = "http://www.acb.com/stspartido.php?cod_competicion=LACB&cod_edicion=59&partido="+partit.to_s
         pagina_partit = Nokogiri::HTML(open(url_partit))
-        HtmlPage.create!(:code => cod_edicion, :game_number => partit, :html => pagina_partit)
+        HtmlPage.create!(:code => cod_edicion, :game_number => partit, :html => pagina_partit.inner_html)
+        @count += 1
       end
     }
   end
@@ -176,7 +176,9 @@ class ImportsController < ApplicationController
   end
 
   def get_seconds minutes_seconds
-    return 0 if minutes_seconds.blank?
+    puts "------------>"
+    puts minutes_seconds
+    return 0 if minutes_seconds.blank? || minutes_seconds == "&#xA0;"
     ms = Time.strptime(minutes_seconds, "%M:%S")
     seconds = ms.min * 60 + ms.sec
   end
