@@ -10,6 +10,7 @@ gem 'nokogiri'
 gem 'awesome_print'
 gem 'hash_to_html'
 
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -20,7 +21,7 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   #gem 'uglifier', '>= 1.0.3'
-
+  gem 'bootstrap-sass',     '~> 3.2'
   gem 'sass-rails',         '~> 4.0.0'
   gem 'coffee-rails',       '~> 4.0.0'
   gem 'uglifier',           '>= 1.3.0'

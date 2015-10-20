@@ -26,7 +26,13 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
     arel (4.0.2)
+    autoprefixer-rails (6.0.3)
+      execjs
+      json
     awesome_print (1.6.1)
+    bootstrap-sass (3.3.5)
+      autoprefixer-rails (>= 5.0.0.1)
+      sass (>= 3.2.19)
     builder (3.1.4)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -100,6 +106,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  bootstrap-sass (~> 3.2)
   coffee-rails (~> 4.0.0)
   haml (~> 4.0)
   hash_to_html
