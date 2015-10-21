@@ -8,13 +8,12 @@ class ImportsController < ApplicationController
 
   end
 
-  def import_statistics
+  def statistics
     @partits = []
-    html_pages = HtmlPage.first(2)
+    html_pages = HtmlPage.all
 
     html_pages.each do |html_page| 
       pagina_partit = Nokogiri::XML(html_page.html)
-      puts pagina_partit
 
       # dades equips
       taula_equips = pagina_partit.css("div.titulopartidonew")[0]
@@ -26,7 +25,7 @@ class ImportsController < ApplicationController
           [:visitant, 'td[2]/text()']
         ].each do |name, xpath|
           equip = row.at_xpath(xpath).to_s.strip
-          equip.slice!(0) if name == :visitant
+          equip.to_s.slice!("&#xA0;") if name == :visitant
           equip = equip[0..-3] if name == :local
 
           detail[name] = equip
@@ -91,7 +90,7 @@ class ImportsController < ApplicationController
       end
       @statistics.delete_if { |k, v| k.nil? }
 
-      ap @statistics
+      #ap @statistics
 
       create_from_list @statistics, @equips
     end
@@ -122,20 +121,29 @@ class ImportsController < ApplicationController
             "LA BRUIXA D'OR MANRESA" => 7,
             "FC BARCELONA" => 5,
             "DOMINION BILBAO" => 3,
-            "TUENTI MóVIL ESTUDIANTES" => 12
+            "TUENTI M&#xF3;VIL ESTUDIANTES" => 12,
+            "BILBAO BASKET" => 3
           }
     
+    @count_players = 0
+    @count_teams = 0
+    @count_statistics = 0 
+
     statistics.each do |statistic|
       jugador = Player.find_by_name statistic[:name]
-      local = Team.find_by_name equips[0][:local]
-      visitant = Team.find_by_name equips[0][:visitant]
+      puts "0000000"
+      puts equips[0][:local]
+      local = Team.find(@teams[equips[0][:local]])
+      visitant = Team.find(@teams[equips[0][:visitant]])
 
       unless local
         local = Team.create!(:name => equips[0][:local])
+        @count_teams += 1 
       end
 
       unless visitant
         visitant = Team.create!(:name => equips[0][:visitant])
+        @count_teams += 1 
       end
 
       team = statistic[:team] == "local" ? local : visitant
@@ -143,6 +151,7 @@ class ImportsController < ApplicationController
 
       unless jugador
         jugador = Player.create!(:name => statistic[:name], :team_id => local.id, :number => statistic[:number])
+        @count_players += 1 
       end
 
       new_statistic = Statistic.where(:player_id => jugador.id, :seasson => statistic[:seasson], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).exists?
@@ -163,6 +172,7 @@ class ImportsController < ApplicationController
                         :mblocks => statistic[:mblocks] , :rblocks => statistic[:rblocks],
                         :mfaults => statistic[:mfaults], :rfaults => statistic[:rfaults],
                         :positive_negative => statistic[:positive_negative], :value => statistic[:value])
+        @count_statistics += 1 
       end
     end
   end

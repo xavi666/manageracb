@@ -55,6 +55,7 @@ Manageracb::Application.routes.draw do
   resources :statistics
   resources :imports do
     get 'html_pages', on: :collection
+    get 'statistics', on: :collection
   end
 
   # See how all your routes lay out with "rake routes"
