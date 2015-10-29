@@ -17,12 +17,39 @@ class StatisticsController < ApplicationController
   end
 
   def import
+    @teams = {
+            "BALONCESTO SEVILLA" => 1,
+            "CAI ZARAGOZA" => 2, 
+            "DOMINION BILBAO BASKET" => 3, 
+            "FIATC JOVENTUT" => 4, 
+            "FC BARCELONA LASSA" => 5, 
+            "HERBALIFE GRAN CANARIA" => 6, 
+            "ICL MANRESA" => 7, 
+            "IBEROSTAR TENERIFE" => 8, 
+            "LABORAL KUTXA BASKONIA" => 9, 
+            "MONTAKIT FUENLABRADA" => 10, 
+            "MORABANC ANDORRA" => 11,
+            "MOVISTAR ESTUDIANTES" => 12, 
+            "UCAM MURCIA" => 13, 
+            "UNICAJA" => 14, 
+            "REAL MADRID" => 15,
+            "RETABET.ES GBC" => 16, 
+            "RIO NATURA MONBUS OBRADOIRO" => 17, 
+            "VALENCIA BASKET CLUB" => 18,
+            "UCAM MURCIA CB" => 13,
+            "GIPUZKOA BASKET" => 16,
+            "LA BRUIXA D'OR MANRESA" => 7,
+            "FC BARCELONA" => 5,
+            "DOMINION BILBAO" => 3,
+            "TUENTI MóVIL ESTUDIANTES" => 12,
+            "TUENTI M&#xF3;VIL ESTUDIANTES" => 12
+          }
+
     @partits = []
     html_pages = HtmlPage.all
 
     html_pages.each do |html_page| 
       pagina_partit = Nokogiri::XML(html_page.html)
-      puts pagina_partit
 
       # dades equips
       taula_equips = pagina_partit.css("div.titulopartidonew")[0]
@@ -41,7 +68,9 @@ class StatisticsController < ApplicationController
           detail[name] = equip
         end
         if detail[:local] != ''
-          detail
+          if @teams[detail[:local]]
+            detail
+          end
         end
       end
 
@@ -101,40 +130,11 @@ class StatisticsController < ApplicationController
       @statistics.delete_if { |k, v| k.nil? }
 
       #ap @statistics
-
       create_from_list @statistics, @equips
     end
   end
 
-  def create_from_list statistics, equips
-    @teams = {
-            "BALONCESTO SEVILLA" => 1,
-            "CAI ZARAGOZA" => 2, 
-            "DOMINION BILBAO BASKET" => 3, 
-            "FIATC JOVENTUT" => 4, 
-            "FC BARCELONA LASSA" => 5, 
-            "HERBALIFE GRAN CANARIA" => 6, 
-            "ICL MANRESA" => 7, 
-            "IBEROSTAR TENERIFE" => 8, 
-            "LABORAL KUTXA BASKONIA" => 9, 
-            "MONTAKIT FUENLABRADA" => 10, 
-            "MORABANC ANDORRA" => 11,
-            "MOVISTAR ESTUDIANTES" => 12, 
-            "UCAM MURCIA" => 13, 
-            "UNICAJA" => 14, 
-            "REAL MADRID" => 15,
-            "RETABET.ES GBC" => 16, 
-            "RIO NATURA MONBUS OBRADOIRO" => 17, 
-            "VALENCIA BASKET CLUB" => 18,
-            "UCAM MURCIA CB" => 13,
-            "GIPUZKOA BASKET" => 16,
-            "LA BRUIXA D'OR MANRESA" => 7,
-            "FC BARCELONA" => 5,
-            "DOMINION BILBAO" => 3,
-            "TUENTI MóVIL ESTUDIANTES" => 12,
-            "TUENTI M&#xF3;VIL ESTUDIANTES" => 12
-          }
-    
+  def create_from_list statistics, equips    
     statistics.each do |statistic|
       jugador = Player.find_by_name statistic[:name]
       local = Team.find_by_name equips[0][:local]
@@ -152,7 +152,7 @@ class StatisticsController < ApplicationController
       team_against = statistic[:team] == "local" ? visitant : local
 
       unless jugador
-        jugador = Player.create!(:name => statistic[:name], :team_id => local.id, :number => statistic[:number])
+        jugador = Player.create!(:name => statistic[:name], :team_id => team.id, :number => statistic[:number])
       end
 
       new_statistic = Statistic.where(:player_id => jugador.id, :seasson => statistic[:seasson], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).exists?
