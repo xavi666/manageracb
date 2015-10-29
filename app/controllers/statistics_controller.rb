@@ -131,7 +131,8 @@ class StatisticsController < ApplicationController
             "LA BRUIXA D'OR MANRESA" => 7,
             "FC BARCELONA" => 5,
             "DOMINION BILBAO" => 3,
-            "TUENTI MóVIL ESTUDIANTES" => 12
+            "TUENTI MóVIL ESTUDIANTES" => 12,
+            "TUENTI M&#xF3;VIL ESTUDIANTES" => 12
           }
     
     statistics.each do |statistic|
