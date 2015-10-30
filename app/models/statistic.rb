@@ -9,6 +9,8 @@ class Statistic < ActiveRecord::Base
   # !                Associations
   # !**************************************************
   belongs_to :player
+  belongs_to :team, class_name: "Team"
+  belongs_to :team_against, class_name: "Team"
 
   # !**************************************************
   # !                Validations

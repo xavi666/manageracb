@@ -48,14 +48,16 @@ Manageracb::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'imports#index'
+  root :to => 'statistics#index'
+
   resources :games
   resources :teams
   resources :players
-  resources :statistics
-  resources :imports do
-    get 'html_pages', on: :collection
-    get 'statistics', on: :collection
+  resources :html_pages do
+    get 'import', on: :collection
+  end
+  resources :statistics do
+    get 'import', on: :collection
   end
 
   # See how all your routes lay out with "rake routes"
