@@ -28,7 +28,6 @@ class CreateTeams < ActiveRecord::Migration
             "VALENCIA BASKET CLUB" => 18
           }
     @teams.each do |key, value|
-      puts key 
       Team.create!(name: key)
     end
   end
