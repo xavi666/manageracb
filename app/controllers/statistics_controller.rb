@@ -42,7 +42,8 @@ class StatisticsController < ApplicationController
             "FC BARCELONA" => 5,
             "DOMINION BILBAO" => 3,
             "TUENTI MóVIL ESTUDIANTES" => 12,
-            "TUENTI M&#xF3;VIL ESTUDIANTES" => 12
+            "TUENTI M&#xF3;VIL ESTUDIANTES" => 12,
+            "BILBAO BASKET" => 3
           }
 
     @partits = []
@@ -67,8 +68,8 @@ class StatisticsController < ApplicationController
 
           detail[name] = equip
         end
-        if detail[:local] != ''
-          if @teams[detail[:local]]
+        if detail[:local] != '' || detail[:visitant] != ''
+          if @teams[detail[:local]] || @teams[detail[:visitant]]
             detail
           end
         end
@@ -130,49 +131,47 @@ class StatisticsController < ApplicationController
       @statistics.delete_if { |k, v| k.nil? }
 
       #ap @statistics
-      create_from_list @statistics, @equips
+      create_from_list @statistics, @equips, @teams
     end
   end
 
-  def create_from_list statistics, equips    
+  def create_from_list statistics, equips, teams    
     statistics.each do |statistic|
-      jugador = Player.find_by_name statistic[:name]
-      local = Team.find_by_name equips[0][:local]
-      visitant = Team.find_by_name equips[0][:visitant]
+      if teams[equips[0][:local]] != "" and teams[equips[0][:visitant]] != ""
+        unless local = Team.find(teams[equips[0][:local]])
+          local = Team.create!(:name => equips[0][:local])
+        end
 
-      unless local
-        local = Team.create!(:name => equips[0][:local])
-      end
+        unless visitant = Team.find(teams[equips[0][:visitant]])
+          visitant = Team.create!(:name => equips[0][:visitant])
+        end
 
-      unless visitant
-        visitant = Team.create!(:name => equips[0][:visitant])
-      end
+        team = statistic[:team] == "local" ? local : visitant
+        team_against = statistic[:team] == "local" ? visitant : local
 
-      team = statistic[:team] == "local" ? local : visitant
-      team_against = statistic[:team] == "local" ? visitant : local
+        unless jugador = Player.find_by_name(statistic[:name])
+          jugador = Player.create!(:name => statistic[:name], :team_id => team.id, :number => statistic[:number])
+        end
 
-      unless jugador
-        jugador = Player.create!(:name => statistic[:name], :team_id => team.id, :number => statistic[:number])
-      end
+        new_statistic = Statistic.where(:player_id => jugador.id, :seasson => statistic[:seasson], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).exists?
 
-      new_statistic = Statistic.where(:player_id => jugador.id, :seasson => statistic[:seasson], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).exists?
-
-      unless new_statistic
-        new_statistic = Statistic.create!(:player_id => jugador.id, 
-                        :team_id => team.id, :team_against_id => team_against.id,
-                        :seasson => statistic[:seasson], :game_number => statistic[:game_number],
-                        :number => jugador.number, 
-                        :seconds => get_seconds(statistic[:seconds]), :points => statistic[:points], 
-                        :two_p => get_points_tried(statistic[:two_p]), :two_pm => get_points_made(statistic[:two_p]),
-                        :three_p => get_points_tried(statistic[:three_p]), :three_pm => get_points_made(statistic[:three_p]),
-                        :one_p => get_points_tried(statistic[:one_p]), :one_pm => get_points_made(statistic[:one_p]),
-                        :rebounds => statistic[:rebounds], :orebounds => get_o_rebounds(statistic[:dorebounds]),
-                        :drebounds => get_d_rebounds(statistic[:dorebounds]), :assists => statistic[:assists],
-                        :steals => statistic[:steals], :turnovers => statistic[:turnovers],
-                        :turnovers => statistic[:turnovers], :fastbreaks => statistic[:fastbreaks],
-                        :mblocks => statistic[:mblocks] , :rblocks => statistic[:rblocks],
-                        :mfaults => statistic[:mfaults], :rfaults => statistic[:rfaults],
-                        :positive_negative => statistic[:positive_negative], :value => statistic[:value])
+        unless new_statistic
+          new_statistic = Statistic.create!(:player_id => jugador.id, 
+                          :team_id => team.id, :team_against_id => team_against.id,
+                          :seasson => statistic[:seasson], :game_number => statistic[:game_number],
+                          :number => jugador.number, 
+                          :seconds => get_seconds(statistic[:seconds]), :points => statistic[:points], 
+                          :two_p => get_points_tried(statistic[:two_p]), :two_pm => get_points_made(statistic[:two_p]),
+                          :three_p => get_points_tried(statistic[:three_p]), :three_pm => get_points_made(statistic[:three_p]),
+                          :one_p => get_points_tried(statistic[:one_p]), :one_pm => get_points_made(statistic[:one_p]),
+                          :rebounds => statistic[:rebounds], :orebounds => get_o_rebounds(statistic[:dorebounds]),
+                          :drebounds => get_d_rebounds(statistic[:dorebounds]), :assists => statistic[:assists],
+                          :steals => statistic[:steals], :turnovers => statistic[:turnovers],
+                          :turnovers => statistic[:turnovers], :fastbreaks => statistic[:fastbreaks],
+                          :mblocks => statistic[:mblocks] , :rblocks => statistic[:rblocks],
+                          :mfaults => statistic[:mfaults], :rfaults => statistic[:rfaults],
+                          :positive_negative => statistic[:positive_negative], :value => statistic[:value])
+        end
       end
     end
   end
