@@ -131,8 +131,6 @@ class ImportsController < ApplicationController
 
     statistics.each do |statistic|
       jugador = Player.find_by_name statistic[:name]
-      puts "0000000"
-      puts equips[0][:local]
       local = Team.find(@teams[equips[0][:local]])
       visitant = Team.find(@teams[equips[0][:visitant]])
 

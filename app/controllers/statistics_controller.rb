@@ -331,7 +331,6 @@ class StatisticsController < ApplicationController
         team.players.each do |player|
           if Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "player").exists?
             statistic = Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "player").first
-            puts statistic.inspect
             seconds += statistic.seconds
             points += statistic.points
             two_p += statistic.two_p
