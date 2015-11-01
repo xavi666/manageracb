@@ -9,7 +9,7 @@ gem 'sqlite3'
 gem 'nokogiri'
 gem 'awesome_print'
 gem 'hash_to_html'
-
+gem 'enumerize'
 
 # Gems used only for assets and not required
 # in production environments by default.

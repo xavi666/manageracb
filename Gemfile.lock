@@ -41,6 +41,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
+    enumerize (1.0.0)
+      activesupport (>= 3.2)
     erubis (2.7.0)
     execjs (2.6.0)
     haml (4.0.7)
@@ -108,6 +110,7 @@ DEPENDENCIES
   awesome_print
   bootstrap-sass (~> 3.2)
   coffee-rails (~> 4.0.0)
+  enumerize
   haml (~> 4.0)
   hash_to_html
   jquery-rails

@@ -8,7 +8,8 @@ class Team < ActiveRecord::Base
   # !**************************************************
   # !                Associations
   # !**************************************************
-  has_many :player
+  has_many :players
+  has_many :statistics
 
   # !**************************************************
   # !                Validations

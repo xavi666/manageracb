@@ -9,8 +9,8 @@ class Statistic < ActiveRecord::Base
   # !                Associations
   # !**************************************************
   belongs_to :player
-  belongs_to :team, class_name: "Team"
-  belongs_to :team_against, class_name: "Team"
+  belongs_to :team, class_name: "Team", foreign_key: 'team_id'
+  belongs_to :team_against, class_name: "Team", foreign_key: 'team_against_id'
 
   # !**************************************************
   # !                Validations
@@ -24,6 +24,11 @@ class Statistic < ActiveRecord::Base
   # !**************************************************
   # !                  Other
   # !**************************************************
+  include StatisticAllowed
+  extend Enumerize
+  default_scope { order('game_number ASC') } 
+
+  enumerize :type_statistic, in: [:game, :player, :team]
 
   private
 

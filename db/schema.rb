@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151019190442) do
+ActiveRecord::Schema.define(version: 20151031115914) do
 
   create_table "games", force: true do |t|
     t.integer  "local_team_id"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 20151019190442) do
     t.boolean  "active",            default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "type_statistic"
   end
 
   create_table "teams", force: true do |t|

@@ -16,6 +16,10 @@ class PlayersController < ApplicationController
     @player.destroy
   end
 
+  def show
+    @player = Player.find(params[:id])
+  end
+
   private
     def player_params
       params.require(:player).permit([:name])

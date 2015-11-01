@@ -1,7 +1,7 @@
 class StatisticsController < ApplicationController
 
   def index
-    @statistics = Statistic.all
+    @statistics = Statistic.game
   end
 
   def create
@@ -85,7 +85,8 @@ class StatisticsController < ApplicationController
       temporada = "2014"
       equips_jornada = 9
 
-      jornada = (html_page.game_number / equips_jornada).round + 1
+      jornada = (html_page.game_number / equips_jornada).round
+      jornada += 1 if html_page.game_number % equips_jornada > 0
 
       @statistics = rows_jugadors.collect do |row|
         detail = {}
@@ -130,7 +131,6 @@ class StatisticsController < ApplicationController
       end
       @statistics.delete_if { |k, v| k.nil? }
 
-      #ap @statistics
       create_from_list @statistics, @equips, @teams
     end
   end
@@ -170,8 +170,209 @@ class StatisticsController < ApplicationController
                           :turnovers => statistic[:turnovers], :fastbreaks => statistic[:fastbreaks],
                           :mblocks => statistic[:mblocks] , :rblocks => statistic[:rblocks],
                           :mfaults => statistic[:mfaults], :rfaults => statistic[:rfaults],
-                          :positive_negative => statistic[:positive_negative], :value => statistic[:value])
+                          :positive_negative => statistic[:positive_negative], :value => statistic[:value],
+                          :type_statistic => 'game')
         end
+      end
+    end
+  end
+
+  def acumulats
+    seasson = "2014"
+    teams = Team.all
+
+    teams.each do |team|
+      team.players.each do |player|
+        (1..34).each do |game_number|
+
+          unless Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number - 1, :type_statistic => "player").exists?
+            prev_seconds = 0
+            prev_points = 0
+            prev_two_p = 0
+            prev_two_pm = 0
+            prev_three_p = 0
+            prev_three_pm = 0
+            prev_one_p = 0
+            prev_one_pm = 0
+            prev_rebounds = 0
+            prev_orebounds = 0
+            prev_drebounds = 0
+            prev_assists = 0
+            prev_steals = 0
+            prev_turnovers = 0
+            prev_fastbreaks = 0
+            prev_mblocks = 0
+            prev_rblocks = 0
+            prev_mfaults = 0
+            prev_rfaults = 0
+            prev_positive_negative = 0
+            prev_value = 0
+          else
+            prev_statistic = Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number - 1, :type_statistic => "player").first
+            prev_seconds = prev_statistic.seconds
+            prev_points = prev_statistic.points
+            prev_two_p = prev_statistic.two_p
+            prev_two_pm = prev_statistic.two_pm
+            prev_three_p = prev_statistic.three_p
+            prev_three_pm = prev_statistic.three_pm
+            prev_one_p = prev_statistic.one_p
+            prev_one_pm = prev_statistic.one_pm
+            prev_rebounds = prev_statistic.rebounds
+            prev_orebounds = prev_statistic.orebounds
+            prev_drebounds = prev_statistic.drebounds
+            prev_assists = prev_statistic.assists
+            prev_steals = prev_statistic.steals
+            prev_turnovers = prev_statistic.turnovers
+            prev_fastbreaks = prev_statistic.fastbreaks
+            prev_mblocks = prev_statistic.mblocks
+            prev_rblocks = prev_statistic.rblocks
+            prev_mfaults = prev_statistic.mfaults
+            prev_rfaults = prev_statistic.rfaults
+            prev_positive_negative = prev_statistic.positive_negative
+            prev_value = prev_statistic.value
+          end
+
+          unless Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "game").exists?
+            seconds = 0
+            points = 0
+            two_p = 0
+            two_pm = 0
+            three_p = 0
+            three_pm = 0
+            one_p = 0
+            one_pm = 0
+            rebounds = 0
+            orebounds = 0
+            drebounds = 0
+            assists = 0
+            steals = 0
+            turnovers = 0
+            fastbreaks = 0
+            mblocks = 0
+            rblocks = 0
+            mfaults = 0
+            rfaults = 0
+            positive_negative = 0
+            value = 0
+          else
+            statistic = Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "game").first
+            seconds = statistic.seconds
+            points = statistic.points
+            two_p = statistic.two_p
+            two_pm = statistic.two_pm
+            three_p = statistic.three_p
+            three_pm = statistic.three_pm
+            one_p = statistic.one_p
+            one_pm = statistic.one_pm
+            rebounds = statistic.rebounds
+            orebounds = statistic.orebounds
+            drebounds = statistic.drebounds
+            assists = statistic.assists
+            steals = statistic.steals
+            turnovers = statistic.turnovers
+            fastbreaks = statistic.fastbreaks
+            mblocks = statistic.mblocks
+            rblocks = statistic.rblocks
+            mfaults = statistic.mfaults
+            rfaults = statistic.rfaults
+            positive_negative = statistic.positive_negative
+            value = statistic.value
+          end
+
+          new_statistic = Statistic.where(:player_id => player.id, 
+                          :team_id => team.id,
+                          :seasson => seasson, :game_number => game_number,
+                          :type_statistic => "player").first_or_create
+
+          new_statistic.update_attributes(:seconds => prev_seconds + seconds, :points => prev_points + points, 
+                          :two_p => prev_two_p + two_p, :two_pm => prev_two_pm + two_pm,
+                          :three_p => prev_three_p + three_p, :three_pm => prev_three_pm + three_pm,
+                          :one_p => prev_one_p + one_p, :one_pm => prev_one_pm + one_pm,
+                          :rebounds => prev_rebounds + rebounds, :orebounds => prev_orebounds + orebounds,
+                          :drebounds => prev_drebounds + drebounds, :assists => prev_assists + assists,
+                          :steals => prev_steals + steals, :turnovers => prev_turnovers + turnovers,
+                          :turnovers => prev_turnovers + turnovers, :fastbreaks => prev_fastbreaks + fastbreaks,
+                          :mblocks => prev_mblocks + mblocks , :rblocks => prev_rblocks + rblocks,
+                          :mfaults => prev_mfaults + mfaults, :rfaults => prev_rfaults + rfaults,
+                          :positive_negative => prev_positive_negative + positive_negative, :value => prev_value + value)
+          new_statistic.save!
+        end
+      end
+    end
+  end
+
+  def acumulats_equip
+    seasson = "2014"
+    teams = Team.all
+
+    teams.each do |team|
+      (1..34).each do |game_number|
+        seconds = 0
+        points = 0
+        two_p = 0
+        two_pm = 0
+        three_p = 0
+        three_pm = 0
+        one_p = 0
+        one_pm = 0
+        rebounds = 0
+        orebounds = 0
+        drebounds = 0
+        assists = 0
+        steals = 0
+        turnovers = 0
+        fastbreaks = 0
+        mblocks = 0
+        rblocks = 0
+        mfaults = 0
+        rfaults = 0
+        positive_negative = 0
+        value = 0
+        team.players.each do |player|
+          if Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "player").exists?
+            statistic = Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "player").first
+            puts statistic.inspect
+            seconds += statistic.seconds
+            points += statistic.points
+            two_p += statistic.two_p
+            two_pm += statistic.two_pm
+            three_p += statistic.three_p
+            three_pm += statistic.three_pm
+            one_p += statistic.one_p
+            one_pm += statistic.one_pm
+            rebounds += statistic.rebounds
+            orebounds += statistic.orebounds
+            drebounds += statistic.drebounds
+            assists += statistic.assists
+            steals += statistic.steals
+            turnovers += statistic.turnovers
+            fastbreaks += statistic.fastbreaks
+            mblocks += statistic.mblocks
+            rblocks += statistic.rblocks
+            mfaults += statistic.mfaults
+            rfaults += statistic.rfaults
+            positive_negative += statistic.positive_negative
+            value += statistic.value
+          end   
+        end
+
+        new_statistic = Statistic.where( 
+                          :team_id => team.id,
+                          :seasson => seasson, :game_number => game_number,
+                          :type_statistic => "team").first_or_create
+
+        new_statistic.update_attributes(:seconds =>  seconds, :points => points, 
+                        :two_p => two_p, :two_pm => two_pm,
+                        :three_p => three_p, :three_pm => three_pm,
+                        :one_p => one_p, :one_pm => one_pm,
+                        :rebounds => rebounds, :orebounds => orebounds,
+                        :drebounds => drebounds, :assists => assists,
+                        :steals => steals, :turnovers => turnovers,
+                        :turnovers => turnovers, :fastbreaks => fastbreaks,
+                        :mblocks => mblocks , :rblocks => rblocks,
+                        :mfaults => mfaults, :rfaults => rfaults,
+                        :positive_negative => positive_negative, :value => value)
+        new_statistic.save!
       end
     end
   end

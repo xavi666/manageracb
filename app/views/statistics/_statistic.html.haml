@@ -1,6 +1,7 @@
 %tr
   %td= statistic.id
-  %td= statistic.player.name
-  %td= statistic.team.name
-  %td= statistic.team_against.name
+  %td= statistic.game_number
+  %td= link_to statistic.player.name, statistic.player if statistic.player
+  %td= link_to statistic.team.name, statistic.team if statistic.team
+  %td= link_to statistic.team_against.name, statistic.team_against if statistic.team_against
   %td= statistic.value

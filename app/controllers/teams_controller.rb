@@ -12,6 +12,10 @@ class TeamsController < ApplicationController
     @team.update_attributes team_params
   end
 
+  def show
+    @team = Team.find(params[:id])
+  end
+
   def destroy
     @team.destroy
   end
