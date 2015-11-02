@@ -53,6 +53,7 @@ Manageracb::Application.routes.draw do
   resources :games
   resources :teams 
   resources :players
+  resources :predictions
   resources :html_pages do
     get 'import', on: :collection
   end
@@ -60,7 +61,6 @@ Manageracb::Application.routes.draw do
     get 'import', on: :collection
     get 'acumulats', on: :collection
     get 'acumulats_equip', on: :collection
-
   end
 
   # See how all your routes lay out with "rake routes"
