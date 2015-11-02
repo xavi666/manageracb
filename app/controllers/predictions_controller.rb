@@ -8,6 +8,8 @@ class PredictionsController < ApplicationController
   end
 
   def create
+    DATA_LABELS = [ 'city', 'age_range', 'gender', 'marketing_target' ]
+
     #@predictions = Prediction.create(prediction_params)
     redirect_to action: "index"
   end
