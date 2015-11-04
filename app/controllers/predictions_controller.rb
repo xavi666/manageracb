@@ -13,29 +13,31 @@ class PredictionsController < ApplicationController
   end
 
   def create
-    data_labels = [ 'city', 'age_range', 'gender', 'marketing_target' ]
-    data_items = [  
-           ['New York',  '<30',      'M',  'Y'],
-           ['Chicago',   '<30',      'M',  'Y'],
-           ['Chicago',   '<30',      'F',  'Y'],
-           ['New York',  '<30',      'M',  'Y'],
-           ['New York',  '<30',      'M',  'Y'],
-           ['Chicago',   '[30-50)',  'M',  'Y'],
-           ['New York',  '[30-50)',  'F',  'N'],
-           ['Chicago',   '[30-50)',  'F',  'Y'],
-           ['New York',  '[30-50)',  'F',  'N'],
-           ['Chicago',   '[50-80]',  'M',  'N'],
-           ['New York',  '[50-80]',  'F',  'N'],
-           ['New York',  '[50-80]',  'M',  'N'],
-           ['Chicago',   '[50-80]',  'M',  'N'],
-           ['New York',  '[50-80]',  'F',  'N'],
-           ['Chicago',   '>80',      'F',  'Y']
-         ]
+    data_labels = [ 'seconds', 'points', 'two_p', 'two_pm' ]
+    #data_items = [  
+    #       ['New York',  '<30',      'M',  'Y'],
+    #       ['Chicago',   '<30',      'M',  'Y'],
+    #       ['Chicago',   '<30',      'F',  'Y'],
+    #       ['New York',  '<30',      'M',  'Y'],
+    #       ['New York',  '<30',      'M',  'Y'],
+    #       ['Chicago',   '[30-50)',  'M',  'Y'],
+    #       ['New York',  '[30-50)',  'F',  'N'],
+    #       ['Chicago',   '[30-50)',  'F',  'Y'],
+    #       ['New York',  '[30-50)',  'F',  'N'],
+    #       ['Chicago',   '[50-80]',  'M',  'N'],
+    #       ['New York',  '[50-80]',  'F',  'N'],
+    #       ['New York',  '[50-80]',  'M',  'N'],
+    #       ['Chicago',   '[50-80]',  'M',  'N'],
+    #       ['New York',  '[50-80]',  'F',  'N'],
+    #       ['Chicago',   '>80',      'F',  'Y']
+    #     ]
+    data = Statistic.player.select(:seconds, :points, :two_p, :two_pm)
+    data_items = data.map{ |statistic| [statistic.seconds, statistic.points, statistic.two_p, statistic.two_pm] }
+
     data_set = DataSet.new(:data_items => data_items, :data_labels => data_labels)
     id3 = Ai4r::Classifiers::ID3.new.build(data_set)   
-    var = id3.eval(['New York', '<30', 'M'])
-    puts var
-    #redirect_to action: "index"
+    #@prediction = id3.eval([300, 10, 6, 4])
+    @rules = id3.get_rules
   end
 
   def update
