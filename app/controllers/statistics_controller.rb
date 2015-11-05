@@ -135,6 +135,16 @@ class StatisticsController < ApplicationController
     end
   end
 
+  def export
+    @statistics = Statistic.player.select(:seconds, :points, :two_p, :two_pm, :value)
+    respond_to do |format|
+      format.html
+        format.csv{
+        @filename = "statistics.csv"
+      }
+    end
+  end
+
   def create_from_list statistics, equips, teams    
     statistics.each do |statistic|
       if teams[equips[0][:local]] != "" and teams[equips[0][:visitant]] != ""

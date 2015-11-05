@@ -31,24 +31,23 @@ class PredictionsController < ApplicationController
     #       ['New York',  '[50-80]',  'F',  'N'],
     #       ['Chicago',   '>80',      'F',  'Y']
     #     ]
-    data = Statistic.player.select(:seconds, :points, :two_p, :two_pm, :value)
-    data_items = data.map{ |statistic| [statistic.seconds, statistic.points, statistic.two_p, statistic.two_pm, statistic.value] }
+    data_items = Statistic.player.pluck(:seconds, :points, :two_p, :two_pm, :value)
 
-    data_set = DataSet.new(:data_items => data_items, :data_labels => data_labels)
+    data_set = DataSet.new(:data_labels => data_labels, :data_items => data_items)
 
     test = [1500, 10, 6, 4]
 
-    #id3 = Ai4r::Classifiers::ID3.new.build(data_set)   
+    id3 = Ai4r::Classifiers::ID3.new.build(data_set)   
     #prism = Ai4r::Classifiers::Prism.new.build(data_set)   
-    b = NaiveBayes.new.
-    set_parameters({:m=>data.count}).
-    build data_set
+    #b = NaiveBayes.new.
+    #set_parameters({:m=>0}).
+    #build data_set
 
-    #@prediction = id3.eval([300, 10, 6, 4])
+    @prediction = id3.eval([1500, 10, 6, 4])
     #@prediction = prism.eval(test)
     #@rules = id3.get_rules
-    b.eval(test)
-    @prediction = b.get_probability_map(test)
+    #b.eval(test)
+    #@prediction = b.get_probability_map(test)
   end
 
   def update

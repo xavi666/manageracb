@@ -11,6 +11,9 @@
   <li>
     <%= link_to "Crear Prediccions", predictions_path, method: "post" %>
   </li>
+  <li>
+    <%= link_to "Exportar Prediccions", export_statistics_path(format: :csv) %>
+  </li>
 </ul>
 <ul class="nav nav-sidebar">
   <li>  

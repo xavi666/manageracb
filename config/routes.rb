@@ -59,6 +59,7 @@ Manageracb::Application.routes.draw do
   end
   resources :statistics do
     get 'import', on: :collection
+    get 'export', on: :collection
     get 'acumulats', on: :collection
     get 'acumulats_equip', on: :collection
   end
