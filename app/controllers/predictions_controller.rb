@@ -3,8 +3,6 @@ class PredictionsController < ApplicationController
   require 'rubygems'
   require 'ai4r'
   require "bundler/setup"
-  Bundler.require
-
   include Ai4r::Classifiers
   include Ai4r::Data
 
@@ -13,28 +11,9 @@ class PredictionsController < ApplicationController
   end
 
   def create
-    data_labels = [ 'seconds', 'points', 'two_p', 'two_pm', 'value' ]
-    #data_items = [  
-    #       ['New York',  '<30',      'M',  'Y'],
-    #       ['Chicago',   '<30',      'M',  'Y'],
-    #       ['Chicago',   '<30',      'F',  'Y'],
-    #       ['New York',  '<30',      'M',  'Y'],
-    #       ['New York',  '<30',      'M',  'Y'],
-    #       ['Chicago',   '[30-50)',  'M',  'Y'],
-    #       ['New York',  '[30-50)',  'F',  'N'],
-    #       ['Chicago',   '[30-50)',  'F',  'Y'],
-    #       ['New York',  '[30-50)',  'F',  'N'],
-    #       ['Chicago',   '[50-80]',  'M',  'N'],
-    #       ['New York',  '[50-80]',  'F',  'N'],
-    #       ['New York',  '[50-80]',  'M',  'N'],
-    #       ['Chicago',   '[50-80]',  'M',  'N'],
-    #       ['New York',  '[50-80]',  'F',  'N'],
-    #       ['Chicago',   '>80',      'F',  'Y']
-    #     ]
+    data_labels = %w(seconds points two_p two_pm value)
     data_items = Statistic.player.pluck(:seconds, :points, :two_p, :two_pm, :value)
-
     data_set = DataSet.new(:data_labels => data_labels, :data_items => data_items)
-
     test = [1500, 10, 6, 4]
 
     id3 = Ai4r::Classifiers::ID3.new.build(data_set)   
@@ -42,6 +21,9 @@ class PredictionsController < ApplicationController
     #b = NaiveBayes.new.
     #set_parameters({:m=>0}).
     #build data_set
+    b = NaiveBayes.new
+          .set_parameters(m: 0)
+          .build(data_set)
 
     @prediction = id3.eval([1500, 10, 6, 4])
     #@prediction = prism.eval(test)
