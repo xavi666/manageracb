@@ -136,7 +136,7 @@ class StatisticsController < ApplicationController
   end
 
   def export
-    @statistics = Statistic.player.select(:seconds, :points, :two_p, :two_pm, :value)
+    @statistics = Statistic.player.select(:seconds, :points, :rebounds, :assists, :value)
     respond_to do |format|
       format.html
         format.csv{
