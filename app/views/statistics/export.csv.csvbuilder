@@ -1,8 +1,8 @@
 csv << [
   "seconds",
   "points",
-  "two_p",
-  "two_pm",
+  "rebounds",
+  "assists",
   "value"
 ]
 
@@ -11,8 +11,8 @@ csv << [
     csv << [
       statistic.seconds, 
       statistic.points,
-      statistic.two_p,
-      statistic.two_pm,
+      statistic.rebounds,
+      statistic.assists,
       statistic.value
     ]
   end
