@@ -1,4 +1,4 @@
-class StatisticsController < ApplicationController
+  class StatisticsController < ApplicationController
 
   def index
     @statistics = Statistic.game
@@ -136,12 +136,11 @@ class StatisticsController < ApplicationController
   end
 
   def export
-    @statistics = Statistic.player.select(:seconds, :points, :two_p, :two_pm, :value)
+    column_name = %w(seconds points two_p two_pm value)
+    @statistics = Statistic.player.select(column_name)
     respond_to do |format|
       format.html
-        format.csv{
-        @filename = "statistics.csv"
-      }
+      format.csv{ render text: @statistics.to_csv }
     end
   end
 
