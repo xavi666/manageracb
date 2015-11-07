@@ -30,6 +30,18 @@ class Statistic < ActiveRecord::Base
 
   enumerize :type_statistic, in: [:game, :player, :team]
 
+  def self.to_csv
+    CSV.generate do |csv|
+      column_name = %w(seconds points two_p two_pm value)
+      csv << column_names
+      all.each do |statistic|
+        if statistic.seconds > 0
+          csv << statistic.attributes.values_at(*column_names)
+        end
+      end
+    end
+  end
+
   private
 
     def set_nil_to_zero
