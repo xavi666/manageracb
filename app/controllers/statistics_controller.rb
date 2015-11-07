@@ -135,9 +135,9 @@
     end
   end
 
-  def export
-    column_name = %w(seconds points two_p two_pm value)
-    @statistics = Statistic.player.select(column_name)
+<<<<<<< HEAD
+    column_names = %w(seconds points two_p two_pm value)
+    @statistics = Statistic.player.select(column_names)
     respond_to do |format|
       format.html
       format.csv{ render text: @statistics.to_csv }

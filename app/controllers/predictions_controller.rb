@@ -11,8 +11,8 @@ class PredictionsController < ApplicationController
   end
 
   def create
-    data_labels = %w(seconds points two_p two_pm value)
-    data_items = Statistic.player.pluck(:seconds, :points, :two_p, :two_pm, :value)
+    data_labels = %w(seconds points rebounds assists value)
+    data_items = Statistic.player.pluck(:seconds, :points, :rebounds, :assists, :value)
     data_set = DataSet.new(:data_labels => data_labels, :data_items => data_items)
     test = [1500, 10, 6, 4]
 

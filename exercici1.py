@@ -3,10 +3,10 @@ from sklearn import preprocessing
 # function declarations
 
 def classify(clf, train, test):
-	trainX = list(map(lambda l: list(map(int, l[2:7])), train))
-	testX = list(map(lambda l: list(map(int, l[2:7])), test))
-	trainY = list(map(lambda l: l[8], train))
-	testY = list(map(lambda l: l[8], test))	
+	trainX = list(map(lambda l: list(map(int, l[0:3])), train))
+	testX = list(map(lambda l: list(map(int, l[0:3])), test))
+	trainY = list(map(lambda l: l[4], train))
+	testY = list(map(lambda l: l[4], test))	
 
 	# Estandaritzacio
 	scaler = preprocessing.StandardScaler().fit(trainX)

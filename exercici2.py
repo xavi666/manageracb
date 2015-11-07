@@ -3,15 +3,15 @@ from sklearn import preprocessing
 # function declarations
 
 def classify2(clf, train, test):
-	trainXY = list(map(lambda l: list(map(int, l[0:7])), train))
+	trainXY = list(map(lambda l: list(map(int, l[0:3])), train))
 	
-	trainX = list(map(lambda l: list(map(int, l[2:7])), train))
-	trainY_chanel = list(map(lambda l: l[0], train))
-	trainY_region = list(map(lambda l: l[1], train))
+	trainX = list(map(lambda l: list(map(int, l[0:3])), train))
+	trainY_chanel = list(map(lambda l: l[4], train))
+	trainY_region = list(map(lambda l: l[4], train))
 
-	testX_chanel = list(map(lambda l: list(map(int, l[2:7])), test))
-	testY_chanel = list(map(lambda l: l[0], test))	
-	testY_region = list(map(lambda l: l[1], test))	
+	testX_chanel = list(map(lambda l: list(map(int, l[0:3])), test))
+	testY_chanel = list(map(lambda l: l[4], test))	
+	testY_region = list(map(lambda l: l[4], test))	
 
 
 	scaler = preprocessing.StandardScaler().fit(trainX)
