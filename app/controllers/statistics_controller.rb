@@ -135,7 +135,7 @@
     end
   end
 
-<<<<<<< HEAD
+  def export
     column_names = %w(seconds points two_p two_pm value)
     @statistics = Statistic.player.select(column_names)
     respond_to do |format|
