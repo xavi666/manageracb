@@ -136,11 +136,11 @@
   end
 
   def export
-    column_names = %w(seconds points two_p two_pm value)
-    @statistics = Statistic.player.select(column_names)
+    #column_names = %w(seconds points assists rebounds value)
+    @statistics = Statistic.game
     respond_to do |format|
       format.html
-      format.csv{ render text: @statistics.to_csv }
+      format.csv{ render text: to_csv(@statistics) }
     end
   end
 
@@ -386,6 +386,20 @@
   end
 
   private
+    def to_csv statistics
+    CSV.generate do |csv|
+      column_names = %w(seconds points assists rebounds value)
+      csv << column_names
+      statistics.each do |statistic|
+        if statistic.seconds > 0
+          player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: statistic.game_number).first
+          team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: statistic.game_number).first
+          csv << [player_statistic.seconds, player_statistic.value, player_statistic.points, team_statistic.value, team_statistic.points]
+        end
+      end
+    end
+  end
+
     def is_number? string
       true if Float(string) rescue false
     end
