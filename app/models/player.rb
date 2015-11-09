@@ -22,6 +22,6 @@ class Player < ActiveRecord::Base
   # !**************************************************
   # !                  Other
   # !**************************************************
-
+  include PlayerAllowed
 
 end

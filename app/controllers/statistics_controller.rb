@@ -394,7 +394,7 @@
         if statistic.seconds > 0
           player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: statistic.game_number).first
           team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: statistic.game_number).first
-          csv << [player_statistic.seconds, player_statistic.value, player_statistic.points, team_statistic.value, team_statistic.points]
+          csv << [player_statistic.seconds, player_statistic.value, player_statistic.points, team_statistic.value, statistic.points]
         end
       end
     end
