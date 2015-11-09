@@ -46,7 +46,7 @@ def ex2(clfp, trainX, testX, trainY, testY, text):
 
 # open file
 l = list(map(lambda l: (l.strip()).split(','),
-             open('statistics.csv', 'r').readlines()))
+             open('Wholesale customers.csv', 'r').readlines()))
 l.pop(0)
 # examples shuffle
 shuffle(l)
