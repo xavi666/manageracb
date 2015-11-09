@@ -5,7 +5,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import tree
 from sklearn import svm
 from exercici1 import * 
-from exercici2 import * 
 from time import time
 
 # warning filter
@@ -15,12 +14,12 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 # obrim fitxer
 l = list(map(lambda l: (l.strip()).split(','),
-	open('statistics.csv', 'r').readlines()))
+	open('export.csv', 'r').readlines()))
 
 # eliminem la primera fila, que conte les capcaleres
 l.pop(0)
 
-print(l)
+#print(l)
 # desordenem
 #shuffle(l)
 
