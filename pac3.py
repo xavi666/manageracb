@@ -24,54 +24,54 @@ l.pop(0)
 
 #print(l)
 # desordenem
-#shuffle(l)
+shuffle(l)
 
 # marge
 marge = 2
 
 # PRECISION
 print('----------------------')
-print('NAIVE BAYES')
+#print('NAIVE BAYES')
 # classification
-clf = GaussianNB()
-t1 = time()
-acc = sets_svm_prec(clf, l, marge)
-print('Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#clf = GaussianNB()
+#t1 = time()
+#acc = sets_svm_prec(clf, l, marge)
+#print('Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
 
 print('----------------------')
-print('kNN')
+#print('kNN')
 # classification
-for i in range(0, 12):
-	n_neighbors = i * i
-	if n_neighbors % 2 != 0:
-		clf = KNeighborsClassifier(n_neighbors=n_neighbors)
-		t1 = time()
-		acc = sets_svm_prec(clf, l, marge)
-		print('n_neighbors = ', n_neighbors, ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#for i in range(0, 12):
+#	n_neighbors = i * i
+#	if n_neighbors % 2 != 0:
+#		clf = KNeighborsClassifier(n_neighbors=n_neighbors)
+#		t1 = time()
+#		acc = sets_svm_prec(clf, l, marge)
+#		print('n_neighbors = ', n_neighbors, ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
 
 print('----------------------')
 
-print('DECISION TREES')
+#print('DECISION TREES')
 # classification
-clf = tree.DecisionTreeClassifier()
-t1 = time()
-acc = sets_svm_prec(clf, l, marge)
-print('Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#clf = tree.DecisionTreeClassifier()
+#t1 = time()
+#acc = sets_svm_prec(clf, l, marge)
+#print('Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
 
-print('----------------------')
-print('SVM')
-
-# classification
-clf = svm.SVC(kernel='linear')
-t1 = time()
-acc = sets_svm_prec(clf, l, marge)
-print('Kernel=linear - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#print('----------------------')
+#print('SVM')
 
 # classification
-clf = svm.SVC(kernel='poly', degree=1)
-t1 = time()
-acc = sets_svm_prec(clf, l, marge)
-print('Kernel=poly, degree=2 - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#clf = svm.SVC(kernel='linear')
+#t1 = time()
+#acc = sets_svm_prec(clf, l, marge)
+#print('Kernel=linear - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+
+# classification
+#clf = svm.SVC(kernel='poly', degree=1)
+#t1 = time()
+#acc = sets_svm_prec(clf, l, marge)
+#print('Kernel=poly, degree=2 - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
 
 # classification
 #for i in range(0, 4):
@@ -82,10 +82,12 @@ print('Kernel=poly, degree=2 - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' 
   #print('Kernel=rbf, gamma=', gamma, ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
  
 # SVR
-clf = SVR(C=3.0, epsilon=0.8)
-t1 = time()
-acc = sets_svm_prec(clf, l, marge)
-print('SVR - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+for i in range(1, 100):
+  #gamma = i * 50
+  clf = SVR(C=i, epsilon=0.8)
+  t1 = time()
+  acc = sets_svm_prec(clf, l, marge)
+  print('SVR, C=', i, ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
 
 # classification
 #for i in range(1, 5):
