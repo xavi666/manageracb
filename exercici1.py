@@ -15,8 +15,11 @@ def classify(clf, train, test, marge):
 
 	clf.fit(trainX, trainY)
 	predictions = clf.predict(testX)
+	print predictions
 
 	encerts = float(sum(map(lambda x, y: (int(x) - int(y)) * (-1) <= marge, predictions, testY)))
+	#encerts = float(sum(map(lambda x, y: int(x) == int(y), predictions, testY)))
+
 	size = float(len(testX))
 	return encerts / size * 100
 

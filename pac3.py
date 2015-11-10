@@ -5,8 +5,10 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import tree
 from sklearn import svm
+from sklearn.svm import SVR
 from exercici1 import * 
 from time import time
+
 
 # warning filter
 import warnings
@@ -25,7 +27,7 @@ l.pop(0)
 #shuffle(l)
 
 # marge
-marge = 4
+marge = 2
 
 # PRECISION
 print('----------------------')
@@ -72,13 +74,19 @@ acc = sets_svm_prec(clf, l, marge)
 print('Kernel=poly, degree=2 - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
 
 # classification
-for i in range(0, 4):
-  gamma = i * 50
-  clf = svm.SVC(kernel='rbf', gamma=gamma)
-  t1 = time()
-  acc = sets_svm_prec(clf, l, marge)
-  print('Kernel=rbf, gamma=', gamma, ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#for i in range(0, 4):
+  #gamma = i * 50
+  #clf = svm.SVC(kernel='rbf', gamma=gamma)
+  #t1 = time()
+  #acc = sets_svm_prec(clf, l, marge)
+  #print('Kernel=rbf, gamma=', gamma, ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
  
+# SVR
+clf = SVR(C=3.0, epsilon=0.8)
+t1 = time()
+acc = sets_svm_prec(clf, l, marge)
+print('SVR - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+
 # classification
 #for i in range(1, 5):
   #c = i * 50
