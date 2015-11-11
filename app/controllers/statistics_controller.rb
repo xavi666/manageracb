@@ -16,7 +16,7 @@
     @statistic.destroy
   end
 
-  def import
+  def create_from_html
     @teams = {
             "BALONCESTO SEVILLA" => 1,
             "CAI ZARAGOZA" => 2, 
@@ -43,35 +43,22 @@
             "DOMINION BILBAO" => 3,
             "TUENTI MóVIL ESTUDIANTES" => 12,
             "TUENTI M&#xF3;VIL ESTUDIANTES" => 12,
-            "BILBAO BASKET" => 3
+            "BILBAO BASKET" => 3,
+            "DOMINION BILBAO BASKET" => 3,
+            "FC BARCELONA LASSA" => 5,
+            "ICL MANRESA" => 7
           }
 
     @partits = []
-    html_pages = HtmlPage.all
+    html_pages = HtmlPage.statistic
 
     html_pages.each do |html_page| 
       pagina_partit = Nokogiri::XML(html_page.html)
 
       # dades equips
-      taula_equips = pagina_partit.css("div.titulopartidonew")[0]
-      row_equips = taula_equips.search('tr')
-      @equips = row_equips.collect do |row|
-        detail = {}
-        [
-          [:local, 'td[1]/text()'],
-          [:visitant, 'td[2]/text()']
-        ].each do |name, xpath|
-          equip = row.at_xpath(xpath).to_s.strip
-          equip.slice!("#xA0;")
-          equip.slice!(0) if name == :visitant
-          equip = equip[0..-3] if name == :local
-
-          detail[name] = equip
-        end
-        if detail[:local] != '' || detail[:visitant] != ''
-          if @teams[detail[:local]] || @teams[detail[:visitant]]
-            detail
-          end
+      doc.search('table.resultados > tr').each do |row|
+        row.search('td/font/text()').each do |col|
+            p col.to_s
         end
       end
 
