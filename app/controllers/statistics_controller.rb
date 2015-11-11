@@ -56,9 +56,28 @@
       pagina_partit = Nokogiri::XML(html_page.html)
 
       # dades equips
+      taula_equips = pagina_partit.css("div.titulopartidonew")[0]
       doc.search('table.resultados > tr').each do |row|
+      row_equips = taula_equips.search('tr')
         row.search('td/font/text()').each do |col|
+      @equips = row_equips.collect do |row|
             p col.to_s
+        detail = {}
+        [
+          [:local, 'td[1]/text()'],
+          [:visitant, 'td[2]/text()']
+        ].each do |name, xpath|
+          equip = row.at_xpath(xpath).to_s.strip
+          equip.slice!("#xA0;")
+          equip.slice!(0) if name == :visitant
+          equip = equip[0..-3] if name == :local
+
+          detail[name] = equip
+        end
+        if detail[:local] != '' || detail[:visitant] != ''
+          if @teams[detail[:local]] || @teams[detail[:visitant]]
+            detail
+          end
         end
       end
 
