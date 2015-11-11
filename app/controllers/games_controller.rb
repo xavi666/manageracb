@@ -41,42 +41,24 @@ class GamesController < ApplicationController
     html_pages = HtmlPage.game
 
     html_pages.each do |html_page| 
-      pagina_jornada = Nokogiri::XML(html_page.html)
+      pagina_jornada = Nokogiri::HTML(html_page.html)
 
-      # dades equips
-      taula_partits = pagina_jornada.css("td.naranjaclaro")[0]
-      rows_partits = taula_partits.search('//a')
+
       count = 0
-      @partits = rows_partits.collect do |row|
-        detail = {}
-        [
-          [:equipo, 'text()'],
-        ].each do |name, xpath|
-          if count > 0
-            unless detail[:equipo] == "" and detail[:equipo].nil? and detail[:equipo].blank?
-              detail[name] = row.at_xpath(xpath).to_s.strip
-            end
+      local = 0
+      pagina_jornada.css("table td.naranjaclaro").each do |link|
+        equip = link.content.upcase
+        equip.slice! " |"
+        if count % 2 == 1
+          game = Game.where(game_number: html_page.game_number, seasson: "2015", local_team_id: @teams[local], visitant_team_id: @teams[equip]).first
+          unless game
+            game = Game.create!(game_number: html_page.game_number, seasson: "2015", local_team_id: @teams[local], visitant_team_id: @teams[equip])
           end
-          count += 1
+        else
+          local = equip
         end
-        detail
+        count += 1
       end
-
-      count = 0
-      local = ""
-      @partits.each do |partit|
-        if count < 19 and partit[:equipo] and @teams[partit[:equipo].to_s.upcase]
-          if count % 2 == 1
-            game = Game.where(game_number: html_page.game_number, seasson: "2015", local_team_id: @teams[local], visitant_team_id: @teams[partit[:equipo].to_s.upcase]).first
-            unless game
-              game = Game.create!(game_number: html_page.game_number, seasson: "2015", local_team_id: @teams[local], visitant_team_id: @teams[partit[:equipo].to_s.upcase])
-            end
-          else
-            local = partit[:equipo].to_s.upcase
-          end
-          count += 1
-        end
-      end 
     end
   end
 
