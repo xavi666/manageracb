@@ -50,15 +50,18 @@ Manageracb::Application.routes.draw do
   # just remember to delete public/index.html.
   root :to => 'teams#index'
 
-  resources :games
+  resources :games do
+    get 'create_from_html', on: :collection
+  end
   resources :teams 
   resources :players
   resources :predictions
   resources :html_pages do
-    get 'import', on: :collection
+    get 'import_games', on: :collection
+    get 'import_statistics', on: :collection
   end
   resources :statistics do
-    get 'import', on: :collection
+    get 'create_from_html', on: :collection
     get 'export', on: :collection
     get 'acumulats_jugador', on: :collection
     get 'acumulats_equip', on: :collection
