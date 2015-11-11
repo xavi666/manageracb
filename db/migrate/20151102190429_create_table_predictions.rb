@@ -1,13 +1,13 @@
 class CreateTablePredictions < ActiveRecord::Migration
   def change
     create_table :table_predictions do |t|
-      t.player_id :integer
-      t.team_id :integer
-      t.value :integer
-      t.points :integer
-      t.rebounds :integer
-      t.assists :integer
-      t.money :integer
+      t.integer :player_id
+      t.integer :team_id
+      t.integer :value
+      t.integer :points
+      t.integer :rebounds
+      t.integer :assists
+      t.integer :money
 
       t.boolean :active, default: true
       t.timestamps
