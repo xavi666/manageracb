@@ -64,6 +64,9 @@ Manageracb::Application.routes.draw do
     get 'acumulats_equip', on: :collection
   end
 
+  get '/home', to: 'home#index'
+
+
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
