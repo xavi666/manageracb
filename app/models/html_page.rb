@@ -20,6 +20,9 @@ class HtmlPage < ActiveRecord::Base
   # !**************************************************
   # !                  Other
   # !**************************************************
+  include HtmlPageAllowed
+  extend Enumerize
 
+  enumerize :html_page_type, in: [:statistic, :game]
 
 end
