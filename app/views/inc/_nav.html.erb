@@ -1,9 +1,15 @@
 <ul class="nav nav-sidebar">
   <li>
-    <%= link_to "Importar Pàgines", import_html_pages_path %>
+    <%= link_to "Importar Pàgines Estadístiques", import_statistics_html_pages_path %>
   </li>
   <li>
-    <%= link_to "Crear Estadístiques", import_statistics_path %>
+    <%= link_to "Importar Pàgines Partits", import_games_html_pages_path %>
+  </li>
+  <li>
+    <%= link_to "Crear Partits", create_from_html_games_path %>
+  </li>
+  <li>
+    <%= link_to "Crear Estadístiques", create_from_html_statistics_path %>
   </li>
   <li>
     <%= link_to "Crear Acumulats Jugador", acumulats_jugador_statistics_path %>
