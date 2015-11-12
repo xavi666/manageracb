@@ -1,12 +1,18 @@
-body{
+body.front{
   background-color: #C7C6C6;
-}
-.navbar{
-  background-color: #706F6F;
-  a{
-    color: #fff;
+
+  .navbar{
+    background-color: #706F6F;
+    a{
+      color: #fff;
+    }
   }
-}
-.navbar, .navbar-brand{
-  //height: 100px;
+  .navbar, .navbar-brand{
+    //height: 100px;
+  }
+  .white{
+    background-color: white;
+    float: left;
+    padding: 20px;
+  }
 }
