@@ -27,7 +27,7 @@ l.pop(0)
 shuffle(l)
 
 # marge
-marge = 2
+marge = 1
 
 # PRECISION
 print('----------------------')
@@ -82,12 +82,40 @@ print('----------------------')
   #print('Kernel=rbf, gamma=', gamma, ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
  
 # SVR
-for i in range(1, 100):
-  #gamma = i * 50
-  clf = SVR(C=i, epsilon=0.8)
-  t1 = time()
-  acc = sets_svm_prec(clf, l, marge)
-  print('SVR, C=', i, ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+# RBF
+svr_rbf = SVR(C=1e3, gamma=0.1, cache_size=200, coef0=0.0, degree=3, epsilon=0.1,
+    kernel='rbf', max_iter=-1, shrinking=True, tol=0.001, verbose=False)
+t1 = time()
+acc = sets_svm_prec(svr_rbf, l, marge)
+print('SVR rbf', ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#y_rbf = svr_rbf.fit(X, y).predict(X)
+
+# LIN
+svr_lin = SVR(kernel='linear', C=1e3)
+t1 = time()
+acc = sets_svm_prec(svr_lin, l, marge)
+print('SVR lin', ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#y_lin = svr_lin.fit(X, y).predict(X)
+
+# POLY
+svr_poly = SVR(kernel='poly', C=1e3, degree=2)
+t1 = time()
+acc = sets_svm_prec(svr_poly, l, marge)
+print('SVR poly', ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#y_poly = svr_poly.fit(X, y).predict(X)
+
+###############################################################################
+# look at the results
+plt.scatter(X, y, c='k', label='data')
+plt.hold('on')
+plt.plot(X, y_rbf, c='g', label='RBF model')
+plt.plot(X, y_lin, c='r', label='Linear model')
+plt.plot(X, y_poly, c='b', label='Polynomial model')
+plt.xlabel('data')
+plt.ylabel('target')
+plt.title('Support Vector Regression')
+plt.legend()
+plt.show()
 
 # classification
 #for i in range(1, 5):

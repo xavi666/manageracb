@@ -13,6 +13,19 @@ body.front{
   .white{
     background-color: white;
     float: left;
-    padding: 20px;
+    padding: 5px;
+  }
+  #predictions{
+    padding: 10px;
+    .box{
+      height: 80px;
+      margin-bottom: 5px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+      img.team{
+        width: 38%;
+      }
+    }
   }
 }

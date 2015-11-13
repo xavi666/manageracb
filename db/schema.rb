@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151112152241) do
+ActiveRecord::Schema.define(version: 20151113143305) do
 
   create_table "games", force: true do |t|
     t.integer  "local_team_id"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20151112152241) do
     t.datetime "updated_at"
     t.integer  "game_number"
     t.string   "seasson"
+    t.integer  "prediction_id"
   end
 
   create_table "html_pages", force: true do |t|
@@ -52,6 +53,20 @@ ActiveRecord::Schema.define(version: 20151112152241) do
     t.boolean  "active",        default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "predictions", force: true do |t|
+    t.integer  "player_id"
+    t.integer  "team_id"
+    t.integer  "value"
+    t.integer  "points"
+    t.integer  "rebounds"
+    t.integer  "assists"
+    t.integer  "money"
+    t.boolean  "active",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "game_id"
   end
 
   create_table "statistics", force: true do |t|
@@ -86,19 +101,6 @@ ActiveRecord::Schema.define(version: 20151112152241) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "type_statistic"
-  end
-
-  create_table "table_predictions", force: true do |t|
-    t.integer  "player_id"
-    t.integer  "team_id"
-    t.integer  "value"
-    t.integer  "points"
-    t.integer  "rebounds"
-    t.integer  "assists"
-    t.integer  "money"
-    t.boolean  "active",     default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "teams", force: true do |t|
