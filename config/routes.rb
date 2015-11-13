@@ -55,7 +55,9 @@ Manageracb::Application.routes.draw do
   end
   resources :teams 
   resources :players
-  resources :predictions
+  resources :predictions do
+    get 'game', on: :collection
+  end
   resources :html_pages do
     get 'import_games', on: :collection
     get 'import_statistics', on: :collection
@@ -67,6 +69,7 @@ Manageracb::Application.routes.draw do
     get 'acumulats_equip', on: :collection
   end
 
+  #get '/predictions/:id/game', to: 'predictions#game', as: 'predictions_game'
   get '/home', to: 'home#index'
 
 

@@ -1,10 +1,11 @@
 class PredictionsController < ApplicationController
+  layout "front", only: [:game]
 
   require 'rubygems'
-  require 'ai4r'
+  #require 'ai4r'
   require "bundler/setup"
-  include Ai4r::Classifiers
-  include Ai4r::Data
+  #include Ai4r::Classifiers
+  #include Ai4r::Data
 
   def index
     #@predictions = Prediction.all
@@ -16,20 +17,24 @@ class PredictionsController < ApplicationController
     data_set = DataSet.new(:data_labels => data_labels, :data_items => data_items)
     test = [1500, 10, 6, 4]
 
-    id3 = Ai4r::Classifiers::ID3.new.build(data_set)   
+    #id3 = Ai4r::Classifiers::ID3.new.build(data_set)   
     #prism = Ai4r::Classifiers::Prism.new.build(data_set)   
     #b = NaiveBayes.new.
     #set_parameters({:m=>0}).
     #build data_set
-    b = NaiveBayes.new
-          .set_parameters(m: 0)
-          .build(data_set)
+    #b = NaiveBayes.new
+    #      .set_parameters(m: 0)
+    #      .build(data_set)
 
-    @prediction = id3.eval([1500, 10, 6, 4])
+    #@prediction = id3.eval([1500, 10, 6, 4])
     #@prediction = prism.eval(test)
     #@rules = id3.get_rules
     #b.eval(test)
     #@prediction = b.get_probability_map(test)
+  end
+
+  def game
+    puts "----------------> GAME"
   end
 
   def update
