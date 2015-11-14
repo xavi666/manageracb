@@ -1,4 +1,4 @@
-  class StatisticsController < ApplicationController
+class StatisticsController < ApplicationController
 
   def index
     @statistics = Statistic.game
@@ -57,11 +57,8 @@
 
       # dades equips
       taula_equips = pagina_partit.css("div.titulopartidonew")[0]
-      doc.search('table.resultados > tr').each do |row|
       row_equips = taula_equips.search('tr')
-        row.search('td/font/text()').each do |col|
       @equips = row_equips.collect do |row|
-            p col.to_s
         detail = {}
         [
           [:local, 'td[1]/text()'],
@@ -136,7 +133,6 @@
         end
       end
       @statistics.delete_if { |k, v| k.nil? }
-
       create_from_list @statistics, @equips, @teams
     end
   end
@@ -149,47 +145,7 @@
     end
   end
 
-  def create_from_list statistics, equips, teams    
-    statistics.each do |statistic|
-      if teams[equips[0][:local]] != "" and teams[equips[0][:visitant]] != ""
-        unless local = Team.find(teams[equips[0][:local]])
-          local = Team.create!(:name => equips[0][:local])
-        end
-
-        unless visitant = Team.find(teams[equips[0][:visitant]])
-          visitant = Team.create!(:name => equips[0][:visitant])
-        end
-
-        team = statistic[:team] == "local" ? local : visitant
-        team_against = statistic[:team] == "local" ? visitant : local
-
-        unless jugador = Player.find_by_name(statistic[:name])
-          jugador = Player.create!(:name => statistic[:name], :team_id => team.id, :number => statistic[:number])
-        end
-
-        new_statistic = Statistic.where(:player_id => jugador.id, :seasson => statistic[:seasson], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).exists?
-
-        unless new_statistic
-          new_statistic = Statistic.create!(:player_id => jugador.id, 
-                          :team_id => team.id, :team_against_id => team_against.id,
-                          :seasson => statistic[:seasson], :game_number => statistic[:game_number],
-                          :number => jugador.number, 
-                          :seconds => get_seconds(statistic[:seconds]), :points => statistic[:points], 
-                          :two_p => get_points_tried(statistic[:two_p]), :two_pm => get_points_made(statistic[:two_p]),
-                          :three_p => get_points_tried(statistic[:three_p]), :three_pm => get_points_made(statistic[:three_p]),
-                          :one_p => get_points_tried(statistic[:one_p]), :one_pm => get_points_made(statistic[:one_p]),
-                          :rebounds => statistic[:rebounds], :orebounds => get_o_rebounds(statistic[:dorebounds]),
-                          :drebounds => get_d_rebounds(statistic[:dorebounds]), :assists => statistic[:assists],
-                          :steals => statistic[:steals], :turnovers => statistic[:turnovers],
-                          :turnovers => statistic[:turnovers], :fastbreaks => statistic[:fastbreaks],
-                          :mblocks => statistic[:mblocks] , :rblocks => statistic[:rblocks],
-                          :mfaults => statistic[:mfaults], :rfaults => statistic[:rfaults],
-                          :positive_negative => statistic[:positive_negative], :value => statistic[:value],
-                          :type_statistic => 'game')
-        end
-      end
-    end
-  end
+  
 
   def acumulats_jugador
     seasson = "2014"
@@ -392,22 +348,22 @@
 
   private
     def to_csv statistics
-    CSV.generate do |csv|
-      column_names = %w(PlayerId TeamAgainstId GameNumber PlayerSeconds PlayerPoints Player2P Player2PM Player3P Player3PM Player1P Player1PM PlayerRebounds PlayerORebounds PlayerDRebounds PlayerAssists PlayerSteals PlayerTurnovers PlayerFastbreak PlayerBlocksM PlayerBlockR PlayerFaultsM PlayerFaulsR PlayerPN PlayerValue 
-        TeamPoints Team2P Team2PM Team3P Team3PM Team1P Team1PM TeamRebounds TeamORebounds TeamDRebounds TeamAssists TeamSteals TeamTurnovers TeamFastbreak TeamBlocksM TeamBlockR TeamFaultsM TeamFaultsR TeamPN TeamValue GameValue GamePoints GameRebounds GameAssists)
-      csv << column_names
-      statistics.each do |statistic|
-        if statistic.seconds > 0
-          player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: statistic.game_number).first
-          team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: statistic.game_number).first
-          csv << [player_statistic.player_id, team_statistic.team_id, statistic.game_number,
-                  player_statistic.seconds, player_statistic.points, player_statistic.two_p, player_statistic.two_pm, player_statistic.three_p, player_statistic.three_pm, player_statistic.one_p, player_statistic.one_pm, player_statistic.rebounds, player_statistic.orebounds, player_statistic.drebounds, player_statistic.assists, player_statistic.steals, player_statistic.turnovers, player_statistic.fastbreaks, player_statistic.mblocks, player_statistic.rblocks, player_statistic.mfaults, player_statistic.rfaults, player_statistic.positive_negative, player_statistic.value,
-                  team_statistic.points, team_statistic.two_p, team_statistic.two_pm, team_statistic.three_p, team_statistic.three_pm, team_statistic.one_p, team_statistic.one_pm, team_statistic.rebounds, team_statistic.orebounds, team_statistic.drebounds, team_statistic.assists, team_statistic.steals, team_statistic.turnovers, team_statistic.fastbreaks, team_statistic.mblocks, team_statistic.rblocks, team_statistic.mfaults, team_statistic.rfaults, team_statistic.positive_negative, team_statistic.value,
-                  statistic.value, statistic.points, statistic.rebounds, statistic.assists]
+      CSV.generate do |csv|
+        column_names = %w(PlayerId TeamAgainstId GameNumber PlayerSeconds PlayerPoints Player2P Player2PM Player3P Player3PM Player1P Player1PM PlayerRebounds PlayerORebounds PlayerDRebounds PlayerAssists PlayerSteals PlayerTurnovers PlayerFastbreak PlayerBlocksM PlayerBlockR PlayerFaultsM PlayerFaulsR PlayerPN PlayerValue 
+          TeamPoints Team2P Team2PM Team3P Team3PM Team1P Team1PM TeamRebounds TeamORebounds TeamDRebounds TeamAssists TeamSteals TeamTurnovers TeamFastbreak TeamBlocksM TeamBlockR TeamFaultsM TeamFaultsR TeamPN TeamValue GameValue GamePoints GameRebounds GameAssists)
+        csv << column_names
+        statistics.each do |statistic|
+          if statistic.seconds > 0
+            player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: statistic.game_number).first
+            team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: statistic.game_number).first
+            csv << [player_statistic.player_id, team_statistic.team_id, statistic.game_number,
+                    player_statistic.seconds, player_statistic.points, player_statistic.two_p, player_statistic.two_pm, player_statistic.three_p, player_statistic.three_pm, player_statistic.one_p, player_statistic.one_pm, player_statistic.rebounds, player_statistic.orebounds, player_statistic.drebounds, player_statistic.assists, player_statistic.steals, player_statistic.turnovers, player_statistic.fastbreaks, player_statistic.mblocks, player_statistic.rblocks, player_statistic.mfaults, player_statistic.rfaults, player_statistic.positive_negative, player_statistic.value,
+                    team_statistic.points, team_statistic.two_p, team_statistic.two_pm, team_statistic.three_p, team_statistic.three_pm, team_statistic.one_p, team_statistic.one_pm, team_statistic.rebounds, team_statistic.orebounds, team_statistic.drebounds, team_statistic.assists, team_statistic.steals, team_statistic.turnovers, team_statistic.fastbreaks, team_statistic.mblocks, team_statistic.rblocks, team_statistic.mfaults, team_statistic.rfaults, team_statistic.positive_negative, team_statistic.value,
+                    statistic.value, statistic.points, statistic.rebounds, statistic.assists]
+          end
         end
       end
     end
-  end
 
     def is_number? string
       true if Float(string) rescue false
