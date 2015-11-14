@@ -138,7 +138,7 @@ class StatisticsController < ApplicationController
   end
 
   def export
-    @statistics = Statistic.game.first(25)
+    @statistics = Statistic.game
     f = open("export.csv", "w+")
     f.close()
     CSV.open("export.csv", "wb") do |csv|
