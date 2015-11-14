@@ -139,9 +139,13 @@ class StatisticsController < ApplicationController
 
   def export
     @statistics = Statistic.game
-    respond_to do |format|
-      format.html
-      format.csv{ render text: to_csv(@statistics) }
+    f = open("export.csv", "w+")
+    f.close()
+    CSV.open("export.csv", "wb") do |csv|
+      statistics_array = to_csv(@statistics)
+      statistics_array.each do |statistic|
+        csv << statistic
+      end
     end
   end
 
@@ -348,21 +352,21 @@ class StatisticsController < ApplicationController
 
   private
     def to_csv statistics
-      CSV.generate do |csv|
-        column_names = %w(PlayerId TeamAgainstId GameNumber PlayerSeconds PlayerPoints Player2P Player2PM Player3P Player3PM Player1P Player1PM PlayerRebounds PlayerORebounds PlayerDRebounds PlayerAssists PlayerSteals PlayerTurnovers PlayerFastbreak PlayerBlocksM PlayerBlockR PlayerFaultsM PlayerFaulsR PlayerPN PlayerValue 
-          TeamPoints Team2P Team2PM Team3P Team3PM Team1P Team1PM TeamRebounds TeamORebounds TeamDRebounds TeamAssists TeamSteals TeamTurnovers TeamFastbreak TeamBlocksM TeamBlockR TeamFaultsM TeamFaultsR TeamPN TeamValue GameValue GamePoints GameRebounds GameAssists)
-        csv << column_names
-        statistics.each do |statistic|
-          if statistic.seconds > 0
-            player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: statistic.game_number).first
-            team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: statistic.game_number).first
-            csv << [player_statistic.player_id, team_statistic.team_id, statistic.game_number,
-                    player_statistic.seconds, player_statistic.points, player_statistic.two_p, player_statistic.two_pm, player_statistic.three_p, player_statistic.three_pm, player_statistic.one_p, player_statistic.one_pm, player_statistic.rebounds, player_statistic.orebounds, player_statistic.drebounds, player_statistic.assists, player_statistic.steals, player_statistic.turnovers, player_statistic.fastbreaks, player_statistic.mblocks, player_statistic.rblocks, player_statistic.mfaults, player_statistic.rfaults, player_statistic.positive_negative, player_statistic.value,
-                    team_statistic.points, team_statistic.two_p, team_statistic.two_pm, team_statistic.three_p, team_statistic.three_pm, team_statistic.one_p, team_statistic.one_pm, team_statistic.rebounds, team_statistic.orebounds, team_statistic.drebounds, team_statistic.assists, team_statistic.steals, team_statistic.turnovers, team_statistic.fastbreaks, team_statistic.mblocks, team_statistic.rblocks, team_statistic.mfaults, team_statistic.rfaults, team_statistic.positive_negative, team_statistic.value,
-                    statistic.value, statistic.points, statistic.rebounds, statistic.assists]
-          end
+      csv = []
+      column_names = %w(PlayerId TeamAgainstId GameNumber PlayerSeconds PlayerPoints Player2P Player2PM Player3P Player3PM Player1P Player1PM PlayerRebounds PlayerORebounds PlayerDRebounds PlayerAssists PlayerSteals PlayerTurnovers PlayerFastbreak PlayerBlocksM PlayerBlockR PlayerFaultsM PlayerFaulsR PlayerPN PlayerValue 
+        TeamPoints Team2P Team2PM Team3P Team3PM Team1P Team1PM TeamRebounds TeamORebounds TeamDRebounds TeamAssists TeamSteals TeamTurnovers TeamFastbreak TeamBlocksM TeamBlockR TeamFaultsM TeamFaultsR TeamPN TeamValue GameValue GamePoints GameRebounds GameAssists)
+      csv << column_names
+      statistics.each do |statistic|
+        if statistic.seconds > 0
+          player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: statistic.game_number).first
+          team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: statistic.game_number).first
+          csv << [player_statistic.player_id, team_statistic.team_id, statistic.game_number,
+                  player_statistic.seconds, player_statistic.points, player_statistic.two_p, player_statistic.two_pm, player_statistic.three_p, player_statistic.three_pm, player_statistic.one_p, player_statistic.one_pm, player_statistic.rebounds, player_statistic.orebounds, player_statistic.drebounds, player_statistic.assists, player_statistic.steals, player_statistic.turnovers, player_statistic.fastbreaks, player_statistic.mblocks, player_statistic.rblocks, player_statistic.mfaults, player_statistic.rfaults, player_statistic.positive_negative, player_statistic.value,
+                  team_statistic.points, team_statistic.two_p, team_statistic.two_pm, team_statistic.three_p, team_statistic.three_pm, team_statistic.one_p, team_statistic.one_pm, team_statistic.rebounds, team_statistic.orebounds, team_statistic.drebounds, team_statistic.assists, team_statistic.steals, team_statistic.turnovers, team_statistic.fastbreaks, team_statistic.mblocks, team_statistic.rblocks, team_statistic.mfaults, team_statistic.rfaults, team_statistic.positive_negative, team_statistic.value,
+                  statistic.value, statistic.points, statistic.rebounds, statistic.assists]
         end
       end
+      csv
     end
 
     def is_number? string
