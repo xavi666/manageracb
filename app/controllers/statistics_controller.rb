@@ -138,7 +138,7 @@ class StatisticsController < ApplicationController
   end
 
   def export
-    @statistics = Statistic.game
+    @statistics = Statistic.game.first(25)
     f = open("export.csv", "w+")
     f.close()
     CSV.open("export.csv", "wb") do |csv|
@@ -154,12 +154,10 @@ class StatisticsController < ApplicationController
   def acumulats_jugador
     seasson = "2014"
     teams = Team.all
-
     teams.each do |team|
       team.players.each do |player|
         (1..34).each do |game_number|
-
-          unless Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number - 1, :type_statistic => "player").exists?
+          unless Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number - 1, :type_statistic => "player").first
             prev_seconds = 0
             prev_points = 0
             prev_two_p = 0
@@ -183,30 +181,30 @@ class StatisticsController < ApplicationController
             prev_value = 0
           else
             prev_statistic = Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number - 1, :type_statistic => "player").first
-            prev_seconds = prev_statistic.seconds / game_number
-            prev_points = prev_statistic.points / game_number
-            prev_two_p = prev_statistic.two_p / game_number
-            prev_two_pm = prev_statistic.two_pm / game_number
-            prev_three_p = prev_statistic.three_p / game_number
-            prev_three_pm = prev_statistic.three_pm / game_number
-            prev_one_p = prev_statistic.one_p / game_number
-            prev_one_pm = prev_statistic.one_pm / game_number
-            prev_rebounds = prev_statistic.rebounds / game_number
-            prev_orebounds = prev_statistic.orebounds / game_number
-            prev_drebounds = prev_statistic.drebounds / game_number
-            prev_assists = prev_statistic.assists / game_number
-            prev_steals = prev_statistic.steals / game_number
-            prev_turnovers = prev_statistic.turnovers / game_number
-            prev_fastbreaks = prev_statistic.fastbreaks / game_number
-            prev_mblocks = prev_statistic.mblocks / game_number
-            prev_rblocks = prev_statistic.rblocks / game_number
-            prev_mfaults = prev_statistic.mfaults / game_number
-            prev_rfaults = prev_statistic.rfaults / game_number
-            prev_positive_negative = prev_statistic.positive_negative / game_number
-            prev_value = prev_statistic.value / game_number
+            prev_seconds = prev_statistic.seconds
+            prev_points = prev_statistic.points
+            prev_two_p = prev_statistic.two_p
+            prev_two_pm = prev_statistic.two_pm
+            prev_three_p = prev_statistic.three_p
+            prev_three_pm = prev_statistic.three_pm
+            prev_one_p = prev_statistic.one_p
+            prev_one_pm = prev_statistic.one_pm
+            prev_rebounds = prev_statistic.rebounds
+            prev_orebounds = prev_statistic.orebounds
+            prev_drebounds = prev_statistic.drebounds
+            prev_assists = prev_statistic.assists
+            prev_steals = prev_statistic.steals
+            prev_turnovers = prev_statistic.turnovers
+            prev_fastbreaks = prev_statistic.fastbreaks
+            prev_mblocks = prev_statistic.mblocks
+            prev_rblocks = prev_statistic.rblocks
+            prev_mfaults = prev_statistic.mfaults
+            prev_rfaults = prev_statistic.rfaults
+            prev_positive_negative = prev_statistic.positive_negative
+            prev_value = prev_statistic.value
           end
 
-          unless Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "game").exists?
+          unless Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "game").first
             seconds = 0
             points = 0
             two_p = 0
@@ -230,27 +228,27 @@ class StatisticsController < ApplicationController
             value = 0
           else
             statistic = Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "game").first
-            seconds = statistic.seconds / game_number
-            points = statistic.points / game_number
-            two_p = statistic.two_p / game_number
-            two_pm = statistic.two_pm / game_number
-            three_p = statistic.three_p / game_number
-            three_pm = statistic.three_pm / game_number
-            one_p = statistic.one_p / game_number
-            one_pm = statistic.one_pm / game_number
-            rebounds = statistic.rebounds / game_number
-            orebounds = statistic.orebounds / game_number
-            drebounds = statistic.drebounds / game_number
-            assists = statistic.assists / game_number
-            steals = statistic.steals / game_number
-            turnovers = statistic.turnovers / game_number
-            fastbreaks = statistic.fastbreaks / game_number
-            mblocks = statistic.mblocks / game_number
-            rblocks = statistic.rblocks / game_number
-            mfaults = statistic.mfaults / game_number
-            rfaults = statistic.rfaults / game_number
-            positive_negative = statistic.positive_negative / game_number
-            value = statistic.value / game_number
+            seconds = statistic.seconds
+            points = statistic.points
+            two_p = statistic.two_p
+            two_pm = statistic.two_pm
+            three_p = statistic.three_p
+            three_pm = statistic.three_pm
+            one_p = statistic.one_p
+            one_pm = statistic.one_pm
+            rebounds = statistic.rebounds
+            orebounds = statistic.orebounds
+            drebounds = statistic.drebounds
+            assists = statistic.assists
+            steals = statistic.steals
+            turnovers = statistic.turnovers
+            fastbreaks = statistic.fastbreaks
+            mblocks = statistic.mblocks
+            rblocks = statistic.rblocks
+            mfaults = statistic.mfaults
+            rfaults = statistic.rfaults
+            positive_negative = statistic.positive_negative
+            value = statistic.value
           end
 
           new_statistic = Statistic.where(:player_id => player.id, 
@@ -305,27 +303,27 @@ class StatisticsController < ApplicationController
         team.players.each do |player|
           if Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "player").exists?
             statistic = Statistic.where(:player_id => player.id, :seasson => seasson, :game_number => game_number, :type_statistic => "player").first
-            seconds = (seconds + statistic.seconds) / game_number
-            points = (statistic.points) / game_number
-            two_p = (statistic.two_p) / game_number
-            two_pm = (statistic.two_pm) / game_number
-            three_p = (statistic.three_p) / game_number
-            three_pm = (statistic.three_pm) / game_number
-            one_p = (statistic.one_p) / game_number
-            one_pm = (statistic.one_pm) / game_number
-            rebounds = (statistic.rebounds) / game_number
-            orebounds = (statistic.orebounds) / game_number
-            drebounds = (statistic.drebounds) / game_number
-            assists = (statistic.assists) / game_number
-            steals = (statistic.steals) / game_number
-            turnovers = (statistic.turnovers) / game_number
-            fastbreaks = (statistic.fastbreaks) / game_number
-            mblocks = (statistic.mblocks) / game_number
-            rblocks = (statistic.rblocks) / game_number
-            mfaults = (statistic.mfaults) / game_number
-            rfaults = (statistic.rfaults) / game_number
-            positive_negative = (statistic.positive_negative) / game_number
-            value = (value + statistic.value) / game_number
+            seconds = (seconds + statistic.seconds)
+            points = (statistic.points)
+            two_p = (statistic.two_p)
+            two_pm = (statistic.two_pm)
+            three_p = (statistic.three_p)
+            three_pm = (statistic.three_pm)
+            one_p = (statistic.one_p)
+            one_pm = (statistic.one_pm)
+            rebounds = (statistic.rebounds)
+            orebounds = (statistic.orebounds)
+            drebounds = (statistic.drebounds)
+            assists = (statistic.assists)
+            steals = (statistic.steals)
+            turnovers = (statistic.turnovers)
+            fastbreaks = (statistic.fastbreaks)
+            mblocks = (statistic.mblocks)
+            rblocks = (statistic.rblocks)
+            mfaults = (statistic.mfaults)
+            rfaults = (statistic.rfaults)
+            positive_negative = (statistic.positive_negative)
+            value = (value + statistic.value)
           end   
         end
 
@@ -358,11 +356,12 @@ class StatisticsController < ApplicationController
       csv << column_names
       statistics.each do |statistic|
         if statistic.seconds > 0
-          player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: statistic.game_number).first
-          team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: statistic.game_number).first
+          game_number = statistic.game_number
+          player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: game_number).first
+          team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: game_number).first
           csv << [player_statistic.player_id, team_statistic.team_id, statistic.game_number,
-                  player_statistic.seconds, player_statistic.points, player_statistic.two_p, player_statistic.two_pm, player_statistic.three_p, player_statistic.three_pm, player_statistic.one_p, player_statistic.one_pm, player_statistic.rebounds, player_statistic.orebounds, player_statistic.drebounds, player_statistic.assists, player_statistic.steals, player_statistic.turnovers, player_statistic.fastbreaks, player_statistic.mblocks, player_statistic.rblocks, player_statistic.mfaults, player_statistic.rfaults, player_statistic.positive_negative, player_statistic.value,
-                  team_statistic.points, team_statistic.two_p, team_statistic.two_pm, team_statistic.three_p, team_statistic.three_pm, team_statistic.one_p, team_statistic.one_pm, team_statistic.rebounds, team_statistic.orebounds, team_statistic.drebounds, team_statistic.assists, team_statistic.steals, team_statistic.turnovers, team_statistic.fastbreaks, team_statistic.mblocks, team_statistic.rblocks, team_statistic.mfaults, team_statistic.rfaults, team_statistic.positive_negative, team_statistic.value,
+                  player_statistic.seconds / game_number, player_statistic.points / game_number, player_statistic.two_p / game_number, player_statistic.two_pm / game_number, player_statistic.three_p / game_number, player_statistic.three_pm / game_number, player_statistic.one_p / game_number, player_statistic.one_pm / game_number, player_statistic.rebounds / game_number, player_statistic.orebounds / game_number, player_statistic.drebounds / game_number, player_statistic.assists / game_number, player_statistic.steals / game_number, player_statistic.turnovers / game_number, player_statistic.fastbreaks / game_number, player_statistic.mblocks / game_number, player_statistic.rblocks / game_number, player_statistic.mfaults / game_number, player_statistic.rfaults / game_number, player_statistic.positive_negative / game_number, player_statistic.value / game_number,
+                  team_statistic.points / game_number, team_statistic.two_p / game_number, team_statistic.two_pm / game_number, team_statistic.three_p / game_number, team_statistic.three_pm / game_number, team_statistic.one_p / game_number, team_statistic.one_pm / game_number, team_statistic.rebounds / game_number, team_statistic.orebounds / game_number, team_statistic.drebounds / game_number, team_statistic.assists / game_number, team_statistic.steals / game_number, team_statistic.turnovers / game_number, team_statistic.fastbreaks / game_number, team_statistic.mblocks / game_number, team_statistic.rblocks / game_number, team_statistic.mfaults / game_number, team_statistic.rfaults / game_number, team_statistic.positive_negative / game_number, team_statistic.value / game_number,
                   statistic.value, statistic.points, statistic.rebounds, statistic.assists]
         end
       end
