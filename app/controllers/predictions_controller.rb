@@ -34,7 +34,6 @@ class PredictionsController < ApplicationController
   end
 
   def game
-    puts "----------------> GAME"
     @predictions = Prediction.where(:game => params[:id])
   end
 
