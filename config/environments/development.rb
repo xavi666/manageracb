@@ -34,4 +34,35 @@ Manageracb::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  config.teams = {
+                  "BALONCESTO SEVILLA" => 1,
+                  "CAI ZARAGOZA" => 2, 
+                  "DOMINION BILBAO BASKET" => 3, 
+                  "FIATC JOVENTUT" => 4, 
+                  "FC BARCELONA LASSA" => 5, 
+                  "HERBALIFE GRAN CANARIA" => 6, 
+                  "ICL MANRESA" => 7, 
+                  "IBEROSTAR TENERIFE" => 8, 
+                  "LABORAL KUTXA BASKONIA" => 9, 
+                  "MONTAKIT FUENLABRADA" => 10, 
+                  "MORABANC ANDORRA" => 11,
+                  "MOVISTAR ESTUDIANTES" => 12, 
+                  "UCAM MURCIA" => 13, 
+                  "UNICAJA" => 14, 
+                  "REAL MADRID" => 15,
+                  "RETABET.ES GBC" => 16, 
+                  "RIO NATURA MONBUS OBRADOIRO" => 17, 
+                  "VALENCIA BASKET CLUB" => 18,
+                  "UCAM MURCIA CB" => 13,
+                  "GIPUZKOA BASKET" => 16,
+                  "LA BRUIXA D'OR MANRESA" => 7,
+                  "FC BARCELONA" => 5,
+                  "DOMINION BILBAO" => 3,
+                  "TUENTI MóVIL ESTUDIANTES" => 12,
+                  "TUENTI M&#xF3;VIL ESTUDIANTES" => 12,
+                  "BILBAO BASKET" => 3,
+                  "DOMINION BILBAO BASKET" => 3,
+                  "FC BARCELONA LASSA" => 5,
+                  "ICL MANRESA" => 7
+                }
 end
