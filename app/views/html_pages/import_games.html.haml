@@ -4,5 +4,6 @@
       = filter_text_field "season", placeholder: Statistic.human_attribute_name(:season)
       = filter_text_field "code", placeholder: Statistic.human_attribute_name(:code)
       = filter_text_field "num_games", placeholder: Statistic.human_attribute_name(:num_games)
+      = filter_buttons button="Importar"
       
 ="Imported = "+@count.to_s
