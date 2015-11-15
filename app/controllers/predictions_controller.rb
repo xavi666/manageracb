@@ -12,10 +12,16 @@ class PredictionsController < ApplicationController
   end
 
   def create
-    data_labels = %w(seconds points rebounds assists value)
-    data_items = Statistic.player.pluck(:seconds, :points, :rebounds, :assists, :value)
-    data_set = DataSet.new(:data_labels => data_labels, :data_items => data_items)
-    test = [1500, 10, 6, 4]
+    csv_text = File.read('predictions.csv')
+    csv = CSV.parse(csv_text, :headers => true)
+    csv.each do |row|
+      Moulding.create!(row.to_hash)
+    end
+    @season = Setting.find_by_name("season").value
+    #data_labels = %w(seconds points rebounds assists value)
+    #data_items = Statistic.player.pluck(:seconds, :points, :rebounds, :assists, :value)
+    #data_set = DataSet.new(:data_labels => data_labels, :data_items => data_items)
+    #test = [1500, 10, 6, 4]
 
     #id3 = Ai4r::Classifiers::ID3.new.build(data_set)   
     #prism = Ai4r::Classifiers::Prism.new.build(data_set)   

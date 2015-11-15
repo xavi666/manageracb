@@ -42,7 +42,7 @@ class ImportsController < ApplicationController
       taula_jugadors = pagina_partit.css("table.estadisticasnew")[1]
       rows_jugadors = taula_jugadors.search('//tr')
       local_visitant = "local"
-      temporada = "2014"
+      temporada = Setting.find_by_name("season_data").value
       equips_jornada = 9
 
       jornada = (html_page.game_number / equips_jornada).round + 1
@@ -75,9 +75,9 @@ class ImportsController < ApplicationController
           [:value, 'td[23]/text()'],
           [:team, local_visitant],
           [:game_number, jornada],
-          [:seasson, temporada]
+          [:season, temporada]
         ].each do |name, xpath|
-          if name == :team || name == :game_number || name == :seasson
+          if name == :team || name == :game_number || name == :season
             detail[name] = xpath
           else
             detail[name] = row.at_xpath(xpath).to_s.strip || 0
@@ -152,12 +152,12 @@ class ImportsController < ApplicationController
         @count_players += 1 
       end
 
-      new_statistic = Statistic.where(:player_id => jugador.id, :seasson => statistic[:seasson], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).exists?
+      new_statistic = Statistic.where(:player_id => jugador.id, :season => statistic[:season], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).exists?
 
       unless new_statistic
         new_statistic = Statistic.create!(:player_id => jugador.id, 
                         :team_id => team.id, :team_against_id => team_against.id,
-                        :seasson => statistic[:seasson], :game_number => statistic[:game_number],
+                        :season => statistic[:season], :game_number => statistic[:game_number],
                         :number => jugador.number, 
                         :seconds => get_seconds(statistic[:seconds]), :points => statistic[:points], 
                         :two_p => get_points_tried(statistic[:two_p]), :two_pm => get_points_made(statistic[:two_p]),
