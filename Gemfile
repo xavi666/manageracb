@@ -10,6 +10,7 @@ gem 'nokogiri'
 gem 'awesome_print'
 gem 'hash_to_html'
 gem 'enumerize'
+gem "font-awesome-rails"
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -29,6 +30,9 @@ end
 
 gem 'jquery-rails'
 gem 'haml',                 '~> 4.0'
+
+gem "sortable_filter", path: "../sortable_filter"
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
