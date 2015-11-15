@@ -8,8 +8,9 @@ from sklearn import svm
 from sklearn.svm import SVR
 from exercici1 import * 
 from time import time
+#import matplotlib.pyplot as plt
 
-
+# source venv/bin/activate
 # warning filter
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -91,31 +92,19 @@ print('SVR rbf', ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-
 #y_rbf = svr_rbf.fit(X, y).predict(X)
 
 # LIN
-svr_lin = SVR(kernel='linear', C=1e3)
-t1 = time()
-acc = sets_svm_prec(svr_lin, l, marge)
-print('SVR lin', ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#svr_lin = SVR(kernel='linear', C=1e3)
+#t1 = time()
+#acc = sets_svm_prec(svr_lin, l, marge)
+#print('SVR lin', ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
 #y_lin = svr_lin.fit(X, y).predict(X)
 
 # POLY
-svr_poly = SVR(kernel='poly', C=1e3, degree=2)
-t1 = time()
-acc = sets_svm_prec(svr_poly, l, marge)
-print('SVR poly', ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
+#svr_poly = SVR(kernel='poly', C=1e3, degree=2)
+#t1 = time()
+#acc = sets_svm_prec(svr_poly, l, marge)
+#print('SVR poly', ' - Prec. Exercici1: ', '%.2f' % acc, ' en ', '%.6f' % (time()-t1), ' segundos.')
 #y_poly = svr_poly.fit(X, y).predict(X)
 
-###############################################################################
-# look at the results
-plt.scatter(X, y, c='k', label='data')
-plt.hold('on')
-plt.plot(X, y_rbf, c='g', label='RBF model')
-plt.plot(X, y_lin, c='r', label='Linear model')
-plt.plot(X, y_poly, c='b', label='Polynomial model')
-plt.xlabel('data')
-plt.ylabel('target')
-plt.title('Support Vector Regression')
-plt.legend()
-plt.show()
 
 # classification
 #for i in range(1, 5):
