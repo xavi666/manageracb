@@ -20,37 +20,41 @@ class HtmlPagesController < ApplicationController
   end
 
   def import_statistics
-    cod_edicions = ["59"]
-    @count = 0
-    cod_edicions.each_with_index {|cod_edicion, index| 
-      #totals partits => 9 * 34 = 306
-      (1..306).each do |partit|
-        url_partit = "http://www.acb.com/stspartido.php?cod_competicion=LACB&"+cod_edicion.to_s+"=59&partido="+partit.to_s
+    if params[:search]
+      code = params[:search][:code]
+      season = params[:search][:season]
+      num_games = params[:search][:num_games].to_i
+      @count = 0
+      #totals partits => 9 * 34 = 306 per a la temporada 2014
+      #total partits temporada 2015, 54?
+      (1..num_games).each do |partit|
+        url_partit = "http://www.acb.com/stspartido.php?cod_competicion=LACB&cod_edicion="+code+"&partido="+partit.to_s
         pagina_partit = Nokogiri::HTML(open(url_partit))
-        game = HtmlPage.where(:code => cod_edicion, :game_number => partit, :html => pagina_partit.inner_html, :html_page_type => "statistic").first
-        unless game
-          HtmlPage.create!(:code => cod_edicion, :game_number => partit, :html => pagina_partit.inner_html, :html_page_type => "statistic")
+        html_page = HtmlPage.where(code: code, season: season, game_number: partit, html: pagina_partit.inner_html, html_page_type: "statistic").first
+        unless html_page
+          HtmlPage.create!(code: code, season: season, game_number: partit, html: pagina_partit.inner_html, html_page_type: "statistic")
           @count += 1
         end
       end
-    }
+    end
   end
 
   def import_games
-    cod_edicions = ["60"]
-    @count = 0
-    cod_edicions.each_with_index {|cod_edicion, index| 
+    if params[:search]
+      code = params[:search][:code]
+      season = params[:search][:season]
+      num_games = params[:search][:num_games].to_i
       #jornades = 34
-      (1..34).each do |jornada|
-        url_partit = "http://acb.com/resulcla.php?codigo=LACB-"+cod_edicion.to_s+"&jornada="+jornada.to_s
+      (1..num_games).each do |jornada|
+        url_partit = "http://acb.com/resulcla.php?codigo=LACB-"+code+"&jornada="+jornada.to_s
         pagina_jornada = Nokogiri::HTML(open(url_partit))
-        game = HtmlPage.where(:code => cod_edicion, :game_number => jornada, :html => pagina_jornada.inner_html, :html_page_type => "game").first
+        game = HtmlPage.where(:code => code, season: season, :game_number => jornada, :html => pagina_jornada.inner_html, :html_page_type => "game").first
         unless game
-          HtmlPage.create!(:code => cod_edicion, :game_number => jornada, :html => pagina_jornada.inner_html, :html_page_type => "game")
+          HtmlPage.create!(:code => code, season: season, :game_number => jornada, :html => pagina_jornada.inner_html, :html_page_type => "game")
           @count += 1
         end
       end
-    }
+    end
   end
 
   private
