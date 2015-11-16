@@ -412,10 +412,8 @@ class StatisticsController < ApplicationController
       game_number = Setting.find_by_name("game_number").value.to_i
       season = Setting.find_by_name("season").value
       games.each do |game|
-        local_team_statistic = Statistic.team.where(team_id: game.visitant_team_id, game_number: game_number, season: season).first
+        local_team_statistic = Statistic.team.where(team_id: game.local_team_id, game_number: game_number, season: season).first
         visitant_team_statistic = Statistic.team.where(team_id: game.visitant_team_id, game_number: game_number, season: season).first
-        puts "active players ===> "
-        puts game.local_team.players.active.count
         game.local_team.players.active.each do |player|
           player_statistic = Statistic.player.where(player_id: player.id, game_number: game_number, season: season).first
           if player_statistic and visitant_team_statistic
