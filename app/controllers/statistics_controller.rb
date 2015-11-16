@@ -113,19 +113,19 @@ class StatisticsController < ApplicationController
   def export
     #training data
     #file_name = "export.csv"
-    #@statistics = Statistic.game
+    #@statistics = Statistic.game.where(season: "2014")
     #f = open(file_name, "w+")
     #f.close()
     #CSV.open(file_name, "wb") do |csv|
     #  statistics_array = statistic_to_csv(@statistics)
     #  statistics_array.each do |statistic|
     #    csv << statistic
-    #  end
-    #end
+      end
+    end
 
     # predictions
     file_name = "predictions.csv"
-    @statistics = Statistic.game
+    @statistics = Statistic.game.where(season: "2015")
     f = open(file_name, "w+")
     f.close()
     CSV.open(file_name, "wb") do |csv|
@@ -388,8 +388,8 @@ class StatisticsController < ApplicationController
       statistics.each do |statistic|
         if statistic.seconds > 0
           game_number = statistic.game_number
-          player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: game_number, season: Setting.find_by_name("season_data").value).first
-          team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: game_number, season: Setting.find_by_name("season_data").value).first
+          player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: game_number, season: "2014").first
+          team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: game_number, season: "2014").first
           if player_statistic and team_statistic
             csv << [player_statistic.player_id, team_statistic.team_id, statistic.game_number,
                   player_statistic.seconds / game_number, player_statistic.points / game_number, player_statistic.two_p / game_number, player_statistic.two_pm / game_number, player_statistic.three_p / game_number, player_statistic.three_pm / game_number, player_statistic.one_p / game_number, player_statistic.one_pm / game_number, player_statistic.rebounds / game_number, player_statistic.orebounds / game_number, player_statistic.drebounds / game_number, player_statistic.assists / game_number, player_statistic.steals / game_number, player_statistic.turnovers / game_number, player_statistic.fastbreaks / game_number, player_statistic.mblocks / game_number, player_statistic.rblocks / game_number, player_statistic.mfaults / game_number, player_statistic.rfaults / game_number, player_statistic.positive_negative / game_number, player_statistic.value / game_number,
