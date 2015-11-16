@@ -34,6 +34,7 @@ Manageracb::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
   config.teams = {
                   "BALONCESTO SEVILLA" => 1,
                   "CAI ZARAGOZA" => 2, 

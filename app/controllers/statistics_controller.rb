@@ -113,23 +113,25 @@ class StatisticsController < ApplicationController
   def export
     #training data
     #file_name = "export.csv"
-    #@statistics = Statistic.game.where(season: "2014")
+    @statistics = Statistic.game.where(season: "2014")
     #f = open(file_name, "w+")
     #f.close()
     #CSV.open(file_name, "wb") do |csv|
     #  statistics_array = statistic_to_csv(@statistics)
     #  statistics_array.each do |statistic|
     #    csv << statistic
-      end
-    end
+    #  end
+    #end
 
     # predictions
     file_name = "predictions.csv"
-    @statistics = Statistic.game.where(season: "2015")
+
+    @games = Game.where(season: Setting.find_by_name(:season).value, game_number: Setting.find_by_name(:game_number).value)
+
     f = open(file_name, "w+")
     f.close()
     CSV.open(file_name, "wb") do |csv|
-      statistics_array = data_to_csv(@statistics)
+      statistics_array = data_to_csv(@games)
       statistics_array.each do |statistic|
         csv << statistic
       end
@@ -401,22 +403,22 @@ class StatisticsController < ApplicationController
       csv
     end
 
-    def data_to_csv statistics
+    def data_to_csv games
       csv = []
       column_names = %w(PlayerId TeamAgainstId GameNumber PlayerSeconds PlayerPoints Player2P Player2PM Player3P Player3PM Player1P Player1PM PlayerRebounds PlayerORebounds PlayerDRebounds PlayerAssists PlayerSteals PlayerTurnovers PlayerFastbreak PlayerBlocksM PlayerBlockR PlayerFaultsM PlayerFaulsR PlayerPN PlayerValue 
         TeamPoints Team2P Team2PM Team3P Team3PM Team1P Team1PM TeamRebounds TeamORebounds TeamDRebounds TeamAssists TeamSteals TeamTurnovers TeamFastbreak TeamBlocksM TeamBlockR TeamFaultsM TeamFaultsR TeamPN TeamValue)
       csv << column_names
-      statistics.each do |statistic|
-        if statistic.seconds > 0
-          game_number = statistic.game_number
-          player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: game_number, season: Setting.find_by_name("season").value).first
-          team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: game_number, season: Setting.find_by_name("season").value).first
-          if player_statistic and team_statistic
-            csv << [player_statistic.player_id, team_statistic.team_id, statistic.game_number,
-                  player_statistic.seconds / game_number, player_statistic.points / game_number, player_statistic.two_p / game_number, player_statistic.two_pm / game_number, player_statistic.three_p / game_number, player_statistic.three_pm / game_number, player_statistic.one_p / game_number, player_statistic.one_pm / game_number, player_statistic.rebounds / game_number, player_statistic.orebounds / game_number, player_statistic.drebounds / game_number, player_statistic.assists / game_number, player_statistic.steals / game_number, player_statistic.turnovers / game_number, player_statistic.fastbreaks / game_number, player_statistic.mblocks / game_number, player_statistic.rblocks / game_number, player_statistic.mfaults / game_number, player_statistic.rfaults / game_number, player_statistic.positive_negative / game_number, player_statistic.value / game_number,
-                  team_statistic.points / game_number, team_statistic.two_p / game_number, team_statistic.two_pm / game_number, team_statistic.three_p / game_number, team_statistic.three_pm / game_number, team_statistic.one_p / game_number, team_statistic.one_pm / game_number, team_statistic.rebounds / game_number, team_statistic.orebounds / game_number, team_statistic.drebounds / game_number, team_statistic.assists / game_number, team_statistic.steals / game_number, team_statistic.turnovers / game_number, team_statistic.fastbreaks / game_number, team_statistic.mblocks / game_number, team_statistic.rblocks / game_number, team_statistic.mfaults / game_number, team_statistic.rfaults / game_number, team_statistic.positive_negative / game_number, team_statistic.value / game_number]
-          end
-        end
+      games.each do |game|
+        #if statistic.seconds > 0
+        #  game_number = statistic.game_number
+        #  player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: game_number, season: Setting.find_by_name("season").value).first
+        #  team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: game_number, season: Setting.find_by_name("season").value).first
+        #  if player_statistic and team_statistic
+        #    csv << [player_statistic.player_id, team_statistic.team_id, statistic.game_number,
+        #          player_statistic.seconds / game_number, player_statistic.points / game_number, player_statistic.two_p / game_number, player_statistic.two_pm / game_number, player_statistic.three_p / game_number, player_statistic.three_pm / game_number, player_statistic.one_p / game_number, player_statistic.one_pm / game_number, player_statistic.rebounds / game_number, player_statistic.orebounds / game_number, player_statistic.drebounds / game_number, player_statistic.assists / game_number, player_statistic.steals / game_number, player_statistic.turnovers / game_number, player_statistic.fastbreaks / game_number, player_statistic.mblocks / game_number, player_statistic.rblocks / game_number, player_statistic.mfaults / game_number, player_statistic.rfaults / game_number, player_statistic.positive_negative / game_number, player_statistic.value / game_number,
+        #          team_statistic.points / game_number, team_statistic.two_p / game_number, team_statistic.two_pm / game_number, team_statistic.three_p / game_number, team_statistic.three_pm / game_number, team_statistic.one_p / game_number, team_statistic.one_pm / game_number, team_statistic.rebounds / game_number, team_statistic.orebounds / game_number, team_statistic.drebounds / game_number, team_statistic.assists / game_number, team_statistic.steals / game_number, team_statistic.turnovers / game_number, team_statistic.fastbreaks / game_number, team_statistic.mblocks / game_number, team_statistic.rblocks / game_number, team_statistic.mfaults / game_number, team_statistic.rfaults / game_number, team_statistic.positive_negative / game_number, team_statistic.value / game_number]
+        #  end
+        #end
       end
       csv
     end
