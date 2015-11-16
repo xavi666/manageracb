@@ -11,6 +11,8 @@ gem 'awesome_print'
 gem 'hash_to_html'
 gem 'enumerize'
 gem "font-awesome-rails"
+gem 'rb-libsvm', require: 'libsvm'
+gem 'liblinear-ruby'
 
 # Gems used only for assets and not required
 # in production environments by default.

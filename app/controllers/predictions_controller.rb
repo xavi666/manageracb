@@ -6,37 +6,72 @@ class PredictionsController < ApplicationController
   require "bundler/setup"
   #include Ai4r::Classifiers
   #include Ai4r::Data
+  
 
   def index
     #@predictions = Prediction.all
   end
 
   def create
-    csv_text = File.read('predictions.csv')
-    csv = CSV.parse(csv_text, :headers => true)
-    csv.each do |row|
-      Moulding.create!(row.to_hash)
-    end
-    @season = Setting.find_by_name("season").value
-    #data_labels = %w(seconds points rebounds assists value)
-    #data_items = Statistic.player.pluck(:seconds, :points, :rebounds, :assists, :value)
-    #data_set = DataSet.new(:data_labels => data_labels, :data_items => data_items)
-    #test = [1500, 10, 6, 4]
 
-    #id3 = Ai4r::Classifiers::ID3.new.build(data_set)   
-    #prism = Ai4r::Classifiers::Prism.new.build(data_set)   
-    #b = NaiveBayes.new.
-    #set_parameters({:m=>0}).
-    #build data_set
-    #b = NaiveBayes.new
-    #      .set_parameters(m: 0)
-    #      .build(data_set)
+    ####################################
+    ####### LIBSVM
+    ####### https://github.com/febeling/rb-libsvm
+    ####################################
 
-    #@prediction = id3.eval([1500, 10, 6, 4])
-    #@prediction = prism.eval(test)
-    #@rules = id3.get_rules
-    #b.eval(test)
-    #@prediction = b.get_probability_map(test)
+    # This library is namespaced.
+    problem = Libsvm::Problem.new
+    parameter = Libsvm::SvmParameter.new
+
+    parameter.cache_size = 1 # in megabytes
+
+    parameter.eps = 0.001
+    parameter.c = 10
+
+    examples = [ [1,0,1], [-1,0,-1] ].map {|ary| Libsvm::Node.features(ary) }
+    labels = [1, -1]
+
+    problem.set_examples(labels, examples)
+
+    model = Libsvm::Model.train(problem, parameter)
+
+    pred = model.predict(Libsvm::Node.features(1, 1, 1))
+    puts "Example [1, 1, 1] - Predicted #{pred}"
+
+    ####################################
+    ####### LIBLINEAR
+    ####### https://github.com/kei500/liblinear-ruby
+    ####################################
+
+    # Setting parameters
+    param = Liblinear::Parameter.new
+    param.solver_type = Liblinear::L2R_LR
+
+    # Training phase
+    labels = [1, -1]
+    examples = [
+      {1=>0, 2=>0, 3=>0, 4=>0, 5=>0},
+      {1=>1, 2=>1, 3=>1, 4=>1, 5=>1}
+    ]
+    bias = 0.5
+    prob = Liblinear::Problem.new(labels, examples, bias)
+    model = Liblinear::Model.new(prob, param)
+
+    # Predicting phase
+    puts model.predict({1=>1, 2=>1, 3=>1, 4=>1, 5=>1}) # => -1.0
+
+    # Analyzing phase
+    puts model.coefficient
+    puts model.bias
+
+    # Cross Validation
+    fold = 2
+    cv = Liblinear::CrossValidator.new(prob, param, fold)
+    cv.execute
+
+    puts cv.accuracy                        # for classification
+    puts cv.mean_squared_error              # for regression
+    puts cv.squared_correlation_coefficient # for regression
   end
 
   def game
