@@ -21,5 +21,5 @@ class Prediction < ActiveRecord::Base
   # !**************************************************
   # !                  Other
   # !**************************************************
-
+  acts_as_filterable default_order: "id"
 end
