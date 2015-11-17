@@ -72,6 +72,37 @@ class PredictionsController < ApplicationController
     puts cv.accuracy                        # for classification
     puts cv.mean_squared_error              # for regression
     puts cv.squared_correlation_coefficient # for regression
+
+
+
+    #######
+    # This library is namespaced.
+    problem = Libsvm::Problem.new
+    parameter = Libsvm::SvmParameter.new
+
+    parameter.cache_size = 1 # in megabytes
+
+    parameter.eps = 0.001
+    parameter.c = 10
+
+
+    values = %w(seconds points value game_number)
+    labels = %w(value)
+    @statistics = Statistic.game.where(season: "2014").where("statistics.seconds > 0").select(values)
+
+    @training_values = @statistics.map {|e| [e.seconds / e.game_number, e.points / e.game_number]} 
+    @training_labels = @statistics.map(&:value)
+
+    examples = @training_values.map {|ary| Libsvm::Node.features(ary) }
+    labels = @training_labels
+
+    problem.set_examples(labels, examples)
+
+    model = Libsvm::Model.train(problem, parameter)
+
+    @pred = model.predict(Libsvm::Node.features(1200, 1))
+    puts "Example [1000, 10] - Predicted #{pred}"
+
   end
 
   def game
@@ -94,4 +125,5 @@ class PredictionsController < ApplicationController
     def prediction_params
       params.require(:prediction).permit()
     end
+
 end
