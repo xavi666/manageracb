@@ -112,16 +112,16 @@ class StatisticsController < ApplicationController
 
   def export
     #training data
-    #file_name = "export.csv"
+    file_name = "export.csv"
     @statistics = Statistic.game.where(season: "2014")
-    #f = open(file_name, "w+")
-    #f.close()
-    #CSV.open(file_name, "wb") do |csv|
-    #  statistics_array = statistic_to_csv(@statistics)
-    #  statistics_array.each do |statistic|
-    #    csv << statistic
-    #  end
-    #end
+    f = open(file_name, "w+")
+    f.close()
+    CSV.open(file_name, "wb") do |csv|
+      statistics_array = statistic_to_csv(@statistics)
+      statistics_array.each do |statistic|
+        csv << statistic
+      end
+    end
 
     # predictions
     file_name = "predictions.csv"
