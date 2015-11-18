@@ -77,7 +77,7 @@ class PredictionsController < ApplicationController
 
   end
 
-  def create_two
+  def predict
 
     ####################################
     ####### LIBLINEAR
