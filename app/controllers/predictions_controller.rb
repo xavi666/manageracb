@@ -51,7 +51,7 @@ class PredictionsController < ApplicationController
 
     values = %w(seconds points value game_number)
     labels = %w(value)
-    @statistics = Statistic.game.where(season: "2014").where("statistics.seconds > 0").first(10)
+    @statistics = Statistic.game.where(season: "2014").where("statistics.seconds > 0").first(1000)
 
     @training_values = []
     @statistics.each do |statistic|
@@ -87,9 +87,11 @@ class PredictionsController < ApplicationController
 
 
     # Setting parameters
-    num_elements = 100
+    num_elements = 10
     param = Liblinear::Parameter.new
-    param.solver_type = Liblinear::L2R_L2LOSS_SVR
+    #param.solver_type = Liblinear::L2R_L2LOSS_SVR
+    #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
+    param.solver_type = Liblinear::L2R_L1LOSS_SVR_DUAL
 
     @statistics = Statistic.game.where(season: "2014").where("statistics.seconds > 0").first(num_elements)
 
@@ -102,8 +104,8 @@ class PredictionsController < ApplicationController
         team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: game_number, season: "2014").first
         if player_statistic and team_statistic
           label = {
-                0 => player_statistic.seconds / game_number, 1 => player_statistic.points / game_number, 2 => player_statistic.rebounds / game_number, 3 => player_statistic.assists / game_number, 4 => player_statistic.value / game_number,
-                5 => team_statistic.points / game_number, 6 => team_statistic.rebounds / game_number, 7 => team_statistic.assists / game_number, 8 => team_statistic.rfaults / game_number, 9 => team_statistic.value / game_number }
+                0 => player_statistic.value / game_number,
+                1 => team_statistic.value / game_number }
           examples << label
         end
       end
@@ -115,8 +117,27 @@ class PredictionsController < ApplicationController
     prob = Liblinear::Problem.new(labels, examples, bias)
     model = Liblinear::Model.new(prob, param)
 
+    game_number = Setting.find_by_name(:game_number).value.to_i
+    season = Setting.find_by_name(:season).value
+    prediccions = Prediction.where("games.game_number = ?",game_number.to_i).includes(:game)
+
+    prediccions.each do |prediccio|
+      player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
+      team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
+      if player_statistic and team_statistic
+        prediccio_values = {
+              0 => player_statistic.value / game_number,
+              1 => team_statistic.value / game_number }
+        prediccio_label =  model.predict(prediccio_values)
+        prediccio.value = prediccio_label
+        puts "------------> VALUE"
+        puts prediccio.value
+        prediccio.save!
+      end
+    end
+
     # Predicting phase
-    @prediccio =  model.predict({0=>1603, 1=>6, 2=>1, 3=>2, 4=>8, 5=>90, 6=>25, 7=>12, 8=>20, 9=>97})
+    
 
     # Analyzing phase
     @coefficient = model.coefficient
@@ -139,13 +160,11 @@ class PredictionsController < ApplicationController
     game_number = Setting.find_by_name("game_number").value.to_i
     season = Setting.find_by_name("season").value
     games.each do |game|
-      puts "---->game"
       local_team_statistic = Statistic.team.where(team_id: game.local_team_id, game_number: game_number, season: season).first
       visitant_team_statistic = Statistic.team.where(team_id: game.visitant_team_id, game_number: game_number, season: season).first
       
       #jugadors equip local
       game.local_team.players.active.each do |player|
-        puts "players local"
         player_statistic = Statistic.player.where(player_id: player.id, game_number: game_number, season: season).first
         if player_statistic and visitant_team_statistic
           prediction = Prediction.where(player_id: player_statistic.player_id, team_id: visitant_team_statistic.team_id, game_id: game.id).first
@@ -157,7 +176,6 @@ class PredictionsController < ApplicationController
 
       #jugadors equip visitant
       game.visitant_team.players.active.each do |player|
-        puts "player visitant"
         player_statistic = Statistic.player.where(player_id: player.id, game_number: game_number, season: season).first
         if player_statistic and local_team_statistic
           prediction = Prediction.where(player_id: player_statistic.player_id, team_id: local_team_statistic.team_id, game_id: game.id).first
