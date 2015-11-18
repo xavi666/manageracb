@@ -9,6 +9,7 @@ class Prediction < ActiveRecord::Base
   # !                Associations
   # !**************************************************
   belongs_to :game
+  belongs_to :player
 
   # !**************************************************
   # !                Validations

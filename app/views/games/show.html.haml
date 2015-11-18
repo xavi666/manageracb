@@ -1,0 +1,28 @@
+%h2="Predicciones de Partidos"
+%div.row
+  %div.table-responsive.white
+    %table.table.table-striped
+      %thead
+        %tr
+          %th=@game.local_team.name
+          %th="VALORACIÓN"
+          %th="PUNTOS"
+          %th="REBOTES"
+          %th="ASISTENCIAS"
+          %th="COTIZACIÓN"
+      %tbody
+        = render @game.predictions.where("predictions.team_id = "+@game.visitant_team_id.to_s)
+
+%div.row
+  %div.table-responsive.white
+    %table.table.table-striped
+      %thead
+        %tr
+          %th=@game.visitant_team.name
+          %th="VALORACIÓN"
+          %th="PUNTOS"
+          %th="REBOTES"
+          %th="ASISTENCIAS"
+          %th="COTIZACIÓN"
+      %tbody
+        = render @game.predictions.where("predictions.team_id = "+@game.local_team_id.to_s)

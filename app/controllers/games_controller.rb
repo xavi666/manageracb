@@ -1,4 +1,5 @@
 class GamesController < ApplicationController
+  layout "front", only: [:show]
 
   def index
     @games = Game.all
@@ -30,6 +31,11 @@ class GamesController < ApplicationController
         count += 1
       end
     end
+  end
+
+  def show
+    @game = Game.find(params[:id])
+    @predictions = Prediction.where(game: params[:id])
   end
 
   def update
