@@ -57,6 +57,8 @@ Manageracb::Application.routes.draw do
   resources :players
   resources :predictions do
     get 'game', on: :collection
+    get 'create_two', on: :collection
+    get 'init', on: :collection
   end
   resources :html_pages do
     get 'import_games', on: :collection
