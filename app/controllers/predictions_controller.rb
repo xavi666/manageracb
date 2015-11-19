@@ -78,81 +78,66 @@ class PredictionsController < ApplicationController
   end
 
   def predict
+    if params[:search]
+      ####################################
+      ####### LIBLINEAR
+      ####### https://github.com/kei500/liblinear-ruby
+      ####################################
 
-    ####################################
-    ####### LIBLINEAR
-    ####### https://github.com/kei500/liblinear-ruby
-    ####################################
+      #params
+      num_elements = params[:search][:num_elements].to_i
+      season = params[:search][:season]
+      game_number = params[:search][:num_games].to_i
+      type = params[:search][:type]
 
+      # Setting parameters
+      param = Liblinear::Parameter.new
+      #param.solver_type = Liblinear::L2R_L2LOSS_SVR
+      #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
+      param.solver_type = Liblinear::L2R_L1LOSS_SVR_DUAL
 
+      @statistics = Statistic.game.where(season: "2014").where("statistics.seconds > 0").first(num_elements)
 
-    # Setting parameters
-    num_elements = 10
-    param = Liblinear::Parameter.new
-    #param.solver_type = Liblinear::L2R_L2LOSS_SVR
-    #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
-    param.solver_type = Liblinear::L2R_L1LOSS_SVR_DUAL
-
-    @statistics = Statistic.game.where(season: "2014").where("statistics.seconds > 0").first(num_elements)
-
-    labels = @statistics.map(&:value)
-    examples = []
-    @statistics.each do |statistic|
-      if statistic.seconds > 0
-        game_number = statistic.game_number
-        player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: game_number, season: "2014").first
-        team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: game_number, season: "2014").first
-        if player_statistic and team_statistic
-          label = {
-                0 => player_statistic.value / game_number,
-                1 => team_statistic.value / game_number }
-          examples << label
+      labels = labels(@statistics, type) 
+      test = []
+      @statistics.each do |statistic|
+        if statistic.seconds > 0
+          test << values(statistic, statistic.game_number, "2014", type)
         end
       end
-    end
 
-    bias = 0.5
-    @labels = labels
-    @examples = examples
-    prob = Liblinear::Problem.new(labels, examples, bias)
-    model = Liblinear::Model.new(prob, param)
+      bias = 0.5
+      @labels = labels
+      @test = test
+      prob = Liblinear::Problem.new(labels, test, bias)
+      model = Liblinear::Model.new(prob, param)
 
-    game_number = Setting.find_by_name(:game_number).value.to_i
-    season = Setting.find_by_name(:season).value
-    prediccions = Prediction.where("games.game_number = ?",game_number.to_i).includes(:game)
-
-    prediccions.each do |prediccio|
-      player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
-      team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
-      if player_statistic and team_statistic
-        prediccio_values = {
-              0 => player_statistic.value / game_number,
-              1 => team_statistic.value / game_number }
-        prediccio_label =  model.predict(prediccio_values)
-        prediccio.value = prediccio_label
-        puts "------------> VALUE"
-        puts prediccio.value
-        prediccio.save!
+      prediccions = Prediction.where("games.game_number = ?",game_number.to_i).includes(:game)
+      prediccions.each do |prediccio|
+        player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
+        team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
+        if player_statistic and team_statistic
+          prediccio_values = values(prediccio, game_number, season, type)
+          # Predicting phase
+          prediccio_label =  model.predict(prediccio_values)
+          prediccio = update_field_prediction(prediccio, prediccio_label, type)
+          prediccio.save!
+        end
       end
+      # Analyzing phase
+      @coefficient = model.coefficient
+      @bias =  model.bias
+
+      # Cross Validation
+      fold = 2
+      cv = Liblinear::CrossValidator.new(prob, param, fold)
+      cv.execute
+
+      # for regression
+      @mean_squared_error = cv.mean_squared_error
+      # for regression
+      @squared_correlation_coefficient = cv.squared_correlation_coefficient
     end
-
-    # Predicting phase
-    
-
-    # Analyzing phase
-    @coefficient = model.coefficient
-    @bias =  model.bias
-
-    # Cross Validation
-    fold = 2
-    cv = Liblinear::CrossValidator.new(prob, param, fold)
-    cv.execute
-
-    # for regression
-    @mean_squared_error = cv.mean_squared_error
-    # for regression
-    @squared_correlation_coefficient = cv.squared_correlation_coefficient
-
   end
 
   def init
@@ -204,4 +189,73 @@ class PredictionsController < ApplicationController
       params.require(:prediction).permit()
     end
 
+    def labels  statistics, type
+      case type
+      when "value"
+        labels = statistics.map(&:value)
+      when "points"
+        labels = statistics.map(&:points)
+      when "assists"
+        labels = statistics.map(&:assists)
+      when "rebounds"
+        labels = statistics.map(&:rebounds)
+      else
+        labels = statistics.map(&:value)
+      end 
+      labels 
+    end
+
+    def values statistic_prediction, game_number, season, type 
+      case statistic_prediction.class.name
+      when "Prediction"
+        team_statistic = Statistic.team.where(team_id: statistic_prediction.team_id, game_number: game_number, season: season).first
+      when "Statistic"
+        team_statistic = Statistic.team.where(team_id: statistic_prediction.team_against_id, game_number: game_number, season: season).first
+      else
+        team_statistic = Statistic.team.where(team_id: statistic_prediction.team_id, game_number: game_number, season: season).first
+      end
+      player_statistic = Statistic.player.where(player_id: statistic_prediction.player_id, game_number: game_number, season: season).first
+      
+      if player_statistic and team_statistic
+        case type
+        when "value"
+          label = {
+              0 => player_statistic.value / game_number,
+              1 => team_statistic.value / game_number }
+        when "points"
+          label = {
+              0 => player_statistic.points / game_number,
+              1 => team_statistic.value / game_number }
+        when "assists"
+          label = {
+              0 => player_statistic.assists / game_number,
+              1 => team_statistic.value / game_number }
+        when "rebounds"
+          label = {
+              0 => player_statistic.rebounds / game_number,
+              1 => team_statistic.value / game_number }
+        else
+           label = {
+              0 => player_statistic.value / game_number,
+              1 => team_statistic.value / game_number }
+        end 
+      end
+      label
+    end
+
+    def update_field_prediction prediction, prediccio_label, type
+      case type
+      when "value"
+        prediction.value = prediccio_label
+      when "points"
+        prediction.points = prediccio_label
+      when "assists"
+        prediction.assists = prediccio_label
+      when "rebounds"
+        prediction.rebounds = prediccio_label
+      else
+        prediction.value = prediccio_label
+      end 
+      prediction  
+    end
 end

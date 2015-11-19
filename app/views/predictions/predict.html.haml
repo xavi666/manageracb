@@ -1,0 +1,22 @@
+.row
+  .col-xs-12
+    = filter_form do
+      = filter_text_field "season", placeholder: Statistic.human_attribute_name(:season)
+      = filter_select "type", ["value", "points", "assists", "rebounds"]
+      = filter_text_field "num_games", placeholder: Statistic.human_attribute_name(:num_games)
+      = filter_text_field "num_elements", placeholder: Statistic.human_attribute_name(:num_elements)
+      = filter_buttons button="Importar"
+
+= "labels = "+@labels.to_s
+<br>
+= "test = "+@test.to_s
+<br>
+= "prediccio = "+@prediccio.to_s
+<br>
+= "coefficient = "+@coefficient.to_s
+<br>
+= "bias = "+@bias.to_s
+<br>
+= "mean_squared_error = "+@mean_squared_error.to_s
+<br>
+= "squared_correlation_coefficient = "+@squared_correlation_coefficient.to_s

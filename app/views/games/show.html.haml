@@ -7,8 +7,8 @@
           %th=@game.local_team.name
           %th="VALORACIÓN"
           %th="PUNTOS"
-          %th="REBOTES"
           %th="ASISTENCIAS"
+          %th="REBOTES"
           %th="COTIZACIÓN"
       %tbody
         = render @game.predictions.where("predictions.team_id = "+@game.visitant_team_id.to_s)
@@ -21,8 +21,8 @@
           %th=@game.visitant_team.name
           %th="VALORACIÓN"
           %th="PUNTOS"
-          %th="REBOTES"
           %th="ASISTENCIAS"
+          %th="REBOTES"
           %th="COTIZACIÓN"
       %tbody
         = render @game.predictions.where("predictions.team_id = "+@game.local_team_id.to_s)
