@@ -54,7 +54,9 @@ Manageracb::Application.routes.draw do
     get 'create_from_html', on: :collection
   end
   resources :teams 
-  resources :players
+  resources :players do
+    get 'money', on: :collection
+  end
   resources :predictions do
     get 'game', on: :collection
     get 'predict', on: :collection

@@ -20,6 +20,11 @@ class PlayersController < ApplicationController
     @player = Player.find(params[:id])
   end
 
+  def money
+    
+    redirect_to action: "index"
+  end
+
   private
     def player_params
       params.require(:player).permit([:name])

@@ -1,49 +1,63 @@
-<ul class="nav nav-sidebar">
-  <li>
-    <%= link_to "Importar Pàgines Estadístiques", import_statistics_html_pages_path %>
+<ul class="nav nav-sidebar list-group">
+  <li class="list-group-item">  
+    <h5>Pàgines HTML</h5>
   </li>
-  <li>
-    <%= link_to "Importar Pàgines Partits", import_games_html_pages_path %>
+  <li class="list-group-item">  
+    <%= link_to "Llista Pàgines HTML", html_pages_path %>
   </li>
-  <li>
-    <%= link_to "Crear Partits", create_from_html_games_path %>
+  <li class="list-group-item">  
+    <%= link_to "Importar Estadístiques", import_statistics_html_pages_path %>
   </li>
-  <li>
-    <%= link_to "Crear Estadístiques", create_from_html_statistics_path %>
-  </li>
-  <li>
-    <%= link_to "Crear Acumulats Jugador", acumulats_jugador_statistics_path %>
-  </li>
-  <li>
-    <%= link_to "Crear Acumulats Equip", acumulats_equip_statistics_path %>
-  </li>
-  <li>
-    <%= link_to "Exportar Estadístiques", export_statistics_path %>
-  </li>
-  <li>
-    <%= link_to "Init Prediccions", init_predictions_path %>
-  </li>
-  <li>
-    <%= link_to "Predict LIBLINEAR", predict_predictions_path %>
-  </li>
-  <li>
-    <%= link_to "Set Prediccions", predictions_path, method: "post" %>
+  <li class="list-group-item">  
+    <%= link_to "Importar Partits", import_games_html_pages_path %>
   </li>
 </ul>
 <ul class="nav nav-sidebar">
-  <li>  
-    <%= link_to "Pàgines HTML", html_pages_path %>
+  <li class="list-group-item">  
+    <h5>Creacio de Dades</h5>
   </li>
-  <li>  
+  <li class="list-group-item">  
+    <%= link_to "Crear Partits", create_from_html_games_path %>
+  </li>
+  <li class="list-group-item">  
+    <%= link_to "Crear Estadístiques", create_from_html_statistics_path %>
+  </li>
+  <li class="list-group-item">  
+    <%= link_to "Crear Acum. Jugador", acumulats_jugador_statistics_path %>
+  </li>
+  <li class="list-group-item">  
+    <%= link_to "Crear Acum. Equip", acumulats_equip_statistics_path %>
+  </li>
+  <li class="list-group-item">  
+    <%= link_to "Exportar Estadístiques", export_statistics_path %>
+  </li>
+  <li class="list-group-item">  
+    <%= link_to "Init Prediccions", init_predictions_path %>
+  </li>
+  <li class="list-group-item">  
+    <%= link_to "Predict LIBLINEAR", predict_predictions_path %>
+  </li>
+  <li class="list-group-item">  
+    <%= link_to "Money", money_players_path %>
+  </li>
+</ul>
+<ul class="nav nav-sidebar">
+  <li class="list-group-item">  
+    <h5>Jugadors</h5>
+  </li>
+  <li class="list-group-item">  
+    <%= link_to "Llista Jugadors", players_path %>
+  </li>
+  
+</ul>
+<ul class="nav nav-sidebar">
+  <li class="list-group-item">  
     <%= link_to "Equips", teams_path %>
   </li>
-  <li>  
-    <%= link_to "Jugadors", players_path %>
-  </li>
-  <li>  
+  <li class="list-group-item">  
     <%= link_to "Estadístiques", statistics_path %>
   </li>
-  <li>  
+  <li class="list-group-item">  
     <%= link_to "Prediccions", predictions_path %>
   </li>
 </ul>
