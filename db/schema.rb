@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151113143305) do
+ActiveRecord::Schema.define(version: 20151115225817) do
 
   create_table "games", force: true do |t|
     t.integer  "local_team_id"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 20151113143305) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "game_number"
-    t.string   "seasson"
+    t.string   "season"
     t.integer  "prediction_id"
   end
 
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20151113143305) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "html_page_type"
+    t.string   "season"
   end
 
   create_table "players", force: true do |t|
@@ -69,12 +70,20 @@ ActiveRecord::Schema.define(version: 20151113143305) do
     t.integer  "game_id"
   end
 
+  create_table "settings", force: true do |t|
+    t.string   "name"
+    t.string   "value"
+    t.boolean  "active",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "statistics", force: true do |t|
     t.integer  "player_id"
     t.integer  "team_id"
     t.integer  "team_against_id"
     t.integer  "game_number"
-    t.string   "seasson"
+    t.string   "season"
     t.integer  "number"
     t.integer  "seconds",           default: 0
     t.integer  "points",            default: 0

@@ -1,0 +1,14 @@
+LOG:  database system was shut down at 2015-11-18 13:41:40 GMT
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+ERROR:  column magic_fields.so_account_reference does not exist at character 52
+STATEMENT:  SELECT  "magic_fields".* FROM "magic_fields" WHERE "magic_fields"."so_account_reference" = 'sales_lead_id' LIMIT 1
+ERROR:  role "dernaseer" already exists
+STATEMENT:  CREATE ROLE dernaseer SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;
+ERROR:  database "dernaseer_development" is being accessed by other users
+DETAIL:  There are 2 other sessions using the database.
+STATEMENT:  DROP DATABASE IF EXISTS "dernaseer_development"
+ERROR:  database "dernaseer_development" already exists
+STATEMENT:  CREATE DATABASE "dernaseer_development" ENCODING = 'unicode' TEMPLATE = "template0"
+ERROR:  relation "delayed_jobs" does not exist at character 8
+STATEMENT:  UPDATE "delayed_jobs" SET locked_at = '2015-11-19 09:46:27.464539', locked_by = 'host:Xaviers-iMac.local pid:32889' WHERE id IN (SELECT  "delayed_jobs"."id" FROM "delayed_jobs" WHERE ((run_at <= '2015-11-19 09:46:27.464018' AND (locked_at IS NULL OR locked_at < '2015-11-19 05:46:27.464044') OR locked_by = 'host:Xaviers-iMac.local pid:32889') AND failed_at IS NULL)  ORDER BY priority ASC, run_at ASC LIMIT 1 FOR UPDATE) RETURNING *
