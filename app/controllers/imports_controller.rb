@@ -4,8 +4,6 @@ class ImportsController < ApplicationController
   require 'open-uri'
 
   def index
-
-
   end
 
   def statistics

@@ -1,15 +1,13 @@
 # == Schema Information
 #
-# Table name: players
+# Table name: prices
 #
 #
 
-class Player < ActiveRecord::Base
+class Price < ActiveRecord::Base
   # !**************************************************
   # !                Associations
   # !**************************************************
-  has_many :statistics
-  belongs_to :team
 
   # !**************************************************
   # !                Validations
@@ -22,12 +20,6 @@ class Player < ActiveRecord::Base
   # !**************************************************
   # !                  Other
   # !**************************************************
-  include PlayerAllowed
-  extend Enumerize
   monetize :price_cents, allow_nil: true
-  enumerize :position, in: [:base, :alero, :pivot], predicates: true
 
-  def to_s
-    name
-  end
 end
