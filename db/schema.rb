@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20151120003115) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "html_page_type"
-    t.integer  "season"
+    t.string   "season"
   end
 
   create_table "players", force: true do |t|
