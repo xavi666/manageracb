@@ -1,6 +1,7 @@
 class PlayersController < ApplicationController
   require 'open-uri'  
-
+  include SortableFilterHelper
+  
   def index
     @players = Player.all
   end

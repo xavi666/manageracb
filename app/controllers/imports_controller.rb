@@ -1,5 +1,6 @@
 class ImportsController < ApplicationController
 
+  include SortableFilterHelper
   require 'nokogiri'
   require 'open-uri'
 

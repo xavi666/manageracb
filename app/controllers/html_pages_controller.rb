@@ -1,5 +1,6 @@
 class HtmlPagesController < ApplicationController
 
+  include SortableFilterHelper
   require 'nokogiri'
   require 'open-uri'
 

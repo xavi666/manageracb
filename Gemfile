@@ -34,7 +34,7 @@ end
 gem 'jquery-rails'
 gem 'haml',                 '~> 4.0'
 
-gem "sortable_filter", path: "../sortable_filter"
+#gem "sortable_filter", path: "../sortable_filter"
 
 
 # To use ActiveModel has_secure_password

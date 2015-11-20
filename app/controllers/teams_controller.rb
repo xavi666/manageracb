@@ -1,5 +1,7 @@
 class TeamsController < ApplicationController
 
+  include SortableFilterHelper
+
   def index
     @teams = Team.all
   end

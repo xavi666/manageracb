@@ -1,5 +1,7 @@
 class StatisticsController < ApplicationController
 
+  include SortableFilterHelper
+
   def index
     @statistics = Statistic.game
   end

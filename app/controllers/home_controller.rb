@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+
+  include SortableFilterHelper
   layout "front"
 
   def index

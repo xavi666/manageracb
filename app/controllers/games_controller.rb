@@ -1,4 +1,6 @@
 class GamesController < ApplicationController
+ 
+  include SortableFilterHelper
   layout "front", only: [:show]
 
   def index
