@@ -13,6 +13,7 @@ gem 'enumerize'
 gem "font-awesome-rails"
 gem 'rb-libsvm', require: 'libsvm'
 gem 'liblinear-ruby'
+gem 'money-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
