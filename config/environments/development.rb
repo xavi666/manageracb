@@ -64,6 +64,7 @@ Manageracb::Application.configure do
                   "BILBAO BASKET" => 3,
                   "DOMINION BILBAO BASKET" => 3,
                   "FC BARCELONA LASSA" => 5,
-                  "ICL MANRESA" => 7
+                  "ICL MANRESA" => 7,
+                  "RIO NATURA MONBUS OBR." => 17
                 }
 end
