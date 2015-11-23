@@ -182,22 +182,22 @@ task :set_position => :environment do
   p.position = 'base'
   p.save!
   p = Player.find_by_name('Dewar, Ben')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Garcia, Marc')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Angelats, Nil')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Samuels, Jamar')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Grimau, Roger')
   p.position = 'base'
   p.save!
   p = Player.find_by_name('Haritopoulos, D.')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Hezonja, Mario')
   p.position = 'alero'
@@ -212,109 +212,109 @@ task :set_position => :environment do
   p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Thomas, DeShaun')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Lampe, Maciej')
   p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Iverson, Colton')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Gomes, Ryan')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Perkins, Doron')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('San Emeterio')
   p.position = 'alero'
   p.save!
   p = Player.find_by_name('Heurtel, Thomas')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Johnson, Orlando')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Bertans, Davis')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Vasileiadis, K.')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Toolson, Ryan')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Nguirane, Maodo')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Granger, Jayson')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Stefansson, J.')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Green, Caleb')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Golubovic, V.')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Green, Shaun')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Martínez, Román')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Blanch, Marc')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Ivanov, Kaloyan')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Colom, Quino')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Todorovic, Marko')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Williams, L.')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('López, Raúl')
   p.position = 'base'
   p.save!
   p = Player.find_by_name('Andjusic, Danilo')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Pérez, Daniel')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Panko, Andy')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Vega, Javier')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Akindele, Jeleel')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Baron, Jimmy')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Papamakarios, M.')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Miso, Andrés')
   p.position = 'base'
   p.save!
   p = Player.find_by_name('White, DJ')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Shengelia, T.')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Hakanson, Ludde')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Martí, Marc')
   p.position = ''
@@ -350,7 +350,7 @@ task :set_position => :environment do
   p.position = ''
   p.save!
   p = Player.find_by_name('Satoransky, T.')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Dubljevic, Bojan')
   p.position = ''
@@ -362,7 +362,7 @@ task :set_position => :environment do
   p.position = ''
   p.save!
   p = Player.find_by_name('Hamilton, Lamont')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Mbansogo, S.')
   p.position = ''
