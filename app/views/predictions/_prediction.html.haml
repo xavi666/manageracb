@@ -1,4 +1,5 @@
 %tr
+  %td=image_tag("players/"+prediction.player.image.to_s, class: "player") if prediction.player.image
   %td=prediction.player.name
   %td=prediction.value
   %td=prediction.points

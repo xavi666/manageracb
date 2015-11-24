@@ -1,6 +1,7 @@
 %tr
+  %td= image_tag("players/"+player.image.to_s, class: "player") if player.image
   %td= player.id
   %td= link_to player.name, player
   %td= player.position
   %td= player.price_cents
-  %td= player.team.name
+  %td= player.try(:team)? player.team.name : "-"

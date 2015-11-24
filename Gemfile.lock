@@ -1,9 +1,3 @@
-PATH
-  remote: ../sortable_filter
-  specs:
-    sortable_filter (1.0)
-      rails (~> 4)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -142,6 +136,5 @@ DEPENDENCIES
   rails (~> 4.0.1.rc3)
   rb-libsvm
   sass-rails (~> 4.0.0)
-  sortable_filter!
   sqlite3
   uglifier (>= 1.3.0)

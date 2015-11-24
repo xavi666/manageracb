@@ -1,6 +1,7 @@
 class PredictionsController < ApplicationController
   layout "front", only: [:game]
-
+  include SortableFilterHelper
+  
   require 'rubygems'
   #require 'ai4r'
   require "bundler/setup"
