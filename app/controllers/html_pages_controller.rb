@@ -45,6 +45,7 @@ class HtmlPagesController < ApplicationController
       code = params[:search][:code]
       season = params[:search][:season]
       num_games = params[:search][:num_games].to_i
+      @count = 0
       #jornades = 34
       (1..num_games).each do |jornada|
         url_partit = "http://acb.com/resulcla.php?codigo=LACB-"+code+"&jornada="+jornada.to_s

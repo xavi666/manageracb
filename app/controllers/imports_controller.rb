@@ -125,7 +125,7 @@ class ImportsController < ApplicationController
         @count_players += 1 
       end
 
-      new_statistic = Statistic.where(:player_id => jugador.id, :season => statistic[:season], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).exists?
+      new_statistic = Statistic.where(:player_id => jugador.id, :season => statistic[:season], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).first?
 
       unless new_statistic
         new_statistic = Statistic.create!(:player_id => jugador.id, 

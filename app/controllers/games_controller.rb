@@ -16,16 +16,15 @@ class GamesController < ApplicationController
     html_pages.each do |html_page| 
       pagina_jornada = Nokogiri::HTML(html_page.html)
 
-
       count = 0
       local = 0
       pagina_jornada.css("table td.naranjaclaro").each do |link|
-        equip = link.content.upcase
+        equip = link.content.strip.upcase
         equip.slice! " |"
         if count % 2 == 1
-          game = Game.where(game_number: html_page.game_number, season: Setting.find_by_name("season").value, local_team_id: @teams[local], visitant_team_id: @teams[equip]).first
+          game = Game.where(game_number: html_page.game_number, season: html_page.season, local_team_id: @teams[local], visitant_team_id: @teams[equip]).first
           unless game
-            game = Game.create!(game_number: html_page.game_number, season: Setting.find_by_name("season").value, local_team_id: @teams[local], visitant_team_id: @teams[equip])
+            game = Game.create!(game_number: html_page.game_number, season: html_page.season, local_team_id: @teams[local], visitant_team_id: @teams[equip])
           end
         else
           local = equip

@@ -190,6 +190,7 @@ class StatisticsController < ApplicationController
       teams.each do |team|
         team.players.each do |player|
           (1..34).each do |game_number|
+            puts "-entraaaaa"
             prev_statistic = Statistic.where(:player_id => player.id, :season => season, :game_number => game_number - 1, :type_statistic => "player").first
             unless prev_statistic
               prev_seconds = 0
@@ -284,8 +285,14 @@ class StatisticsController < ApplicationController
               value = statistic.value
             end
 
+            game = Game.where("local_team_id = ? OR visitant_team_id = ?", team.id, team.id).where(:season => season, :game_number => game_number).first
+            if game
+              team_against_id = game.visitant_team_id if team.id == game.local_team_id 
+              team_against_id = game.local_team_id if team.id == game.visitant_team_id
+            end
+
             new_statistic = Statistic.where(:player_id => player.id, 
-                            :team_id => team.id,
+                            :team_id => team.id, :team_against_id => team_against_id,
                             :season => season, :game_number => game_number,
                             :type_statistic => "player").first_or_create
 
@@ -310,10 +317,10 @@ class StatisticsController < ApplicationController
   def acumulats_equip
     if params[:search]
       season = params[:search][:season]
-      teams = Team.all
+      teams = Team.first(1)
 
-      teams.each do |team|
-        (1..34).each do |game_number|
+      teams.first(1)each do |team|
+        (1..1).each do |game_number|
           seconds = 0
           points = 0
           two_p = 0
@@ -336,7 +343,9 @@ class StatisticsController < ApplicationController
           positive_negative = 0
           value = 0
           team.players.each do |player|
+            # Local Team
             statistic = Statistic.where(:player_id => player.id, :season => season, :game_number => game_number, :type_statistic => "player").first
+            puts statistic.inspect
             if statistic
               seconds = (seconds + statistic.seconds)
               points = (points + statistic.points)
@@ -379,6 +388,46 @@ class StatisticsController < ApplicationController
                           :mfaults => mfaults, :rfaults => rfaults,
                           :positive_negative => positive_negative, :value => value)
           new_statistic.save!
+
+          #Rival Team
+
+          game = Game.where("local_team_id = ? OR visitant_team_id = ?", team.id, team.id).where(:season => season, :game_number => game_number).first
+          if game
+            team_against_id = game.visitant_team_id if team.id == game.local_team_id 
+            team_against_id = game.local_team_id if team.id == game.visitant_team_id
+          end
+
+          if team_against_id
+            puts "-----------> TEAM AGAINST ID"
+            prev_statistic_against = Statistic.where( 
+                              :team_id => team_against_id,
+                              :season => season, :game_number => game_number - 1,
+                              :type_statistic => "team").first
+            unless prev_statistic_against
+              acum_value_received = 0
+              acum_points_received = 0
+              acum_assists_received = 0
+              acum_rebounds_received = 0
+              acum_three_pm_received = 0
+            else
+              acum_value_received = prev_statistic_against.value_received + value
+              acum_points_received = prev_statistic_against.points_received + points
+              acum_assists_received = prev_statistic_against.assists_received + assists
+              acum_rebounds_received = prev_statistic_against.rebounds + rebounds
+              acum_three_pm_received = prev_statistic_against.three_pm + three_pm
+            end
+
+            new_statistic_against = Statistic.where( 
+                              :team_id => team_against_id,
+                              :season => season, :game_number => game_number,
+                              :type_statistic => "team").first_or_create  
+            new_statistic_against.value_received = acum_value_received
+            new_statistic_against.points_received = acum_points_received   
+            new_statistic_against.assists_received = acum_assists_received 
+            new_statistic_against.rebounds_received = acum_rebounds_received 
+            new_statistic_against.three_pm_received = acum_three_pm_received
+            new_statistic_against.save!
+          end
         end
       end
     end
