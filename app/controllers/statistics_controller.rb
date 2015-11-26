@@ -27,7 +27,7 @@ class StatisticsController < ApplicationController
       @partits = []
       html_pages = HtmlPage.statistic.where(code: code, season: season)
 
-      html_pages.first(18).each do |html_page| 
+      html_pages.each do |html_page| 
         pagina_partit = Nokogiri::XML(html_page.html)
 
         # dades equips
