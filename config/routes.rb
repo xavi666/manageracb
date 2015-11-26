@@ -71,6 +71,7 @@ Manageracb::Application.routes.draw do
     get 'export', on: :collection
     get 'acumulats_jugador', on: :collection
     get 'acumulats_equip', on: :collection
+    get 'acumulats_equip_received', on: :collection
   end
   resources :optimizations
 

@@ -27,7 +27,7 @@ class StatisticsController < ApplicationController
       @partits = []
       html_pages = HtmlPage.statistic.where(code: code, season: season)
 
-      html_pages.each do |html_page| 
+      html_pages.first(18).each do |html_page| 
         pagina_partit = Nokogiri::XML(html_page.html)
 
         # dades equips
@@ -317,10 +317,10 @@ class StatisticsController < ApplicationController
   def acumulats_equip
     if params[:search]
       season = params[:search][:season]
-      teams = Team.first(1)
+      teams = Team.all
 
-      teams.first(1)each do |team|
-        (1..1).each do |game_number|
+      teams.each do |team|
+        (1..34).each do |game_number|
           seconds = 0
           points = 0
           two_p = 0
@@ -371,8 +371,17 @@ class StatisticsController < ApplicationController
             end   
           end
 
+          #Rival Team
+          game = Game.where("local_team_id = ? OR visitant_team_id = ?", team.id, team.id).where(:season => season, :game_number => game_number).first
+          if game
+            team_against_id = game.visitant_team_id if team.id == game.local_team_id 
+            team_against_id = game.local_team_id if team.id == game.visitant_team_id
+          end
+          #Rival Team
+
           new_statistic = Statistic.where( 
                             :team_id => team.id,
+                            :team_against_id => team_against_id,
                             :season => season, :game_number => game_number,
                             :type_statistic => "team").first_or_create
 
@@ -388,37 +397,87 @@ class StatisticsController < ApplicationController
                           :mfaults => mfaults, :rfaults => rfaults,
                           :positive_negative => positive_negative, :value => value)
           new_statistic.save!
+        end
+      end
+    end
+  end
+
+  def acumulats_equip_received
+    if params[:search]
+      season = params[:search][:season]
+      teams = Team.all
+
+
+      #parcials equip received
+      teams.each do |team|
+        (1..34).each do |game_number|
+          seconds = 0
+          points = 0
+          two_p = 0
+          two_pm = 0
+          three_p = 0
+          three_pm = 0
+          one_p = 0
+          one_pm = 0
+          rebounds = 0
+          orebounds = 0
+          drebounds = 0
+          assists = 0
+          steals = 0
+          turnovers = 0
+          fastbreaks = 0
+          mblocks = 0
+          rblocks = 0
+          mfaults = 0
+          rfaults = 0
+          positive_negative = 0
+          value = 0
+          team.players.each do |player|
+            # Local Team
+            statistic = Statistic.where(:player_id => player.id, :season => season, :game_number => game_number, :type_statistic => "player").first
+            if statistic
+              seconds = (seconds + statistic.seconds)
+              points = (points + statistic.points)
+              two_p = (two_p + statistic.two_p)
+              two_pm = (two_pm + statistic.two_pm)
+              three_p = (three_pm + statistic.three_p)
+              three_pm = ( three_pm + statistic.three_pm)
+              one_p = (one_p + statistic.one_p)
+              one_pm = (one_pm + statistic.one_pm)
+              rebounds = (rebounds + statistic.rebounds)
+              orebounds = (orebounds + statistic.orebounds)
+              drebounds = (drebounds + statistic.drebounds)
+              assists = (assists + statistic.assists)
+              steals = (steals + statistic.steals)
+              turnovers = (turnovers + statistic.turnovers)
+              fastbreaks = (fastbreaks + statistic.fastbreaks)
+              mblocks = (mblocks + statistic.mblocks)
+              rblocks = (rblocks + statistic.rblocks)
+              mfaults = (mfaults + statistic.mfaults)
+              rfaults = (rfaults + statistic.rfaults)
+              positive_negative = (positive_negative + statistic.positive_negative)
+              value = (value + statistic.value)
+            end   
+          end
 
           #Rival Team
-
           game = Game.where("local_team_id = ? OR visitant_team_id = ?", team.id, team.id).where(:season => season, :game_number => game_number).first
           if game
             team_against_id = game.visitant_team_id if team.id == game.local_team_id 
             team_against_id = game.local_team_id if team.id == game.visitant_team_id
           end
+          #Rival Team
 
           if team_against_id
-            puts "-----------> TEAM AGAINST ID"
-            prev_statistic_against = Statistic.where( 
-                              :team_id => team_against_id,
-                              :season => season, :game_number => game_number - 1,
-                              :type_statistic => "team").first
-            unless prev_statistic_against
-              acum_value_received = 0
-              acum_points_received = 0
-              acum_assists_received = 0
-              acum_rebounds_received = 0
-              acum_three_pm_received = 0
-            else
-              acum_value_received = prev_statistic_against.value_received + value
-              acum_points_received = prev_statistic_against.points_received + points
-              acum_assists_received = prev_statistic_against.assists_received + assists
-              acum_rebounds_received = prev_statistic_against.rebounds + rebounds
-              acum_three_pm_received = prev_statistic_against.three_pm + three_pm
-            end
+            acum_value_received = value
+            acum_points_received = points
+            acum_assists_received = assists
+            acum_rebounds_received = rebounds
+            acum_three_pm_received = three_pm
 
             new_statistic_against = Statistic.where( 
                               :team_id => team_against_id,
+                              :team_against_id => team.id,
                               :season => season, :game_number => game_number,
                               :type_statistic => "team").first_or_create  
             new_statistic_against.value_received = acum_value_received

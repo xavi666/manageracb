@@ -8,28 +8,32 @@ class GamesController < ApplicationController
   end
 
   def create_from_html
-    @teams = Rails.application.config.teams
-    
-    @partits = []
-    html_pages = HtmlPage.game
+    if params[:search]
+      season = params[:search][:season]
+      num_games = params[:search][:num_games].to_i
+      @teams = Rails.application.config.teams
+      
+      @partits = []
+      html_pages = HtmlPage.game
 
-    html_pages.each do |html_page| 
-      pagina_jornada = Nokogiri::HTML(html_page.html)
+      html_pages.each do |html_page| 
+        pagina_jornada = Nokogiri::HTML(html_page.html)
 
-      count = 0
-      local = 0
-      pagina_jornada.css("table td.naranjaclaro").each do |link|
-        equip = link.content.strip.upcase
-        equip.slice! " |"
-        if count % 2 == 1
-          game = Game.where(game_number: html_page.game_number, season: html_page.season, local_team_id: @teams[local], visitant_team_id: @teams[equip]).first
-          unless game
-            game = Game.create!(game_number: html_page.game_number, season: html_page.season, local_team_id: @teams[local], visitant_team_id: @teams[equip])
+        @count = 0
+        local = 0
+        pagina_jornada.css("table td.naranjaclaro").each do |link|
+          equip = link.content.strip.upcase
+          equip.slice! " |"
+          if @count % 2 == 1
+            game = Game.where(game_number: html_page.game_number, season: html_page.season, local_team_id: @teams[local], visitant_team_id: @teams[equip]).first
+            unless game
+              game = Game.create!(game_number: html_page.game_number, season: html_page.season, local_team_id: @teams[local], visitant_team_id: @teams[equip])
+            end
+          else
+            local = equip
           end
-        else
-          local = equip
+          @count += 1
         end
-        count += 1
       end
     end
   end
