@@ -1,8 +1,9 @@
 %tr
   %td= statistic.id
   %td= statistic.game_number
-  %td= link_to statistic.player.name, statistic.player if statistic.player
+  - if statistic.player? and statistic.player
+    %td= link_to statistic.player.name, statistic.player  
   %td= link_to statistic.team.name, statistic.team if statistic.team
   %td= link_to statistic.team_against.name, statistic.team_against if statistic.team_against
-  %td= statistic.value
+  %td= statistic.value.to_s + ", "+ statistic.points.to_s+ ", "+ statistic.assists.to_s + ", "+ statistic.rebounds.to_s + ", "+ statistic.three_pm.to_s
   %td= statistic.value_received.to_s + ", "+ statistic.points_received.to_s+ ", "+ statistic.assists_received.to_s + ", "+ statistic.rebounds_received.to_s + ", "+ statistic.three_pm_received.to_s

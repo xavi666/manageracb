@@ -72,3 +72,10 @@ ERROR:  syntax error at or near "1" at character 221
 STATEMENT:  SELECT "project_machine_parts".* FROM "project_machine_parts" INNER JOIN "parts" ON "parts"."id" = "project_machine_parts"."part_id" WHERE "project_machine_parts"."project_machine_id" = $1 AND (parts.part_category_id IN 1,2)
 ERROR:  cached plan must not change result type
 STATEMENT:  SELECT  "companies".* FROM "companies" WHERE "companies"."id" = $1 LIMIT 1
+ERROR:  role "dernaseer" already exists
+STATEMENT:  CREATE ROLE dernaseer SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;
+ERROR:  database "dernaseer_development" is being accessed by other users
+DETAIL:  There are 2 other sessions using the database.
+STATEMENT:  DROP DATABASE IF EXISTS "dernaseer_development"
+ERROR:  database "dernaseer_development" already exists
+STATEMENT:  CREATE DATABASE "dernaseer_development" ENCODING = 'unicode' TEMPLATE = "template0"

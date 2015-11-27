@@ -190,7 +190,6 @@ class StatisticsController < ApplicationController
       teams.each do |team|
         team.players.each do |player|
           (1..34).each do |game_number|
-            puts "-entraaaaa"
             prev_statistic = Statistic.where(:player_id => player.id, :season => season, :game_number => game_number - 1, :type_statistic => "player").first
             unless prev_statistic
               prev_seconds = 0
@@ -345,7 +344,6 @@ class StatisticsController < ApplicationController
           team.players.each do |player|
             # Local Team
             statistic = Statistic.where(:player_id => player.id, :season => season, :game_number => game_number, :type_statistic => "player").first
-            puts statistic.inspect
             if statistic
               seconds = (seconds + statistic.seconds)
               points = (points + statistic.points)
@@ -405,27 +403,71 @@ class StatisticsController < ApplicationController
   def acumulats_equip_received
     if params[:search]
       season = params[:search][:season]
-      @acumulats_equip = Statistic.where(:season => season, :type_statistic => "team").order(:game_number)
-
+      @acumulats_equip = Statistic.where(:season => season, :type_statistic => "team").order(:team_id)
       teams = Team.all
-      @acumulats = []
+
+      #received
+      @partits_received = []
       teams.each do |team|
-        @acumulats[team.id] ||= {}
+        @partits_received[team.id] ||= {}
         (0..34).each do |game_number|
-          @acumulats[team.id][game_number] = {"value_received" => 0}
+          @partits_received[team.id][game_number] = {"value_received" => 0}
         end
       end
 
       id_anterior = 0
+      acumulat_anterior = {"value_received" => 0, "points_received" => 0, "assists_received" => 0, "rebounds_received" => 0, "three_pm_received" => 0}
       @acumulats_equip.each do |acumulat_equip|
-        puts id_anterior
-        puts acumulat_equip.team_id
-        acumulat_anterior = 0 if id_anterior != acumulat_equip.team_id
+        #Rival Team
+        game = Game.where("local_team_id = ? OR visitant_team_id = ?", acumulat_equip.team_id, acumulat_equip.team_id).where(:season => acumulat_equip.season, :game_number => acumulat_equip.game_number).first
+        if game
+          team_against_id = game.visitant_team_id if acumulat_equip.team_id == game.local_team_id 
+          team_against_id = game.local_team_id if acumulat_equip.team_id == game.visitant_team_id
+        end
+        #Rival Team
+        acumulat_anterior = {"value_received" => 0, "points_received" => 0, "assists_received" => 0, "rebounds_received" => 0, "three_pm_received" => 0} if id_anterior != acumulat_equip.team_id
+        @partits_received[team_against_id][acumulat_equip.game_number]["value_received"] = acumulat_equip.value - acumulat_anterior["value_received"]
+        @partits_received[team_against_id][acumulat_equip.game_number]["points_received"] = acumulat_equip.points - acumulat_anterior["points_received"]
+        @partits_received[team_against_id][acumulat_equip.game_number]["assists_received"] = acumulat_equip.assists - acumulat_anterior["assists_received"]
+        @partits_received[team_against_id][acumulat_equip.game_number]["rebounds_received"] = acumulat_equip.rebounds - acumulat_anterior["rebounds_received"]
+        @partits_received[team_against_id][acumulat_equip.game_number]["three_pm_received"] = acumulat_equip.three_pm - acumulat_anterior["three_pm_received"]
 
-        @acumulats[acumulat_equip.team_id][acumulat_equip.game_number]["value_received"] = acumulat_equip.value - acumulat_anterior
-        acumulat_anterior =  acumulat_equip.value
+        acumulat_anterior["value_received"] =  acumulat_equip.value
+        acumulat_anterior["points_received"] =  acumulat_equip.points
+        acumulat_anterior["assists_received"] =  acumulat_equip.assists
+        acumulat_anterior["rebounds_received"] =  acumulat_equip.rebounds
+        acumulat_anterior["three_pm_received"] =  acumulat_equip.three_pm
         id_anterior = acumulat_equip.team_id
-      end     
+      end      
+    
+      # acumulats received
+      @acumulats_received = []
+      teams.each do |team|
+        @acumulats_received[team.id] ||= {}
+        (0..34).each do |game_number|
+          @acumulats_received[team.id][game_number] = {"value_received" => 0, "points_received" => 0, "assists_received" => 0, "rebounds_received" => 0, "three_pm_received" => 0}
+        end
+      end
+      teams.each do |team|
+        (0..34).each do |game_number|
+          if game_number > 0     
+            @acumulats_received[team.id][game_number]["value_received"] = @partits_received[team.id][game_number]["value_received"] + @acumulats_received[team.id][game_number-1]["value_received"]
+            @acumulats_received[team.id][game_number]["points_received"] = @partits_received[team.id][game_number]["points_received"] + @acumulats_received[team.id][game_number-1]["points_received"]
+            @acumulats_received[team.id][game_number]["assists_received"] = @partits_received[team.id][game_number]["assists_received"] + @acumulats_received[team.id][game_number-1]["assists_received"]
+            @acumulats_received[team.id][game_number]["rebounds_received"] = @partits_received[team.id][game_number]["rebounds_received"] + @acumulats_received[team.id][game_number-1]["value_received"]
+            @acumulats_received[team.id][game_number]["three_pm_received"] = @partits_received[team.id][game_number]["three_pm_received"] + @acumulats_received[team.id][game_number-1]["three_pm_received"]
+
+            statistic = Statistic.team.where(season: season, team_id: team.id, game_number: game_number).first
+            statistic.value_received = @acumulats_received[team.id][game_number]["value_received"]
+            statistic.points_received = @acumulats_received[team.id][game_number]["points_received"]
+            statistic.assists_received = @acumulats_received[team.id][game_number]["assists_received"]
+            statistic.rebounds_received = @acumulats_received[team.id][game_number]["rebounds_received"]
+            statistic.three_pm_received = @acumulats_received[team.id][game_number]["three_pm_received"]
+            puts statistic.value_received
+            statistic.save!
+          end
+        end
+      end
     end
   end
 

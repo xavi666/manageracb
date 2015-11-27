@@ -16,6 +16,7 @@ gem 'jquery-rails'
 gem 'haml',                 '~> 4.0'
 gem 'money-rails'
 gem 'gga4r', '~> 0.9.3'
+gem 'bcrypt-ruby', :require => 'bcrypt' 
 
 # Gems used only for assets and not required
 # in production environments by default.

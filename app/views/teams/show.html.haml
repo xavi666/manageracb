@@ -6,9 +6,11 @@
       %table.table.table-striped.table-condensed
         %thead.sortable
           %tr
-            %th.col-xs-2= "ID"
+            %th.col-xs-2= "Imatge"
+            %th.col-xs-2= "Id"
             %th.col-xs-2= "Nom"
             %th.col-xs-2= "Position"
+            %th.col-xs-2= "Price"
             %th.col-xs-2= "Team"
         %tbody= render @team.players
   .col-xs-12
@@ -20,7 +22,6 @@
           %tr
             %th.col-xs-2= "ID"
             %th.col-xs-2= "Jornada"
-            %th.col-xs-2= "Nom"
             %th.col-xs-2= "Equip"
             %th.col-xs-2= "Rival"
             %th.col-xs-2= "Valoració"
@@ -34,8 +35,8 @@
           %tr
             %th.col-xs-2= "ID"
             %th.col-xs-2= "Jornada"
-            %th.col-xs-2= "Nom"
             %th.col-xs-2= "Equip"
             %th.col-xs-2= "Rival"
-            %th.col-xs-2= "Valoració"
+            %th.col-xs-2= "Acumulats Fets"
+            %th.col-xs-2= "Acumulats Rebuts"
         %tbody= render @team.statistics.team.where(season: 2014)

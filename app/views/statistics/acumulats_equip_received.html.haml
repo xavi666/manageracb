@@ -4,4 +4,34 @@
       = filter_text_field "season", placeholder: Statistic.human_attribute_name(:season)
       = filter_buttons button="Importar"
 
-= @acumulats
+-if @partits_received
+  .table-responsive
+    %table.table.table-striped.table-condensed
+      %thead.sortable
+        %td="TEAM"
+        %td="VALUES RECEIVED"
+      %tbody
+      - (1..18).each do |team_id|
+        %tr
+        - team = @partits_received[team_id]
+        %td=Team.find(team_id).name
+        %td
+          -team.each do |k, v|
+            =v["value_received"]
+- if @acumulats_received
+  .table-responsive
+    %table.table.table-striped.table-condensed
+      %thead.sortable
+        %td="TEAM"
+        %td="ACUMULATS RECEIVED"
+      %tbody
+      - (1..18).each do |team_id|
+        %tr
+        - team = @acumulats_received[team_id]
+        %td=Team.find(team_id).name
+        %td
+          -team.each do |k, v|
+            =v["value_received"]
+
+
+

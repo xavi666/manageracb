@@ -26,9 +26,9 @@ class Statistic < ActiveRecord::Base
   # !**************************************************
   include StatisticAllowed
   extend Enumerize
-  default_scope { order('game_number ASC') } 
+  #default_scope { order('game_number ASC') } 
 
-  enumerize :type_statistic, in: [:game, :player, :team]
+  enumerize :type_statistic, in: [:game, :player, :team], predicates: true
 
   
 
