@@ -1,0 +1,9 @@
+%h1 Reset Password
+
+= form_tag [:password_resets], method: :post do
+  = render partial: 'flash', locals: { flash: flash }
+  %div
+    = label_tag :email
+    = email_field_tag :email, params[:email]
+  %div
+    = submit_tag 'Reset Password', class: 'button'

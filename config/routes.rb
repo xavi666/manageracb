@@ -79,6 +79,14 @@ Manageracb::Application.routes.draw do
   get '/home', to: 'home#index'
 
 
+  get 'register' => 'users#new', as: 'register'
+  get 'sign-in' => 'sessions#new', as: 'sign_in'
+  delete 'sign-out' => 'sessions#destroy', as: 'sign_out'
+
+  resources :users, only: [:new, :create, :show]
+  resources :sessions, only: [:new, :create, :destroy]
+  resources :password_resets, only: [:new, :create, :edit, :update]
+
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
