@@ -14,7 +14,7 @@ class GamesController < ApplicationController
       @teams = Rails.application.config.teams
       
       @partits = []
-      html_pages = HtmlPage.game
+      html_pages = HtmlPage.game.where(season: season)
 
       html_pages.each do |html_page| 
         pagina_jornada = Nokogiri::HTML(html_page.html)

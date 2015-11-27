@@ -405,90 +405,27 @@ class StatisticsController < ApplicationController
   def acumulats_equip_received
     if params[:search]
       season = params[:search][:season]
+      @acumulats_equip = Statistic.where(:season => season, :type_statistic => "team").order(:game_number)
+
       teams = Team.all
-
-
-      #parcials equip received
+      @acumulats = []
       teams.each do |team|
-        (1..34).each do |game_number|
-          seconds = 0
-          points = 0
-          two_p = 0
-          two_pm = 0
-          three_p = 0
-          three_pm = 0
-          one_p = 0
-          one_pm = 0
-          rebounds = 0
-          orebounds = 0
-          drebounds = 0
-          assists = 0
-          steals = 0
-          turnovers = 0
-          fastbreaks = 0
-          mblocks = 0
-          rblocks = 0
-          mfaults = 0
-          rfaults = 0
-          positive_negative = 0
-          value = 0
-          team.players.each do |player|
-            # Local Team
-            statistic = Statistic.where(:player_id => player.id, :season => season, :game_number => game_number, :type_statistic => "player").first
-            if statistic
-              seconds = (seconds + statistic.seconds)
-              points = (points + statistic.points)
-              two_p = (two_p + statistic.two_p)
-              two_pm = (two_pm + statistic.two_pm)
-              three_p = (three_pm + statistic.three_p)
-              three_pm = ( three_pm + statistic.three_pm)
-              one_p = (one_p + statistic.one_p)
-              one_pm = (one_pm + statistic.one_pm)
-              rebounds = (rebounds + statistic.rebounds)
-              orebounds = (orebounds + statistic.orebounds)
-              drebounds = (drebounds + statistic.drebounds)
-              assists = (assists + statistic.assists)
-              steals = (steals + statistic.steals)
-              turnovers = (turnovers + statistic.turnovers)
-              fastbreaks = (fastbreaks + statistic.fastbreaks)
-              mblocks = (mblocks + statistic.mblocks)
-              rblocks = (rblocks + statistic.rblocks)
-              mfaults = (mfaults + statistic.mfaults)
-              rfaults = (rfaults + statistic.rfaults)
-              positive_negative = (positive_negative + statistic.positive_negative)
-              value = (value + statistic.value)
-            end   
-          end
-
-          #Rival Team
-          game = Game.where("local_team_id = ? OR visitant_team_id = ?", team.id, team.id).where(:season => season, :game_number => game_number).first
-          if game
-            team_against_id = game.visitant_team_id if team.id == game.local_team_id 
-            team_against_id = game.local_team_id if team.id == game.visitant_team_id
-          end
-          #Rival Team
-
-          if team_against_id
-            acum_value_received = value
-            acum_points_received = points
-            acum_assists_received = assists
-            acum_rebounds_received = rebounds
-            acum_three_pm_received = three_pm
-
-            new_statistic_against = Statistic.where( 
-                              :team_id => team_against_id,
-                              :team_against_id => team.id,
-                              :season => season, :game_number => game_number,
-                              :type_statistic => "team").first_or_create  
-            new_statistic_against.value_received = acum_value_received
-            new_statistic_against.points_received = acum_points_received   
-            new_statistic_against.assists_received = acum_assists_received 
-            new_statistic_against.rebounds_received = acum_rebounds_received 
-            new_statistic_against.three_pm_received = acum_three_pm_received
-            new_statistic_against.save!
-          end
+        @acumulats[team.id] ||= {}
+        (0..34).each do |game_number|
+          @acumulats[team.id][game_number] = {"value_received" => 0}
         end
       end
+
+      id_anterior = 0
+      @acumulats_equip.each do |acumulat_equip|
+        puts id_anterior
+        puts acumulat_equip.team_id
+        acumulat_anterior = 0 if id_anterior != acumulat_equip.team_id
+
+        @acumulats[acumulat_equip.team_id][acumulat_equip.game_number]["value_received"] = acumulat_equip.value - acumulat_anterior
+        acumulat_anterior =  acumulat_equip.value
+        id_anterior = acumulat_equip.team_id
+      end     
     end
   end
 
