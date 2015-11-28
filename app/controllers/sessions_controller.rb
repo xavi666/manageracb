@@ -27,7 +27,7 @@ class SessionsController < ApplicationController
   def sign_in_destination
     intended_destination = session[:intended_destination]
     session[:intended_destination] = nil
-    intended_destination.blank? ? root_url : intended_destination
+    intended_destination.blank? ? sign_in_path : intended_destination
   end
 
   def set_cookie(user, params)

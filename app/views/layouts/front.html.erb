@@ -55,7 +55,11 @@
             <%= yield %>
           </div>
           <div class="col-sm-3">
-            <%= render partial: "inc/login" %>
+            <% if cookies[:auth_token] %>
+              <%= render partial: "users/right_side" %>
+            <% else %>  
+              <%= render partial: "inc/login" %>
+            <% end %>
             <%= render partial: "inc/recomendaciones" %>
           </div>   
         </div>

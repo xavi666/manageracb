@@ -80,7 +80,7 @@ Manageracb::Application.routes.draw do
 
 
   get 'register' => 'users#new', as: 'register'
-  get 'sign-in' => 'sessions#new', as: 'sign_in'
+  get 'sign-in' => 'home#index', as: 'sign_in'
   delete 'sign-out' => 'sessions#destroy', as: 'sign_out'
 
   resources :users, only: [:new, :create, :show]
