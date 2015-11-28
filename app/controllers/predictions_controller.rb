@@ -52,7 +52,7 @@ class PredictionsController < ApplicationController
 
     values = %w(seconds points value game_number)
     labels = %w(value)
-    @statistics = Statistic.game.where(season: "2014").where("statistics.seconds > 0").first(1000)
+    @statistics = Statistic.game.find_season("2014").where("statistics.seconds > 0").first(1000)
 
     @training_values = []
     @statistics.each do |statistic|
@@ -97,7 +97,7 @@ class PredictionsController < ApplicationController
       #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
       param.solver_type = Liblinear::L2R_L1LOSS_SVR_DUAL
 
-      @statistics = Statistic.game.where(season: "2014").where("statistics.seconds > 0").first(num_elements)
+      @statistics = Statistic.game.find_season("2014").where("statistics.seconds > 0").first(num_elements)
 
       labels = labels(@statistics, type) 
       test = []
@@ -113,7 +113,7 @@ class PredictionsController < ApplicationController
       prob = Liblinear::Problem.new(labels, test, bias)
       model = Liblinear::Model.new(prob, param)
 
-      prediccions = Prediction.where("games.game_number = ?",game_number.to_i).includes(:game)
+      prediccions = Prediction.where("games.season = ?", season).where("games.game_number = ?",game_number.to_i).includes(:game)
       prediccions.each do |prediccio|
         player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
         team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
@@ -200,6 +200,8 @@ class PredictionsController < ApplicationController
         labels = statistics.map(&:assists)
       when "rebounds"
         labels = statistics.map(&:rebounds)
+      when "three_pm"
+        labels = statistics.map(&:three_pm)
       else
         labels = statistics.map(&:value)
       end 
@@ -226,15 +228,19 @@ class PredictionsController < ApplicationController
         when "points"
           label = {
               0 => player_statistic.points / game_number,
-              1 => team_statistic.value / game_number }
+              1 => team_statistic.points / game_number }
         when "assists"
           label = {
               0 => player_statistic.assists / game_number,
-              1 => team_statistic.value / game_number }
+              1 => team_statistic.assists / game_number }
         when "rebounds"
           label = {
               0 => player_statistic.rebounds / game_number,
-              1 => team_statistic.value / game_number }
+              1 => team_statistic.rebounds / game_number }
+        when "three_pm"
+          label = {
+              0 => player_statistic.three_pm / game_number,
+              1 => team_statistic.three_pm / game_number }
         else
            label = {
               0 => player_statistic.value / game_number,
@@ -254,6 +260,8 @@ class PredictionsController < ApplicationController
         prediction.assists = prediccio_label
       when "rebounds"
         prediction.rebounds = prediccio_label
+      when "three_pm"
+        prediction.three_pm = prediccio_label
       else
         prediction.value = prediccio_label
       end 

@@ -26,11 +26,10 @@ class Statistic < ActiveRecord::Base
   # !**************************************************
   include StatisticAllowed
   extend Enumerize
-  #default_scope { order('game_number ASC') } 
-
   enumerize :type_statistic, in: [:game, :player, :team], predicates: true
-
-  
+  #default_scope { order('game_number ASC') } 
+  scope :find_season, -> (season) { where(:season => season) }
+  scope :find_game_number, -> (game_number) { where(:game_number => game_number) }
 
   private
 

@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   layout "front"
 
   def index
-    @games = Game.where(:game_number => Setting.find_by_name(:game_number).value)
+    @games = Game.find_game_number(Setting.find_by_name(:game_number).value).find_season(Setting.find_by_name(:season).value)
   end
 
   

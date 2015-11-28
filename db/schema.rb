@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127155359) do
+ActiveRecord::Schema.define(version: 20151128141846) do
 
   create_table "games", force: true do |t|
     t.integer  "local_team_id"
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20151127155359) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "html_page_type"
-    t.string   "season"
+    t.integer  "season"
   end
 
   create_table "players", force: true do |t|
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20151127155359) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "game_id"
+    t.integer  "three_pm"
   end
 
   create_table "prices", force: true do |t|
@@ -136,15 +137,6 @@ ActiveRecord::Schema.define(version: 20151127155359) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "short_code"
-  end
-
-  create_table "users", force: true do |t|
-    t.string   "username"
-    t.string   "email"
-    t.string   "encrypted_password"
-    t.string   "salt"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
 end

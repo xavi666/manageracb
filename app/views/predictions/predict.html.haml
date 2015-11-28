@@ -2,7 +2,7 @@
   .col-xs-12
     = filter_form do
       = filter_text_field "season", placeholder: Statistic.human_attribute_name(:season)
-      = filter_select "type", ["value", "points", "assists", "rebounds"]
+      = filter_select "type", ["value", "points", "assists", "rebounds", "three_pm"]
       = filter_text_field "num_games", placeholder: Statistic.human_attribute_name(:num_games)
       = filter_text_field "num_elements", placeholder: Statistic.human_attribute_name(:num_elements)
       = filter_buttons button="Importar"

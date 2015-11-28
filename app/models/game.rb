@@ -24,6 +24,7 @@ class Game < ActiveRecord::Base
   # !**************************************************
   # !                  Other
   # !**************************************************
-
+  scope :find_season, -> (season) { where(:season => season) }
+  scope :find_game_number, -> (game_number) { where(:game_number => game_number) }
 
 end

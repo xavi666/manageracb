@@ -40,7 +40,7 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
-    @predictions = Prediction.where(game: params[:id])
+    @predictions = Prediction.where(game_id: params[:id])
   end
 
   def update

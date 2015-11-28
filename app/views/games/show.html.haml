@@ -10,6 +10,7 @@
           %th="PUNTOS"
           %th="ASISTENCIAS"
           %th="REBOTES"
+          %th="3PM"
           %th="COTIZACIÓN"
       %tbody
         = render @game.predictions.where("predictions.team_id = "+@game.visitant_team_id.to_s)
@@ -25,6 +26,7 @@
           %th="PUNTOS"
           %th="ASISTENCIAS"
           %th="REBOTES"
+          %th="3PM"
           %th="COTIZACIÓN"
       %tbody
         = render @game.predictions.where("predictions.team_id = "+@game.local_team_id.to_s)
