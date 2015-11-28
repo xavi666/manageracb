@@ -1,0 +1,27 @@
+%div.col-sm-12.white
+  %h1 Sign in
+  = form_tag [:sessions], {:class => 'form-horizontal'} do
+    = render partial: 'flash', locals: { flash: flash }
+    %div.form-group
+      %div.col-sm-12
+        = label_tag :email
+      %div.col-sm-12
+        = email_field_tag :email, params[:email], {:class => 'form-control'}
+    %div.form-group
+      %div.col-sm-12
+        = label_tag :password
+      %div.col-sm-12
+        = password_field_tag :password, "", {:class => 'form-control'}
+    %div.form-group
+      %div.col-sm-offset-2.col-sm-10
+        %div.checkbox
+          %label
+          = check_box_tag :remember_me, 1, params[:remember_me]
+          = label_tag :remember_me, 'Remember me', id: 'remember-me'
+    %div.form-group
+      %div.col-sm-offset-2.col-sm-10
+        %strong Help:
+        = link_to 'Forgot password?', [:new, :password_reset]
+    %div.form-group
+      %div.col-sm-offset-2.col-sm-10
+        = submit_tag 'Sign in', class: 'button'
