@@ -8,6 +8,19 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def init_team
+    @user_team = UserTeam.new
+    3.times do
+      player = @user_team.bases.build
+    end
+    4.times do
+      player = @user_team.aleros.build
+    end
+    4.times do
+      player = @user_team.pivots.build
+    end
+  end
+
   def authenticated_user
     @authenticated_user ||= User.find_by(auth_token: cookies[:auth_token]) if cookies[:auth_token]
   end

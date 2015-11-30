@@ -1,17 +1,16 @@
 # == Schema Information
 #
-# Table name: players
+# Table name: user_teams
 #
 #
 
-class Player < ActiveRecord::Base
+class UserTeam < ActiveRecord::Base
   # !**************************************************
   # !                Associations
   # !**************************************************
-  has_many :statistics
-  belongs_to :team
-  belongs_to :user_team_players
-  has_many :predictions
+  has_many :bases, foreign_key: 'player_id', class_name: 'UserTeamPlayer'
+  has_many :aleros, foreign_key: 'player_id', class_name: 'UserTeamPlayer'
+  has_many :pivots, foreign_key: 'player_id', class_name: 'UserTeamPlayer'
 
   # !**************************************************
   # !                Validations
@@ -23,13 +22,7 @@ class Player < ActiveRecord::Base
 
   # !**************************************************
   # !                  Other
-  # !**************************************************
-  include PlayerAllowed
-  extend Enumerize
-  monetize :price_cents, allow_nil: true
-  enumerize :position, in: [:base, :alero, :pivot], predicates: true
+  # !**************************************************  
+  accepts_nested_attributes_for :bases, :aleros, :pivots
 
-  def to_s
-    name
-  end
 end

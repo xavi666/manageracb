@@ -242,7 +242,7 @@ class PredictionsController < ApplicationController
               0 => player_statistic.three_pm / game_number,
               1 => team_statistic.three_pm / game_number }
         else
-           label = {
+          label = {
               0 => player_statistic.value / game_number,
               1 => team_statistic.value / game_number }
         end 

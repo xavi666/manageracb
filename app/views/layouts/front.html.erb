@@ -56,7 +56,7 @@
           </div>
           <div class="col-sm-3">
             <% if cookies[:auth_token] %>
-              <%= render partial: "users/right_side" %>
+              <%= render partial: "users/user_panel" %>
             <% else %>  
               <%= render partial: "inc/login" %>
             <% end %>

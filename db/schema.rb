@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151128141846) do
+ActiveRecord::Schema.define(version: 20151129221234) do
 
   create_table "games", force: true do |t|
     t.integer  "local_team_id"
@@ -138,5 +138,36 @@ ActiveRecord::Schema.define(version: 20151128141846) do
     t.datetime "updated_at"
     t.string   "short_code"
   end
+
+  create_table "user_team_players", force: true do |t|
+    t.integer  "user_team_id"
+    t.integer  "player_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "user_team_players", ["player_id"], name: "index_user_team_players_on_player_id"
+  add_index "user_team_players", ["user_team_id"], name: "index_user_team_players_on_user_team_id"
+
+  create_table "user_teams", force: true do |t|
+    t.string   "name"
+    t.boolean  "active",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", force: true do |t|
+    t.string   "email",                  null: false
+    t.string   "auth_token"
+    t.string   "password_digest"
+    t.string   "password_reset_token"
+    t.datetime "password_reset_sent_at"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "name"
+  end
+
+  add_index "users", ["auth_token"], name: "index_users_on_auth_token"
+  add_index "users", ["email"], name: "index_users_on_email"
 
 end

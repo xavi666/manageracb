@@ -54,6 +54,7 @@ Manageracb::Application.routes.draw do
     get 'create_from_html', on: :collection
   end
   resources :teams 
+  resources :user_teams 
   resources :players do
     get 'money', on: :collection
   end
@@ -77,7 +78,6 @@ Manageracb::Application.routes.draw do
 
   #get '/predictions/:id/game', to: 'predictions#game', as: 'predictions_game'
   get '/home', to: 'home#index'
-
 
   get 'register' => 'users#new', as: 'register'
   get 'sign-in' => 'home#index', as: 'sign_in'
