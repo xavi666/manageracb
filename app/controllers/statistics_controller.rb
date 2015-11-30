@@ -25,7 +25,7 @@ class StatisticsController < ApplicationController
 
       @teams = Rails.application.config.teams
       @partits = []
-      html_pages = HtmlPage.statistic.where(id: 2739)
+      html_pages = HtmlPage.statistic.where(code: code, season: season)
 
       html_pages.each do |html_page| 
         pagina_partit = Nokogiri::XML(html_page.html)
