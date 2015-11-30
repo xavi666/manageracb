@@ -20,6 +20,10 @@ class HtmlPagesController < ApplicationController
     @html_page.destroy
   end
 
+  def show
+    @html_page = HtmlPage.find(params[:id])
+  end
+
   def import_statistics
     if params[:search]
       code = params[:search][:code]
@@ -34,6 +38,10 @@ class HtmlPagesController < ApplicationController
         html_page = HtmlPage.where(code: code, season: season, game_number: partit, html_page_type: "statistic").first
         unless html_page
           HtmlPage.create!(code: code, season: season, game_number: partit, html: pagina_partit.inner_html, html_page_type: "statistic")
+          @count += 1
+        else
+          html_page.html = pagina_partit.inner_html
+          html_page.save!
           @count += 1
         end
       end
@@ -50,9 +58,13 @@ class HtmlPagesController < ApplicationController
       (1..num_games).each do |jornada|
         url_partit = "http://acb.com/resulcla.php?codigo=LACB-"+code+"&jornada="+jornada.to_s
         pagina_jornada = Nokogiri::HTML(open(url_partit))
-        game = HtmlPage.where(:code => code, season: season, :game_number => jornada, :html_page_type => "game").first
-        unless game
+        html_page = HtmlPage.where(:code => code, season: season, :game_number => jornada, :html_page_type => "game").first
+        unless html_page
           HtmlPage.create!(:code => code, season: season, :game_number => jornada, :html => pagina_jornada.inner_html, :html_page_type => "game")
+          @count += 1
+        else
+          html_page.html = pagina_jornada.inner_html
+          html_page.save!
           @count += 1
         end
       end

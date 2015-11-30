@@ -25,9 +25,11 @@ class Player < ActiveRecord::Base
   # !                  Other
   # !**************************************************
   include PlayerAllowed
+
   extend Enumerize
-  monetize :price_cents, allow_nil: true
   enumerize :position, in: [:base, :alero, :pivot], predicates: true
+  
+  monetize :price_cents, allow_nil: true
 
   def to_s
     name
