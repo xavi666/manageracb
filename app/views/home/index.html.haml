@@ -1,7 +1,7 @@
 %h3="PREDICCIONS DE PARTIDOS"
 - @games.each do |game|
   #predictions.col-xs-6.col-md-4
-    %a{:href => game_path(game.id)}
+    %a{:href => prediction_path(game.id)}
       %div.col-xs-6.col-md-6.box.white
         =image_tag("teams/"+game.local_team.short_code+".jpg", class: "team")
         =game.local_team.short_code

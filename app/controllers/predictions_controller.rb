@@ -1,5 +1,5 @@
 class PredictionsController < ApplicationController
-  layout "front", only: [:game]
+  layout "front", only: [:game, :show]
   include SortableFilterHelper
   
   require 'rubygems'
@@ -178,7 +178,9 @@ class PredictionsController < ApplicationController
   end
 
   def show
-    @prediction = Prediction.find(params[:id])
+    #@prediction = Prediction.find(params[:id])
+    @game = Game.find(params[:id])
+    @predictions = Prediction.where(game_id: params[:id])
   end
 
   def destroy
