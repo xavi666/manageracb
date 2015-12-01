@@ -23,20 +23,22 @@ class PlayersController < ApplicationController
   end
 
   def money
-    doc = Nokogiri::HTML(open("#{Rails.root}/mercado_201506.html"))
-    game_number = Setting.find_by_name("game_number").value
-    season = Setting.find_by_name("season").value
+    if params[:search]
+      game_number = params[:search][:game_number]
+      season = params[:search][:season]
+      doc = Nokogiri::HTML(open("#{Rails.root}/mercado_"+season.to_s+game_number.to_s+".html"))
 
-    doc.css("table#posicion1 tbody tr").each do |player_row|
-      create_player(player_row, "base", season, game_number)
+      doc.css("table#posicion1 tbody tr").each do |player_row|
+        create_player(player_row, "base", season, game_number)
+      end
+      doc.css("table#posicion3 tbody tr").each do |player_row|
+        create_player(player_row, "alero", season, game_number)
+      end
+      doc.css("table#posicion5 tbody tr").each do |player_row|
+        create_player(player_row, "pivot", season, game_number)
+      end
+      redirect_to action: "index"
     end
-    doc.css("table#posicion3 tbody tr").each do |player_row|
-      create_player(player_row, "alero", season, game_number)
-    end
-    doc.css("table#posicion5 tbody tr").each do |player_row|
-      create_player(player_row, "pivot", season, game_number)
-    end
-    redirect_to action: "index"
   end
 
   private
@@ -55,8 +57,7 @@ class PlayersController < ApplicationController
       teams = Rails.application.config.teams
       team_id = teams[team]
       name = player_row.css(".jugador").text
-      price_cents = player_row.css(".precio").text.to_f*100
-
+      price_cents = player_row.css(".precio").text.delete('.').to_i*100
       player = Player.find_by_name(name)
       unless player
         player = Player.create!(name: name, team_id: team_id, active: true, position: position, image: image, price_cents: price_cents, nacionality: nacionality, active: true)
