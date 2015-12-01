@@ -13,6 +13,8 @@ class Population
   def seed!
     chromosomes = Array.new
     1.upto(POPULATION_SIZE).each do
+      puts "cromozome"
+      puts Chromosome.new
       chromosomes << Chromosome.new
     end
 

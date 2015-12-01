@@ -54,25 +54,35 @@ Manageracb::Application.routes.draw do
     get 'create_from_html', on: :collection
   end
   resources :teams 
-  resources :user_teams 
+  resources :user_teams do
+    get 'optimize', on: :collection
+  end
   resources :players do
-    get 'money', on: :collection
+    collection do
+      get 'money'
+    end
   end
   resources :predictions do
-    get 'game', on: :collection
-    get 'predict', on: :collection
-    get 'init', on: :collection
+    collection do
+      get 'game'
+      get 'predict'
+      get 'init'
+    end
   end
   resources :html_pages do
-    get 'import_games', on: :collection
-    get 'import_statistics', on: :collection
+    collection do
+      get 'import_games'
+      get 'import_statistics'
+    end
   end
   resources :statistics do
-    get 'create_from_html', on: :collection
-    get 'export', on: :collection
-    get 'acumulats_jugador', on: :collection
-    get 'acumulats_equip', on: :collection
-    get 'acumulats_equip_received', on: :collection
+    collection do
+      get 'create_from_html'
+      get 'export'
+      get 'acumulats_jugador'
+      get 'acumulats_equip'
+      get 'acumulats_equip_received'
+    end
   end
   resources :optimizations
 

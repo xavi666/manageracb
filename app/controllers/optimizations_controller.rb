@@ -12,6 +12,9 @@ class OptimizationsController < ApplicationController
 
     population = Population.new
     population.seed!
+    puts "POPULATION"
+    puts population.inspect
+    puts "POPULATION"
 
     1.upto(NUM_GENERATIONS).each do |generation|
 
