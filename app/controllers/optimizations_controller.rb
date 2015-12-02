@@ -1,10 +1,10 @@
 #http://mattmazur.com/2013/08/18/a-simple-genetic-algorithm-written-in-ruby/
 
-POPULATION_SIZE = 11
+POPULATION_SIZE = 1000
 NUM_BITS = 64
-NUM_GENERATIONS = 1
-CROSSOVER_RATE = 0.7
-MUTATION_RATE = 0.001
+NUM_GENERATIONS = 100000
+CROSSOVER_RATE = 2
+MUTATION_RATE = 20
 
 class OptimizationsController < ApplicationController
 
@@ -45,8 +45,9 @@ class OptimizationsController < ApplicationController
 
       population = offspring
     end
+    @population
 
-    puts "Final population: " + population.inspect
+    puts "Final population: " + @population.inspect
   end
 
 end

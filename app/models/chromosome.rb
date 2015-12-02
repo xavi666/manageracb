@@ -25,9 +25,11 @@ class Chromosome
   def fitness
     total = 0
     0.upto(genes.count - 1).each do |i|
-      id = genes[i].first
-      value = genes[i].second.to_s.blank? ? 0 : genes[i].second
-      total += value
+      unless genes[i].nil?
+        id = genes[i].first
+        value = genes[i].second.to_s.blank? ? 0 : genes[i].second
+        total += value
+      end
     end
     #genes.count("1")
     total

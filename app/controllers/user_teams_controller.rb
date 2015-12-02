@@ -5,6 +5,8 @@ CROSSOVER_RATE = 0.4
 MUTATION_RATE = 0.000001
 
 # http://mattmazur.com/2013/08/18/a-simple-genetic-algorithm-written-in-ruby/
+# http://gems.sciruby.com/
+
 
 class UserTeamsController < ApplicationController
 
@@ -87,7 +89,8 @@ class UserTeamsController < ApplicationController
       population = offspring
     end
 
-    puts "Final population: "
+    @population = population
+    puts "Final population: " + @population.inspect
     ap population
   end
 

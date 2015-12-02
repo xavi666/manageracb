@@ -29,7 +29,6 @@ class UserTeam < ActiveRecord::Base
   def players
     players = []
     bases.each do |user_team_player|
-      puts user_team_player.inspect
       players << user_team_player.player
     end
     aleros.each do |player|
