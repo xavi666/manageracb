@@ -18,4 +18,5 @@
             =render "user_team_player/new_edit", :f => builder, players: Player.active.aleros
           = f.fields_for :pivots do |builder|
             =render "user_team_player/new_edit", :f => builder, players: Player.active.pivots
-    = f.submit "Submit" 
+      = f.submit "Submit" 
+    #result.table-responsive.white

@@ -2,7 +2,7 @@ class Population
   
   attr_accessor :chromosomes
   
-  def initialize
+  def initialize 
     self.chromosomes = Array.new
   end
   
@@ -10,12 +10,10 @@ class Population
     chromosomes.join(" ")
   end
   
-  def seed!
+  def seed! all_players
     chromosomes = Array.new
     1.upto(POPULATION_SIZE).each do
-      puts "cromozome"
-      puts Chromosome.new
-      chromosomes << Chromosome.new
+      chromosomes << Chromosome.new("", all_players)
     end
 
     self.chromosomes = chromosomes    
@@ -43,7 +41,6 @@ class Population
   
   def select
     rand_selection = rand(total_fitness)
-
     total = 0
     chromosomes.each_with_index do |chromosome, index|
       total += chromosome.fitness
