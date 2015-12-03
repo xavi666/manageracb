@@ -1,0 +1,12 @@
+LOG:  database system was shut down at 2015-11-24 09:39:29 CET
+LOG:  autovacuum launcher started
+LOG:  database system is ready to accept connections
+FATAL:  role "managaracb" does not exist
+ERROR:  database "manageracb_development" already exists
+STATEMENT:  CREATE DATABASE "manageracb_development" ENCODING = 'unicode' TEMPLATE = "template0"
+ERROR:  database "manageracb_development" already exists
+STATEMENT:  CREATE DATABASE "manageracb_development" ENCODING = 'unicode' TEMPLATE = "template0"
+ERROR:  database "manageracb_development" already exists
+STATEMENT:  CREATE DATABASE "manageracb_development" ENCODING = 'unicode' TEMPLATE = "template0"
+ERROR:  relation "teams" does not exist at character 23
+STATEMENT:  SELECT "teams".* FROM "teams"
