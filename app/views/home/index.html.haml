@@ -7,6 +7,6 @@
         =game.local_team.short_code
       %div.col-xs-6.col-md-6.box.white
         =game.visitant_team.short_code
-        =image_tag("teams/"+game.local_team.short_code.to_s+".jpg", class: "team") if game.local_team.short_code
+        =image_tag("teams/"+game.visitant_team.short_code.to_s+".jpg", class: "team") if game.visitant_team.short_code
 %h3="OPTIMIZA TU EQUIPO"
 = render partial: "user_teams/new_edit"
