@@ -3,20 +3,21 @@
 #
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
-development:
-  adapter: sqlite3
-  database: db/development.sqlite3
-  pool: 5
-  timeout: 5000
+#development:
+  #adapter: sqlite3
+  #database: db/development.sqlite3
+  #pool: 5
+  #timeout: 5000
 
-  #adapter:  postgresql
-  #host:     localhost
-  #encoding: unicode
-  #database: teamwear_ireland_development
-  #pool:     5
-  #username: teamwear_ireland
-  #password:
-  #template: template0
+development:
+  adapter:  postgresql
+  host:     localhost
+  encoding: unicode
+  database: manageracb_development
+  pool:     5
+  username: manageracb
+  password:
+  template: template0
 
 
 # Warning: The database defined as "test" will be erased and
