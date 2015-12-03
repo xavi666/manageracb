@@ -18,7 +18,6 @@ gem 'gga4r', '~> 0.9.3'
 gem 'bcrypt-ruby', :require => 'bcrypt' 
 gem 'select2-rails',             '~> 3.5'
 gem 'pg'
-gem 'sqlite3'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -27,11 +26,11 @@ group :assets do
   gem 'sass-rails',         '~> 4.0.0'
   gem 'coffee-rails',       '~> 4.0.0'
   gem 'uglifier',           '>= 1.3.0'
-
 end
 
 group :development, :test do # <<<< :development, not devlopment
   gem 'awesome_print'
+  gem 'sqlite3'
 end
 
 # To use ActiveModel has_secure_password
