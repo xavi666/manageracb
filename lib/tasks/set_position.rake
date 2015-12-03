@@ -26,7 +26,7 @@ task :set_position => :environment do
   p.position = 'base'
   p.save!
   p = Player.find_by_name('Urtasun, Alex')
-  p.positiogn = 'alero'
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Porzingis, K.')
   p.position = 'pivot'

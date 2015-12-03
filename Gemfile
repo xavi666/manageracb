@@ -32,6 +32,7 @@ end
 group :development, :test do # <<<< :development, not devlopment
   gem 'awesome_print'
   gem 'sqlite3'
+  gem 'seed_dump'
 end
 
 # To use ActiveModel has_secure_password
