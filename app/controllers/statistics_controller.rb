@@ -463,7 +463,6 @@ class StatisticsController < ApplicationController
             statistic.assists_received = @acumulats_received[team.id][game_number]["assists_received"]
             statistic.rebounds_received = @acumulats_received[team.id][game_number]["rebounds_received"]
             statistic.three_pm_received = @acumulats_received[team.id][game_number]["three_pm_received"]
-            puts statistic.value_received
             statistic.save!
           end
         end

@@ -12,6 +12,7 @@ class Player < ActiveRecord::Base
   belongs_to :team
   belongs_to :user_team_players
   has_many :predictions
+  has_many :prices
 
   # !**************************************************
   # !                Validations
@@ -25,11 +26,18 @@ class Player < ActiveRecord::Base
   # !                  Other
   # !**************************************************
   include PlayerAllowed
+
   extend Enumerize
-  monetize :price_cents, allow_nil: true
   enumerize :position, in: [:base, :alero, :pivot], predicates: true
+  
+  monetize :price_cents, allow_nil: true
 
   def to_s
     name
   end
+
+  def print_price
+    ActiveSupport::NumberHelper.number_to_delimited(price.to_i, :delimiter => ".")
+  end
+
 end

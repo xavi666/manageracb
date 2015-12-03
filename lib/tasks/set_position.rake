@@ -26,7 +26,7 @@ task :set_position => :environment do
   p.position = 'base'
   p.save!
   p = Player.find_by_name('Urtasun, Alex')
-  p.position = 'alero'
+  p.positiogn = 'alero'
   p.save!
   p = Player.find_by_name('Porzingis, K.')
   p.position = 'pivot'
@@ -43,7 +43,7 @@ task :set_position => :environment do
   p = Player.find_by_name('San Miguel, R.')
   p.position = 'base'
   p.save!
-  p = Player.find_by_name('Richotti, Nicolàs')
+  p = Player.find_by_name('Richotti, Nicolás')
   p.position = 'base' if p
   p.save! if p
   p = Player.find_by_name('Tsairelis, M.')
@@ -55,7 +55,7 @@ task :set_position => :environment do
   p = Player.find_by_name('Lampropoulos,F.')
   p.position = 'pivot'
   p.save!
-  p = Player.find_by_name('Beiràn, Javier')
+  p = Player.find_by_name('Beirán, Javier')
   p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Rost, Levi')
@@ -377,181 +377,181 @@ task :set_position => :environment do
   p.position = 'base'
   p.save!
   p = Player.find_by_name('Isiani, Willy')
-  p.position = 'alero'
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Karahodzic, Kenan')
   p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Orlov, Volodymyr')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Begic, Mirza')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Rodríguez, A.')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Barro, Mouhamed')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Slaughter, M.')
   p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Woodside, Ben')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Thomas, D.')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Duch, Adrià')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Summers, D.')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Llorente, Juan')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Martínez, Eric')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Peno, Stefan')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Burtt, Steve')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Alvarado, Óscar')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Esteban, Máxim')
-  p.position = '' if p
+  p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Vila, Eric')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Aradori, Pietro')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Jawai, Nathan')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Huertas, Rafael')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Hansbrough, Ben')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Portugués, Joaquín')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Guardia, David')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Cabrera, Alberto')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Pursl, Simon')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Penney, Kirk')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Bogdanovic, L.')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Stojanovski, V.')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Lee, Gerald')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Poeta, Giuseppe')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Cvetkovic, B.')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Mayo, Josh')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Dilys, Vilmantas')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Little, Mario')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Martínez, Carlos')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Sedekerskis, Tadas')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Creus, Joan')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Nikolic, Zoran')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Seeley, DJ')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Abecrombie, T.')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Sánchez, A.')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Palsson, Haukur')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Salash, Maksim')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Ortega, José')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Hopson, Scotty')
-  p.position = ''
+  p.position = 'alero'
   p.save!
   p = Player.find_by_name('Maric, Aleks')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Sainsbury, David')
-  p.position = ''
+  p.position = 'pivot'
   p.save!
   p = Player.find_by_name('Vitali, Luca')
-  p.position = ''
+  p.position = 'base'
   p.save!
   p = Player.find_by_name('Jofresa, David')
-  p.position = '' if p
+  p.position = 'base' if p
   p.save! if p
   p = Player.find_by_name('Vezenkov, A.')
-  p.position = '' if p
+  p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Perperoglou, S.')
-  p.position = '' if p
+  p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('González, José M.')
-  p.position = '' if p
+  p.position = 'pivot' if p
   p.save! if p
   p = Player.find_by_name('Sandul, M.')
-  p.position = '' if p
+  p.position = 'pivot' if p
   p.save! if p
   p = Player.find_by_name('Otverchenko, R.')
-  p.position = '' if p
+  p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Carter, Kerry')
   p.position = 'base' if p
   p.save! if p
   p = Player.find_by_name('Rubio, Juan')
-  p.position = '' if p
+  p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Stimac, Vladimir')
-  p.position = '' if p
+  p.position = 'pivot' if p
   p.save! if p
   p = Player.find_by_name('Kangur, Kristjan')
-  p.position = '' if p
+  p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Lindstrom, Valter')
   p.position = 'base' if p

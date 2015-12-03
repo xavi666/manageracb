@@ -1,12 +1,11 @@
 %tr
-  %td=f.select :player_id, options_for_select(players.joins(predictions: :game).includes(predictions: :game).where("games.season = ?", "2015").where("games.game_number = ?", 6).order(:name).map {|p| [p.name, p.id, {'data-value' => p.predictions.first.value, 'data-points' => p.predictions.first.points, 'data-assists' => p.predictions.first.assists, 'data-rebounds' => p.predictions.first.rebounds, 'data-rebounds' => p.predictions.first.rebounds, 'data-money' => p.predictions.first.money}]}), {:include_blank => "Selecciona Jugador"}, {class: "select2 user_team_player"}
+  %td=f.select :player_id, options_for_select(players.joins(predictions: :game).includes(predictions: :game).where("games.season = ?", "2015").where("games.game_number = ?", 6).order(:name).map {|p| [p.name, p.id, {'data-value' => p.predictions.first.value, 'data-points' => p.predictions.first.points, 'data-assists' => p.predictions.first.assists, 'data-rebounds' => p.predictions.first.rebounds, 'data-rebounds' => p.predictions.first.rebounds, 'data-three-pm' => p.predictions.first.three_pm}]}), {:include_blank => "Selecciona Jugador"}, {class: "select2 user_team_player"}
   %td.value
   %td.points
   %td.rebounds
   %td.assists
   %td.three_pm
-  %td.money
-  %td="a"
+  %td.price
 
 
     

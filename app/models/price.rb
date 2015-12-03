@@ -8,6 +8,7 @@ class Price < ActiveRecord::Base
   # !**************************************************
   # !                Associations
   # !**************************************************
+  belongs_to :player
 
   # !**************************************************
   # !                Validations
@@ -21,5 +22,9 @@ class Price < ActiveRecord::Base
   # !                  Other
   # !**************************************************
   monetize :price_cents, allow_nil: true
+
+  def print_price
+    ActiveSupport::NumberHelper.number_to_delimited(price.to_i, :delimiter => ".")
+  end
 
 end
