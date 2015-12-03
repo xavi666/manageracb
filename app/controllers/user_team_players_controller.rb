@@ -21,6 +21,7 @@ class UserTeamPlayersController < ApplicationController
   end
 
   def new
+    init_team
   end
 
   private
