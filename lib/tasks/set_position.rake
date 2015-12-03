@@ -26,7 +26,7 @@ task :set_position => :environment do
   p.position = 'base'
   p.save!
   p = Player.find_by_name('Urtasun, Alex')
-  p.position = 'alero'
+  p.positiogn = 'alero'
   p.save!
   p = Player.find_by_name('Porzingis, K.')
   p.position = 'pivot'
@@ -43,7 +43,7 @@ task :set_position => :environment do
   p = Player.find_by_name('San Miguel, R.')
   p.position = 'base'
   p.save!
-  p = Player.find_by_name('Richotti, Nicolàs')
+  p = Player.find_by_name('Richotti, Nicolás')
   p.position = 'base' if p
   p.save! if p
   p = Player.find_by_name('Tsairelis, M.')
@@ -55,7 +55,7 @@ task :set_position => :environment do
   p = Player.find_by_name('Lampropoulos,F.')
   p.position = 'pivot'
   p.save!
-  p = Player.find_by_name('Beiràn, Javier')
+  p = Player.find_by_name('Beirán, Javier')
   p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Rost, Levi')
