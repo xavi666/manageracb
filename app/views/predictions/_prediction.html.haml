@@ -1,5 +1,5 @@
 %tr
-  %td=image_tag("players/"+prediction.player.image.to_s, class: "player") if prediction.player.image
+  %td=image_tag("players/"+prediction.player.image.to_s, class: "player") if prediction.try(:player).try(:image)
   %td=prediction.player.name
   %td=prediction.value
   %td=prediction.points
