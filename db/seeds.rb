@@ -698,7 +698,8 @@ Prediction.create!([
 ])
 Setting.create!([
   {name: "season", value: "2015", active: true},
-  {name: "game_number", value: "7", active: true}
+  {name: "game_number", value: "7", active: true},
+  {name: "season_data", value: "2014", active: true}
 ])
 Game.create!([
   {local_team_id: 11, visitant_team_id: 3, local_score: nil, visitant_score: nil, date_time: nil, place: nil, referees: nil, p1: nil, p2: nil, p3: nil, p4: nil, active: true, game_number: 1, season: "2015", prediction_id: nil},
