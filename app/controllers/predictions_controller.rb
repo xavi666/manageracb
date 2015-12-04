@@ -151,6 +151,7 @@ class PredictionsController < ApplicationController
       
       #jugadors equip local
       game.local_team.players.active.each do |player|
+        #I need to check the player is active
         player_statistic = Statistic.player.where(player_id: player.id, game_number: game_number, season: season).first
         if player_statistic and visitant_team_statistic
           prediction = Prediction.where(player_id: player_statistic.player_id, team_id: visitant_team_statistic.team_id, game_id: game.id).first

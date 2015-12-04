@@ -1,8 +1,9 @@
-%tr
-  %td=image_tag("players/"+prediction.player.image.to_s, class: "player") if prediction.try(:player).try(:image)
-  %td=prediction.player.name
-  %td=prediction.value
-  %td=prediction.points
-  %td=prediction.assists
-  %td=prediction.rebounds
-  %td=prediction.three_pm
+- if prediction.try(:player)
+  %tr
+    %td=image_tag("players/"+prediction.player.image.to_s, class: "player") if prediction.try(:player).try(:image)
+    %td=prediction.player.name
+    %td=prediction.value
+    %td=prediction.points
+    %td=prediction.assists
+    %td=prediction.rebounds
+    %td=prediction.three_pm
