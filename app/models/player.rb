@@ -40,4 +40,14 @@ class Player < ActiveRecord::Base
     ActiveSupport::NumberHelper.number_to_delimited(price.to_i, :delimiter => ".")
   end
 
+  def position_integer
+    if self.position.base?
+      -1 
+    elsif self.position.alero?
+      0 
+    elsif self.position.pivot?
+      1
+    end 
+  end
+
 end

@@ -116,7 +116,7 @@ task :set_position => :environment do
   p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Rivers, K. C.')
-  p.position = '' if p
+  p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Campazzo, Facu')
   p.position = 'base' if p
@@ -424,7 +424,7 @@ task :set_position => :environment do
   p = Player.find_by_name('Alvarado, Óscar')
   p.position = 'base' if p
   p.save! if p
-  p = Player.find_by_name('Esteban, Máxim')
+  p = Player.find_by_name('Esteban, Màxim')
   p.position = 'alero' if p
   p.save! if p
   p = Player.find_by_name('Vila, Eric')
@@ -579,5 +579,8 @@ task :set_position => :environment do
   p.save! if p
   p = Player.find_by_name('Sans, Agustín')
   p.position = 'base' if p
+  p.save! if p
+  p = Player.find_by_name('Llorca, Álex')
+  p.position = 'alero' if p
   p.save! if p
 end

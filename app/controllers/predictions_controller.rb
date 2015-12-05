@@ -13,71 +13,6 @@ class PredictionsController < ApplicationController
     #@predictions = Prediction.all
   end
 
-  def create
-
-    ####################################
-    ####### LIBSVM
-    ####### https://github.com/febeling/rb-libsvm
-    ####################################
-
-    # This library is namespaced.
-    problem = Libsvm::Problem.new
-    parameter = Libsvm::SvmParameter.new
-
-    parameter.cache_size = 1 # in megabytes
-
-    parameter.eps = 0.001
-    parameter.c = 10
-
-    examples = [ [1,0,1], [-1,0,-1] ].map {|ary| Libsvm::Node.features(ary) }
-    labels = [1, -1]
-
-    problem.set_examples(labels, examples)
-
-    model = Libsvm::Model.train(problem, parameter)
-
-    pred = model.predict(Libsvm::Node.features(1, 1, 1))
-    puts "Example [1, 1, 1] - Predicted #{pred}"
-
-    #######
-    # This library is namespaced.
-    problem = Libsvm::Problem.new
-    parameter = Libsvm::SvmParameter.new
-
-    parameter.cache_size = 1 # in megabytes
-
-    parameter.eps = 0.001
-    parameter.c = 1
-
-
-    values = %w(seconds points value game_number)
-    labels = %w(value)
-    @statistics = Statistic.game.find_season("2014").where("statistics.seconds > 0").first(1000)
-
-    @training_values = []
-    @statistics.each do |statistic|
-      if statistic.seconds > 0
-        game_number = statistic.game_number
-        player_statistic = Statistic.player.where(player_id: statistic.player_id, game_number: game_number, season: "2014").first
-        team_statistic = Statistic.team.where(team_id: statistic.team_against_id, game_number: game_number, season: "2014").first
-        if player_statistic and team_statistic
-          @training_values << [player_statistic.seconds / game_number, player_statistic.points / game_number, player_statistic.rebounds / game_number, player_statistic.assists / game_number, player_statistic.value / game_number,
-                team_statistic.points / game_number, team_statistic.rebounds / game_number, team_statistic.assists / game_number, team_statistic.rfaults / game_number, team_statistic.value / game_number ]
-        end
-      end
-    end
-
-    @training_labels = @statistics.map(&:value)
-
-    examples = @training_values.map {|ary| Libsvm::Node.features(ary) }
-    labels = @training_labels
-    problem.set_examples(labels, examples)
-    model = Libsvm::Model.train(problem, parameter)
-    @pred = model.predict(Libsvm::Node.features(1822, 18, 9, 1, 20, 76, 27, 10, 20, 65))
-    puts "Example [1822, 18, 9, 1, 20, 76, 27, 10, 20, 65] - Predicted #{pred}"
-
-  end
-
   def predict
     if params[:search]
       ####################################
@@ -90,6 +25,7 @@ class PredictionsController < ApplicationController
       season = params[:search][:season]
       game_number = params[:search][:num_games].to_i
       type = params[:search][:type]
+      season_data = Setting.find_by_name("season_data").value
 
       # Setting parameters
       param = Liblinear::Parameter.new
@@ -97,15 +33,18 @@ class PredictionsController < ApplicationController
       #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
       param.solver_type = Liblinear::L2R_L1LOSS_SVR_DUAL
 
-      @statistics = Statistic.game.find_season("2014").where("statistics.seconds > 0").first(num_elements)
+      @statistics = Statistic.game.find_season(season_data).where("statistics.seconds > 0")
+      @statistics = @statistics.shuffle.first(num_elements)
 
       labels = labels(@statistics, type) 
       test = []
       @statistics.each do |statistic|
         if statistic.seconds > 0
-          test << values(statistic, statistic.game_number, "2014", type)
+          test << values(statistic, statistic.game_number, season_data, type)
         end
       end
+      puts "TEST"
+      ap test
 
       bias = 0.5
       @labels = labels
@@ -212,14 +151,8 @@ class PredictionsController < ApplicationController
     end
 
     def values statistic_prediction, game_number, season, type 
-      case statistic_prediction.class.name
-      when "Prediction"
-        team_statistic = Statistic.team.where(team_id: statistic_prediction.team_id, game_number: game_number, season: season).first
-      when "Statistic"
-        team_statistic = Statistic.team.where(team_id: statistic_prediction.team_against_id, game_number: game_number, season: season).first
-      else
-        team_statistic = Statistic.team.where(team_id: statistic_prediction.team_id, game_number: game_number, season: season).first
-      end
+      team_statistic = Statistic.team.where(team_id: statistic_prediction.player.team_id, game_number: game_number, season: season).first
+      team_against_statistic = Statistic.team.where(team_id: statistic_prediction.team_id, game_number: game_number, season: season).first
       player_statistic = Statistic.player.where(player_id: statistic_prediction.player_id, game_number: game_number, season: season).first
       
       if player_statistic and team_statistic
@@ -227,28 +160,35 @@ class PredictionsController < ApplicationController
         when "value"
           label = {
               0 => player_statistic.value / game_number,
-              1 => team_statistic.value / game_number }
+              1 => team_statistic.value / game_number,
+              2 => team_against_statistic.value_received / game_number }
         when "points"
           label = {
               0 => player_statistic.points / game_number,
-              1 => team_statistic.points / game_number }
+              1 => team_statistic.points / game_number,
+              2 => team_against_statistic.value_received / game_number }
         when "assists"
           label = {
               0 => player_statistic.assists / game_number,
-              1 => team_statistic.assists / game_number }
+              1 => team_statistic.assists / game_number,
+              2 => team_against_statistic.value_received / game_number }
         when "rebounds"
           label = {
               0 => player_statistic.rebounds / game_number,
-              1 => team_statistic.rebounds / game_number }
+              1 => team_statistic.rebounds / game_number,
+              2 => team_against_statistic.value_received / game_number }
         when "three_pm"
           label = {
               0 => player_statistic.three_pm / game_number,
-              1 => team_statistic.three_pm / game_number }
+              1 => team_statistic.three_pm / game_number,
+              2 => team_against_statistic.value_received / game_number }
         else
           label = {
               0 => player_statistic.value / game_number,
-              1 => team_statistic.value / game_number }
+              1 => team_statistic.value / game_number,
+              2 => team_against_statistic.value_received / game_number }
         end 
+        label[3] = player_statistic.player.position_integer
       end
       label
     end

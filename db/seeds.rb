@@ -78,7 +78,7 @@ Player.create("id"=>220, "name"=>"Diagne, Moussa", "date_of_birth"=>nil, "team_i
 Player.create("id"=>222, "name"=>"Linhart, Nate", "date_of_birth"=>nil, "team_id"=>2, "number"=>4, "position"=>"alero", "nationality"=>nil, "active"=>true, "image"=>"JFOGLACB60.jpg", "nacionality"=>"extracomunitario", "price_cents"=>36225000)
 Player.create("id"=>223, "name"=>"Vrkic, Zoran", "date_of_birth"=>nil, "team_id"=>16, "number"=>7, "position"=>"alero", "nationality"=>nil, "active"=>true, "image"=>"JH04LACB60.jpg", "nacionality"=>"extracomunitario", "price_cents"=>51625000)
 Player.create("id"=>224, "name"=>"Sandul, M.", "date_of_birth"=>nil, "team_id"=>7, "number"=>5, "position"=>"pivot", "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
-Player.create("id"=>225, "name"=>"Monta&#xF1;ez, Román", "date_of_birth"=>nil, "team_id"=>7, "number"=>8, "position"=>nil, "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
+Player.create("id"=>225, "name"=>"Montañez, Román", "date_of_birth"=>nil, "team_id"=>7, "number"=>8, "position"=>"alero", "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
 Player.create("id"=>226, "name"=>"Samuels, Samardo", "date_of_birth"=>nil, "team_id"=>5, "number"=>23, "position"=>"pivot", "nationality"=>nil, "active"=>true, "image"=>"JFOLLACB60.jpg", "nacionality"=>"extracomunitario", "price_cents"=>45400000)
 Player.create("id"=>227, "name"=>"Miljenovic, Nenad", "date_of_birth"=>nil, "team_id"=>1, "number"=>13, "position"=>"base", "nationality"=>nil, "active"=>true, "image"=>"JFPULACB60.jpg", "nacionality"=>"extracomunitario", "price_cents"=>41170000)
 Player.create("id"=>228, "name"=>"Rodríguez, Samuel", "date_of_birth"=>nil, "team_id"=>8, "number"=>14, "position"=>"alero", "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
@@ -133,8 +133,8 @@ Player.create("id"=>283, "name"=>"Kanacevic, Halil", "date_of_birth"=>nil, "team
 Player.create("id"=>284, "name"=>"Flis, Dmitry", "date_of_birth"=>nil, "team_id"=>7, "number"=>21, "position"=>"pivot", "nationality"=>nil, "active"=>true, "image"=>"JB0VLACB60.jpg", "nacionality"=>"espanol", "price_cents"=>9127800)
 Player.create("id"=>285, "name"=>"Romera, Pedro", "date_of_birth"=>nil, "team_id"=>2, "number"=>7, "position"=>"pivot", "nationality"=>nil, "active"=>true, "image"=>"JFQJLACB60.jpg", "nacionality"=>"espanol", "price_cents"=>13380000)
 Player.create("id"=>286, "name"=>"Pangos, Kevin", "date_of_birth"=>nil, "team_id"=>6, "number"=>3, "position"=>"base", "nationality"=>nil, "active"=>true, "image"=>"JFOOLACB60.jpg", "nacionality"=>"extracomunitario", "price_cents"=>89950000)
-Player.create("id"=>287, "name"=>"Llorca, Alex", "date_of_birth"=>nil, "team_id"=>10, "number"=>11, "position"=>nil, "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
-Player.create("id"=>288, "name"=>"Aboubacar, Seydou", "date_of_birth"=>nil, "team_id"=>3, "number"=>4, "position"=>nil, "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
+Player.create("id"=>287, "name"=>"Llorca, Álex", "date_of_birth"=>nil, "team_id"=>10, "number"=>11, "position"=>"alero", "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
+Player.create("id"=>288, "name"=>"Aboubacar, Seydou", "date_of_birth"=>nil, "team_id"=>3, "number"=>4, "position"=>"pivot", "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
 Player.create("id"=>289, "name"=>"Mitchell, Tony", "date_of_birth"=>nil, "team_id"=>12, "number"=>1, "position"=>"alero", "nationality"=>nil, "active"=>true, "image"=>"JD00LACB60.jpg", "nacionality"=>"extracomunitario", "price_cents"=>40375000)
 Player.create("id"=>309, "name"=>"González, José M.", "date_of_birth"=>nil, "team_id"=>10, "number"=>15, "position"=>"pivot", "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
 Player.create("id"=>310, "name"=>"Torres, Alberto", "date_of_birth"=>nil, "team_id"=>12, "number"=>16, "position"=>"pivot", "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
@@ -695,6 +695,7 @@ Prediction.create("id"=>430, "player_id"=>328, "team_id"=>13, "value"=>7, "point
 
 Setting.create("id"=>1, "name"=>"season", "value"=>"2015", "active"=>true)
 Setting.create("id"=>2, "name"=>"game_number", "value"=>"7", "active"=>true)
+Setting.create("id"=>3, "name"=>"season_data", "value"=>"2014", "active"=>true)
 
 Game.create("id"=>307, "local_team_id"=>11, "visitant_team_id"=>3, "local_score"=>nil, "visitant_score"=>nil, "date_time"=>nil, "place"=>nil, "referees"=>nil, "p1"=>nil, "p2"=>nil, "p3"=>nil, "p4"=>nil, "active"=>true, "game_number"=>1, "season"=>"2015", "prediction_id"=>nil)
 Game.create("id"=>308, "local_team_id"=>5, "visitant_team_id"=>2, "local_score"=>nil, "visitant_score"=>nil, "date_time"=>nil, "place"=>nil, "referees"=>nil, "p1"=>nil, "p2"=>nil, "p3"=>nil, "p4"=>nil, "active"=>true, "game_number"=>1, "season"=>"2015", "prediction_id"=>nil)
