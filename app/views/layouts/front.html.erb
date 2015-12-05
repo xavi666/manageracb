@@ -13,8 +13,8 @@
   </head>
   <body class="front" id="<%= params[:controller].parameterize %>_controller" data-current-section="<%= @current_section %>">
     <div class="container">
-      <nav class="navbar navbar-fixed-top" role="navigation">
-        <div class="container">
+      <div class="row">
+        <nav class="navbar" role="navigation">
           <div class="col-sm-4">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
@@ -44,25 +44,21 @@
               </ul>
             </div>
           </div>
-        </div>
-      </nav>
-    </div>
-    <!-- Page Content -->
-    <div class="container">
+        </nav>
+      </div>
+      <!-- Page Content -->
       <div class="row">
-        <div class="col-sm-12">
-          <div class="col-sm-9">
-            <%= yield %>
-          </div>
-          <div class="col-sm-3">
-            <% if cookies[:auth_token] %>
-              <%= render partial: "users/user_panel" %>
-            <% else %>  
-              <%= render partial: "inc/login" %>
-            <% end %>
-            <%= render partial: "inc/recomendaciones" %>
-          </div>   
+        <div class="col-md-9 white">
+          <%= yield %>
         </div>
+        <div class="col-md-3 white">
+          <% if cookies[:auth_token] %>
+            <%= render partial: "users/user_panel" %>
+          <% else %>  
+            <%= render partial: "inc/login" %>
+          <% end %>
+          <%= render partial: "inc/recomendaciones" %>
+        </div>   
       </div>
     </div>
   </body>

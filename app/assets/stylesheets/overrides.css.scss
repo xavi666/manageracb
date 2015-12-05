@@ -1,11 +1,19 @@
 body.front{
-  background-color: #C7C6C6;
+  background-color: #272a2f;
+
+  .nav{
+    li{
+      a:hover{
+        background-color: #7ec6ef;
+      }
+    }
+  }
 
   .navbar{
-    background-color: #706F6F;
+    background-color: #66b4e8;
     a{
       color: #fff;
-    }
+      }
   }
   .navbar, .navbar-brand{
     //height: 100px;
@@ -14,6 +22,7 @@ body.front{
     background-color: white;
   }
   #predictions{
+    background-color: #f1f1f1;
     padding: 10px;
     .box{
       height: 80px;
