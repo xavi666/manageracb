@@ -25,7 +25,7 @@
             %th.col-xs-2= "Equip"
             %th.col-xs-2= "Rival"
             %th.col-xs-2= "Valoració"
-        %tbody= render @team.statistics.team.where(season: 2015)
+        %tbody= render @team.statistics.team.where(season: "2015")
   .col-xs-12
     %h1= "Acumulats 2014"
   .col-xs-12
@@ -39,4 +39,4 @@
             %th.col-xs-2= "Rival"
             %th.col-xs-2= "Acumulats Fets"
             %th.col-xs-2= "Acumulats Rebuts"
-        %tbody= render @team.statistics.team.where(season: 2014)
+        %tbody= render @team.statistics.team.where(season: "2014")

@@ -1,13 +1,9 @@
 class PredictionsController < ApplicationController
   layout "front", only: [:game, :show]
   include SortableFilterHelper
-  
   require 'rubygems'
-  #require 'ai4r'
   require "bundler/setup"
-  #include Ai4r::Classifiers
-  #include Ai4r::Data
-  
+  #require 'descriptive_statistics'
 
   def index
     #@predictions = Prediction.all
@@ -43,8 +39,6 @@ class PredictionsController < ApplicationController
           test << values(statistic, statistic.game_number, season_data, type)
         end
       end
-      puts "TEST"
-      ap test
 
       bias = 0.5
       @labels = labels
@@ -77,6 +71,12 @@ class PredictionsController < ApplicationController
       @mean_squared_error = cv.mean_squared_error
       # for regression
       @squared_correlation_coefficient = cv.squared_correlation_coefficient
+
+
+      puts "----------------------"
+      puts mean_and_standard_deviation([1,2,3,1,1,2,1])
+      puts mean_and_standard_deviation([1,2,3,1,1,2,1000])
+      puts "----------------------"
     end
   end
 
@@ -210,4 +210,14 @@ class PredictionsController < ApplicationController
       end 
       prediction  
     end
+
+    def mean(array)
+      array.inject(0) { |sum, x| sum += x } / array.size.to_f
+    end
+    def mean_and_standard_deviation(array)
+      m = mean(array)
+      variance = array.inject(0) { |variance, x| variance += (x - m) ** 2 }
+      return m, Math.sqrt(variance/(array.size-1))
+    end
+
 end
