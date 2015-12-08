@@ -34,18 +34,31 @@ body.front{
       }
     }
   }
+  .prediction{
+    img.team{
+      width: 30px;
+    }
+  }
   #recomendations{
     .team_image,
     .team_image img,
     .player_image,
     .player_image img{
       width: 30px;
+      border-bottom-left-radius: 50%;
+      border-bottom-right-radius: 50%;
+      border-top-left-radius: 50%;
+      border-top-right-radius: 50%;
     }
   }
 }
 
 img.player{
   width: 30px;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
 }
 
 .nav > li{
