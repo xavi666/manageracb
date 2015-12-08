@@ -25,6 +25,7 @@ class Prediction < ActiveRecord::Base
   # !**************************************************
   extend Enumerize
   monetize :price_cents, allow_nil: true
+  include PredictionAllowed
 
   def update_price
     price = Price.where(season: self.game.season, player_id: self.player_id, game_number: self.game.game_number - 1).first
