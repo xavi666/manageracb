@@ -118,9 +118,9 @@ class PredictionsController < ApplicationController
   end
 
   def show
-    #@prediction = Prediction.find(params[:id])
     @game = Game.find(params[:id])
     @predictions = Prediction.where(game_id: params[:id])
+    load_top_data
   end
 
   def destroy

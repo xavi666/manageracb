@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  helper_method :authenticated_user
+  helper_method :authenticated_user, :load_top_data
 
   add_flash_types :error, :success, :info, :warning
 
@@ -30,6 +30,22 @@ class ApplicationController < ActionController::Base
       session[:intended_destination] = params
       redirect_to sign_in_path, error: 'Please sign in before continuing!'
     end
+  end
+
+  def load_top_data
+    puts "---------> LOAD TOP DATA"
+    @top_ten =  {
+                  values: {
+                            bases: Prediction.joins(:player).merge(Player.bases).top_ten_value,
+                            aleros: Prediction.joins(:player).merge(Player.aleros).top_ten_value,
+                            pivots: Prediction.joins(:player).merge(Player.pivots).top_ten_value
+                          },                          
+                  points: {
+                            bases: Prediction.joins(:player).merge(Player.bases).top_ten_points,
+                            aleros: Prediction.joins(:player).merge(Player.aleros).top_ten_points,
+                            pivots: Prediction.joins(:player).merge(Player.pivots).top_ten_points
+                          }
+                }
   end
 
 end
