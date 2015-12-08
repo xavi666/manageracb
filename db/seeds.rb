@@ -1,4 +1,3 @@
-  [1m[36mPlayer Load (2.0ms)[0m  [1mSELECT "players".* FROM "players" WHERE "players"."active" = 't'[0m
 Player.create("id"=>2, "name"=>"Radovic, Nemanja", "date_of_birth"=>nil, "team_id"=>13, "number"=>11, "position"=>"pivot", "nationality"=>nil, "active"=>true, "image"=>"JH52LACB60.jpg", "nacionality"=>"extracomunitario", "price_cents"=>20060000)
 Player.create("id"=>3, "name"=>"Sastre, Joan", "date_of_birth"=>nil, "team_id"=>2, "number"=>15, "position"=>"alero", "nationality"=>nil, "active"=>true, "image"=>"JY9OLACB60.jpg", "nacionality"=>"espanol", "price_cents"=>93450000)
 Player.create("id"=>7, "name"=>"García, Sergi", "date_of_birth"=>nil, "team_id"=>2, "number"=>5, "position"=>"base", "nationality"=>nil, "active"=>true, "image"=>"J276LACB60.jpg", "nacionality"=>"espanol", "price_cents"=>6431100)
@@ -244,7 +243,6 @@ Player.create("id"=>414, "name"=>"Sandul, Maksym", "date_of_birth"=>nil, "team_i
 Player.create("id"=>216, "name"=>"Oroz, Xabi", "date_of_birth"=>nil, "team_id"=>16, "number"=>7, "position"=>"base", "nationality"=>nil, "active"=>true, "image"=>"JXDPLACB60.jpg", "nacionality"=>"espanol", "price_cents"=>7000000)
 Player.create("id"=>287, "name"=>"Llorca, Álex", "date_of_birth"=>nil, "team_id"=>10, "number"=>11, "position"=>"alero", "nationality"=>nil, "active"=>true, "image"=>nil, "nacionality"=>nil, "price_cents"=>nil)
 
-  [1m[35mTeam Load (0.8ms)[0m  SELECT "teams".* FROM "teams"
 Team.create("id"=>1, "name"=>"BALONCESTO SEVILLA", "active"=>true, "short_code"=>"SEV")
 Team.create("id"=>2, "name"=>"CAI ZARAGOZA", "active"=>true, "short_code"=>"CAI")
 Team.create("id"=>3, "name"=>"DOMINION BILBAO BASKET", "active"=>true, "short_code"=>"BLB")
@@ -264,7 +262,6 @@ Team.create("id"=>16, "name"=>"RETABET.ES GBC", "active"=>true, "short_code"=>"G
 Team.create("id"=>17, "name"=>"RIO NATURA MONBUS OBRADOIRO", "active"=>true, "short_code"=>"OBR")
 Team.create("id"=>18, "name"=>"VALENCIA BASKET CLUB", "active"=>true, "short_code"=>"VBC")
 
-  [1m[36mPrediction Load (2.2ms)[0m  [1mSELECT "predictions".* FROM "predictions"[0m
 Prediction.create("id"=>443, "player_id"=>139, "team_id"=>11, "value"=>4, "points"=>5, "rebounds"=>2, "assists"=>1, "price_cents"=>63000000, "active"=>true, "game_id"=>361, "three_pm"=>1)
 Prediction.create("id"=>444, "player_id"=>255, "team_id"=>11, "value"=>-4, "points"=>-1, "rebounds"=>0, "assists"=>0, "price_cents"=>nil, "active"=>true, "game_id"=>361, "three_pm"=>0)
 Prediction.create("id"=>445, "player_id"=>323, "team_id"=>11, "value"=>0, "points"=>3, "rebounds"=>3, "assists"=>0, "price_cents"=>21000000, "active"=>true, "game_id"=>361, "three_pm"=>1)
@@ -481,12 +478,10 @@ Prediction.create("id"=>508, "player_id"=>183, "team_id"=>15, "value"=>3, "point
 Prediction.create("id"=>436, "player_id"=>265, "team_id"=>14, "value"=>-4, "points"=>0, "rebounds"=>0, "assists"=>0, "price_cents"=>nil, "active"=>true, "game_id"=>361, "three_pm"=>0)
 Prediction.create("id"=>633, "player_id"=>347, "team_id"=>16, "value"=>2, "points"=>4, "rebounds"=>5, "assists"=>0, "price_cents"=>49000000, "active"=>true, "game_id"=>369, "three_pm"=>0)
 
-  [1m[35mSetting Load (0.6ms)[0m  SELECT "settings".* FROM "settings"
 Setting.create("id"=>1, "name"=>"season", "value"=>"2015", "active"=>true)
 Setting.create("id"=>2, "name"=>"game_number", "value"=>"7", "active"=>true)
 Setting.create("id"=>3, "name"=>"season_data", "value"=>"2014", "active"=>true)
 
-  [1m[36mGame Load (2.6ms)[0m  [1mSELECT "games".* FROM "games" WHERE "games"."season" = '2015'[0m
 Game.create("id"=>307, "local_team_id"=>11, "visitant_team_id"=>3, "local_score"=>nil, "visitant_score"=>nil, "date_time"=>nil, "place"=>nil, "referees"=>nil, "p1"=>nil, "p2"=>nil, "p3"=>nil, "p4"=>nil, "active"=>true, "game_number"=>1, "season"=>"2015", "prediction_id"=>nil)
 Game.create("id"=>308, "local_team_id"=>5, "visitant_team_id"=>2, "local_score"=>nil, "visitant_score"=>nil, "date_time"=>nil, "place"=>nil, "referees"=>nil, "p1"=>nil, "p2"=>nil, "p3"=>nil, "p4"=>nil, "active"=>true, "game_number"=>1, "season"=>"2015", "prediction_id"=>nil)
 Game.create("id"=>309, "local_team_id"=>6, "visitant_team_id"=>16, "local_score"=>nil, "visitant_score"=>nil, "date_time"=>nil, "place"=>nil, "referees"=>nil, "p1"=>nil, "p2"=>nil, "p3"=>nil, "p4"=>nil, "active"=>true, "game_number"=>1, "season"=>"2015", "prediction_id"=>nil)
