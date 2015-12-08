@@ -120,7 +120,6 @@ class PredictionsController < ApplicationController
   def show
     @game = Game.find(params[:id])
     @predictions = Prediction.where(game_id: params[:id])
-    load_top_data
   end
 
   def destroy
