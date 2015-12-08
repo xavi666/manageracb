@@ -1,13 +1,17 @@
 .col-xs-12.col-sm-6.col-md-12.white
   %h3="RECOMENDACIONES DE COMPRA"
-  %table.table.table-striped
-    %tbody
-      %tr
-        %td="1 - Adama, D."
-      %tr
-        %td="1 - Adama, D."
-      %tr
-        %td="1 - Adama, D."
-      %tr
-        %td="1 - Adama, D."
-      
+  .row
+    %ul.nav.nav-tabs{:role => "tablist"}
+      %li.active
+        %a{"data-toggle" => "tab", :href => "#tabs-bases"}= "Bases"
+      %li
+        %a{"data-toggle" => "tab", :href => "#tabs-aleros"}= "Aleros"
+      %li
+        %a{"data-toggle" => "tab", :href => "#tabs-pivots"}= "Pivots"
+    .tab-content
+      #tabs-bases.tab-pane.active
+        =render partial: "predictions/recomendations/recomendation", locals: {predictions: @top_ten[:values][:bases]}
+      #tabs-aleros.tab-pane
+        =render partial: "predictions/recomendations/recomendation", locals: {predictions: @top_ten[:values][:aleros]}
+      #tabs-pivots.tab-pane
+        =render partial: "predictions/recomendations/recomendation", locals: {predictions: @top_ten[:values][:pivots]}

@@ -1,0 +1,6 @@
+.table-responsive
+  %table.table.table-striped.table-condensed
+    - predictions.each do |prediction|
+      %tr
+        %td=prediction.player.name
+        %td=prediction.value
