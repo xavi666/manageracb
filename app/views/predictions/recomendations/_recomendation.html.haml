@@ -1,6 +1,8 @@
-.table-responsive
+.table-responsive#recomendations
   %table.table.table-striped.table-condensed
     - predictions.each do |prediction|
       %tr
+        %td.team_image=team_image prediction.player.team
+        %td.player_image=player_image prediction.player
         %td=prediction.player.name
         %td=prediction.value

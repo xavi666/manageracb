@@ -35,6 +35,14 @@ body.front{
       }
     }
   }
+  #recomendations{
+    .team_image,
+    .team_image img,
+    .player_image,
+    .player_image img{
+      width: 30px;
+    }
+  }
 }
 
 img.player{

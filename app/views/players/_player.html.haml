@@ -1,5 +1,5 @@
 %tr
-  %td= image_tag("players/"+player.image.to_s, class: "player") if player.image
+  %td= player_image player
   %td= player.id
   %td= link_to player.name, player
   %td= player.position

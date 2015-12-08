@@ -1,22 +1,21 @@
 =form_for @user_team, url: {controller: "user_teams", action: "optimize", params: {id: @user_team.id}}, method: "get", remote: true do |f|
-  %div.col-xs-12.col-md-12.white
-    %div.table-responsive.white
-      %table.table.table-striped
-        %thead
-          %tr
-            %th="Jugador / Equipo"
-            %th="VALORACIÓN"
-            %th="PUNTOS"
-            %th="REBOTES"
-            %th="ASISTENCIAS"
-            %th="3PM"
-            %th
-        %tbody
-          = f.fields_for :bases do |builder|
-            =render "user_team_player/new_edit", :f => builder, players: Player.active.bases
-          = f.fields_for :aleros do |builder|
-            =render "user_team_player/new_edit", :f => builder, players: Player.active.aleros
-          = f.fields_for :pivots do |builder|
-            =render "user_team_player/new_edit", :f => builder, players: Player.active.pivots
-      = f.submit "Submit" 
-    #result.table-responsive.white
+  %div.table-responsive.white
+    %table.table.table-striped
+      %thead
+        %tr
+          %th="Jugador / Equipo"
+          %th="VALORACIÓN"
+          %th="PUNTOS"
+          %th="REBOTES"
+          %th="ASISTENCIAS"
+          %th="3PM"
+          %th
+      %tbody
+        = f.fields_for :bases do |builder|
+          =render "user_team_player/new_edit", :f => builder, players: Player.active.bases
+        = f.fields_for :aleros do |builder|
+          =render "user_team_player/new_edit", :f => builder, players: Player.active.aleros
+        = f.fields_for :pivots do |builder|
+          =render "user_team_player/new_edit", :f => builder, players: Player.active.pivots
+    = f.submit "Submit" 
+  #result.table-responsive.white

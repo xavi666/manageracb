@@ -5,11 +5,11 @@
       #predictions.col-xs-12.col-sm-4.col-md-4
         %a{:href => prediction_path(game.id)}
           %div.col-xs-6.col-md-6.box.white
-            =image_tag("teams/"+game.local_team.short_code.to_s+".jpg", class: "team") if game.local_team.short_code
+            =team_image game.local_team 
             =game.local_team.short_code
           %div.col-xs-6.col-md-6.box.white
             =game.visitant_team.short_code
-            =image_tag("teams/"+game.visitant_team.short_code.to_s+".jpg", class: "team") if game.visitant_team.short_code
+            =team_image game.visitant_team
 .row
   .col-md-12
     %h3="OPTIMIZA TU EQUIPO"
