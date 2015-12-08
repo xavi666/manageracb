@@ -2,14 +2,14 @@
   .col-md-12
     %h3="PREDICCIONS DE PARTIDOS"
     - @games.each do |game|
-      #predictions.col-xs-12.col-sm-4.col-md-4
+      .predictions.col-xs-12.col-sm-4.col-md-4
         %a{:href => prediction_path(game.id)}
           %div.col-xs-6.col-md-6.box.white
             =team_image game.local_team 
             =game.local_team.short_code
           %div.col-xs-6.col-md-6.box.white
-            =game.visitant_team.short_code
             =team_image game.visitant_team
+            =game.visitant_team.short_code
 .row
   .col-md-12
     %h3="OPTIMIZA TU EQUIPO"
