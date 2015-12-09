@@ -1,8 +1,8 @@
 #http://mattmazur.com/2013/08/18/a-simple-genetic-algorithm-written-in-ruby/
 
-POPULATION_SIZE = 1000
+POPULATION_SIZE = 10
 NUM_BITS = 64
-NUM_GENERATIONS = 100000
+NUM_GENERATIONS = 10
 CROSSOVER_RATE = 2
 MUTATION_RATE = 20
 
@@ -12,9 +12,6 @@ class OptimizationsController < ApplicationController
 
     population = Population.new
     population.seed!
-    puts "POPULATION"
-    puts population.inspect
-    puts "POPULATION"
 
     1.upto(NUM_GENERATIONS).each do |generation|
 
