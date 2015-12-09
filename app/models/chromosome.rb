@@ -23,18 +23,28 @@ class Chromosome
   end
   
   def fitness
-    result = {total: 0, values: []}
     total = 0
-    values = []
     0.upto(genes.count - 1).each do |i|
       unless genes[i].nil?
         id = genes[i].first
         value = genes[i].second.to_s.blank? ? 0 : genes[i].second
-        result[:total] = result[:total] + value
-        result[:values].push(id)
+        total += value
       end
     end
-    result
+    #genes.count("1")
+    total
+  end
+
+  def fitness_ids
+    ids = []
+    0.upto(genes.count - 1).each do |i|
+      unless genes[i].nil?
+        id = genes[i].first
+        value = genes[i].second.to_s.blank? ? 0 : genes[i].second
+        ids.push(id)
+      end
+    end
+    ids
   end
   
   def mutate!(players = nil)

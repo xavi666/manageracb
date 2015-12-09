@@ -84,7 +84,7 @@ class UserTeamsController < ApplicationController
         end
       end
 
-      @result = "Generation #{generation} - Average: #{population.average_fitness.round(2)} - Max: #{population.max_fitness}"
+      @result = "Generation #{generation} - Average: #{population.average_fitness.round(2)} - Max: #{population.max_fitness} - Values: #{population.max_fitness_ids}"
 
       population = offspring
     end

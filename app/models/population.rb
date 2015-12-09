@@ -24,22 +24,23 @@ class Population
   end
   
   def fitness_values
-    puts "fitness_values--"
     chromosomes.collect(&:fitness)
   end
-  
+
+  def fitness_ids
+    chromosomes.collect(&:fitness_ids)
+  end 
+
   def total_fitness
-    puts "TOTAL FITNESS"
-    #puts fitness_values
-    #puts fitness_values.first
-    puts fitness_values.first[:total]
-    fitness_values.inject{|total, value| total + (value[:total] || 0) }
+    fitness_values.inject{|total, value| total + value }
   end
   
   def max_fitness
-    puts "MAX FITNESS ---"
-    puts fitness_values
     fitness_values.max
+  end
+
+  def max_fitness_ids
+    fitness_ids.max
   end
   
   def average_fitness
