@@ -47,11 +47,11 @@
         </nav>
       </div>
       <!-- Page Content -->
-      <div class="row">
-        <div class="col-md-9 white">
+      <div class="row white">
+        <div class="col-md-9">
           <%= yield %>
         </div>
-        <div class="col-md-3 white">
+        <div class="col-md-3">
           <div class="row">
             <% if cookies[:auth_token] %>
               <%= render partial: "users/user_panel" %>
