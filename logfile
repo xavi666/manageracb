@@ -20,3 +20,20 @@ STATEMENT:  SELECT  "settings".* FROM "settings"  WHERE "name"."game_number" = 6
 LOG:  unexpected EOF on client connection with an open transaction
 ERROR:  value "26867933372020196025454662042292161490821657659332698132145350571088763581219656541961971356094228189730265902571177045005250643642569798110351399684407296" is out of range for type integer
 STATEMENT:  UPDATE "predictions" SET "three_pm" = $1, "updated_at" = $2 WHERE "predictions"."id" = 300
+LOG:  database system was shut down at 2015-12-05 20:25:47 CET
+LOG:  autovacuum launcher started
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher shutting down
+LOG:  received smart shutdown request
+LOG:  shutting down
+LOG:  database system is shut down
+LOG:  database system was shut down at 2015-12-08 02:25:49 CET
+LOG:  autovacuum launcher started
+LOG:  database system is ready to accept connections
+ERROR:  duplicate key value violates unique constraint "players_pkey"
+DETAIL:  Key (id)=(2) already exists.
+STATEMENT:  INSERT INTO "players" ("created_at", "id", "image", "nacionality", "name", "number", "position", "price_cents", "team_id", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING "id"
+LOG:  autovacuum launcher shutting down
+LOG:  received smart shutdown request
+LOG:  shutting down
+LOG:  database system is shut down
