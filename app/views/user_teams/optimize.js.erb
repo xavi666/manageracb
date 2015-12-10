@@ -1,3 +1,14 @@
 $("#result").html('<%= @result %>');
 $("#result").append('<br>');
-$("#result").append('<%= @population.inspect %>');
+
+set_player_select2("user_team_bases_attributes_0_player_id", <%= @players[0].id.to_i %>);
+set_player_select2("user_team_bases_attributes_1_player_id", <%= @players[1].id.to_i %>);
+set_player_select2("user_team_bases_attributes_2_player_id", <%= @players[2].id.to_i %>);
+set_player_select2("user_team_aleros_attributes_0_player_id", <%= @players[3].id.to_i %>);
+set_player_select2("user_team_aleros_attributes_1_player_id", <%= @players[4].id.to_i %>);
+set_player_select2("user_team_aleros_attributes_2_player_id", <%= @players[5].id.to_i %>);
+set_player_select2("user_team_aleros_attributes_3_player_id", <%= @players[6].id.to_i %>);
+set_player_select2("user_team_pivots_attributes_0_player_id", <%= @players[7].id.to_i %>);
+set_player_select2("user_team_pivots_attributes_1_player_id", <%= @players[8].id.to_i %>);
+set_player_select2("user_team_pivots_attributes_2_player_id", <%= @players[9].id.to_i %>);
+set_player_select2("user_team_pivots_attributes_3_player_id", <%= @players[10].id.to_i %>);

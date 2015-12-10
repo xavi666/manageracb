@@ -1,4 +1,4 @@
-POPULATION_SIZE = 10
+POPULATION_SIZE = 1
 NUM_BITS = 64
 NUM_GENERATIONS = 1
 CROSSOVER_RATE = 0.4
@@ -31,22 +31,27 @@ class UserTeamsController < ApplicationController
   end
 
   def optimize
-    puts "------------> OPTIMIZE"
     @user_team = UserTeam.new(user_team_params)
     players_ids = []
     players = Hash.new {|h,k| h[k]=[]}
 
-    user_team_params[:bases_attributes].each do |player|
-      players_ids << player[1][:player_id]
-      players[:bases] << player[1][:player_id]
+    if user_team_params[:bases_attributes]
+      user_team_params[:bases_attributes].each do |player|
+        players_ids << player[1][:player_id]
+        players[:bases] << player[1][:player_id]
+      end
     end
-    user_team_params[:aleros_attributes].each do |player|
-      players_ids << player[1][:player_id]
-      players[:aleros] << player[1][:player_id]
+    if user_team_params[:aleros_attributes]
+      user_team_params[:aleros_attributes].each do |player|
+        players_ids << player[1][:player_id]
+        players[:aleros] << player[1][:player_id]
+      end
     end
-    user_team_params[:pivots_attributes].each do |player|
-      players_ids << player[1][:player_id]
-      players[:pivots] << player[1][:player_id]
+    if user_team_params[:pivots_attributes]
+      user_team_params[:pivots_attributes].each do |player|
+        players_ids << player[1][:player_id]
+        players[:pivots] << player[1][:player_id]
+      end
     end
 
     season = Setting.find_by_name(:season).value
@@ -90,8 +95,15 @@ class UserTeamsController < ApplicationController
     end
 
     @population = population
-    puts "Final population: " + @population.inspect
-    ap population
+    puts @population.max_fitness_ids
+    @players = Player.all.where(:id => @population.max_fitness_ids)
+    puts "players ===> "
+    puts @players.inspect
+    #@population.max_fitness_ids.each do |player|
+    #  @players
+    #  console.log("<%= Plaeplayer %>");
+    #end
+
   end
 
   def new
