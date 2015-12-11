@@ -43,7 +43,7 @@ module Manageracb
 
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
-    config.assets.initialize_on_precompile = false
+    config.assets.initialize_on_precompile = true
     config.assets.precompile += %w( www.js sessions.js embed.js www.css sessions.css embed.css )
 
     # Use SQL instead of Active Record's schema dumper when creating the database.
