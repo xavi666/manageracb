@@ -1,5 +1,5 @@
 =form_for @user_team, url: {controller: "user_teams", action: "optimize", params: {id: @user_team.id}}, method: "get", remote: true do |f|
-  %div.table-responsive.white
+  .table-responsive.white
     %table.table.table-striped
       %thead
         %tr
@@ -19,5 +19,5 @@
           =render "user_team_player/new_edit", :f => builder, players: Player.active.aleros
         = f.fields_for :pivots do |builder|
           =render "user_team_player/new_edit", :f => builder, players: Player.active.pivots
-    = f.submit "Submit" 
-  #result.table-responsive.white
+    = f.submit "Submit", class: 'btn btn-info'
+#result.table-responsive.white

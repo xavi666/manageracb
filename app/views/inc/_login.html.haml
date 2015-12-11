@@ -13,15 +13,13 @@
       %div.col-sm-12
         = password_field_tag :password, "", {:class => 'form-control'}
     %div.form-group
-      %div.col-sm-offset-2.col-sm-10
-        %div.checkbox
-          %label
-          = check_box_tag :remember_me, 1, params[:remember_me]
-          = label_tag :remember_me, 'Remember me', id: 'remember-me'
+      %div.col-sm-12
+        = check_box_tag :remember_me, 1, params[:remember_me]
+        = label_tag :remember_me, 'Remember me', id: 'remember-me'
     %div.form-group
-      %div.col-sm-offset-2.col-sm-10
-        %strong Help:
-        = link_to 'Forgot password?', [:new, :password_reset]
+      %div.col-sm-12
+        = submit_tag 'Sign in', class: 'btn btn-info'
     %div.form-group
-      %div.col-sm-offset-2.col-sm-10
-        = submit_tag 'Sign in', class: 'button'
+      %div.col-sm-12
+        = link_to '¿Has olvidado tu contraseña?', [:new, :password_reset]        
+

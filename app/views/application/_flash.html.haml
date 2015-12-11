@@ -1,2 +1,4 @@
-- flash.each do |name, msg|
-  = content_tag :div, msg, class: "flash-#{name}"
+- if flash.count > 0
+  .alert.alert-info
+    - flash.each do |name, msg|
+      = content_tag :div, msg, class: "flash-#{name}"

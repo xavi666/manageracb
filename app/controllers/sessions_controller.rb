@@ -13,7 +13,8 @@ class SessionsController < ApplicationController
       redirect_to(sign_in_destination)
     else
       flash.now[:error] = 'Invalid sign in attempt!'
-      render :new
+      @user = User.new
+      render 'users/new'
     end
   end
 

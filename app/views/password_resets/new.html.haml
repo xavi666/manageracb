@@ -1,9 +1,13 @@
-%h1 Reset Password
+%h1="Re-enviar Contraseña"
 
-= form_tag [:password_resets], method: :post do
-  = render partial: 'flash', locals: { flash: flash }
-  %div
-    = label_tag :email
-    = email_field_tag :email, params[:email]
-  %div
-    = submit_tag 'Reset Password', class: 'button'
+.col-xs-12.col-sm-12.col-md-6
+  .row
+    = form_tag [:password_resets], method: :post do
+      .form-group
+        = label_tag :email
+        = email_field_tag :email, params[:email], class: "form-control"
+      .form-group
+        = submit_tag 'Reset Password', class: 'btn btn-info pull-right'
+.col-xs-12.col-sm-12.col-md-6
+  .col-xs-12.col-sm-12.col-md-12
+    = render partial: 'flash', locals: { flash: flash }

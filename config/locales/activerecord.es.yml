@@ -1,0 +1,15 @@
+es:
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "- Debes introduir un correo electrónico."
+              taken: "- El correo electrónico introducido ya existe."
+            name: 
+              blank: "- Debes introduir un nombre."
+            password:
+              blank: "- Debes introducir una contraseña."
+            password_confirmation:
+              confirmation: "- Las contraseñas no coinciden."

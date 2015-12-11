@@ -1,20 +1,27 @@
-%h1 Register
+%h1 Registro de Usuario
 
-= form_for @user do |f|
-  - if @user.errors.any?
-    .error-messages
-      %ul
-        -# - filtered_user_messages(@user).each do |message|
-        - @user.errors.full_messages.each do |message|
-          %li= message
-  %div
-    = f.label :email
-    = f.email_field :email
-  %div
-    = f.label :password
-    = f.password_field :password
-  %div
-    = f.label :password_confirmation
-    = f.password_field :password_confirmation
-  %div
-    = f.submit 'Register', class: 'button'
+.col-xs-12.col-sm-12.col-md-6
+  .row
+    = form_for @user do |f|
+      .form-group
+        = f.label :name
+        = f.text_field :name, class: "form-control"
+      .form-group
+        = f.label :email
+        = f.email_field :email, class: "form-control"
+      .form-group
+        = f.label :password
+        = f.password_field :password, class: "form-control"
+      .form-group
+        = f.label :password_confirmation
+        = f.password_field :password_confirmation, class: "form-control"
+      .form-group
+        = f.submit 'Register', class: 'btn btn-info pull-right'
+.col-xs-12.col-sm-12.col-md-6
+  .col-xs-12.col-sm-12.col-md-12
+    - if @user.errors.any?
+      .alert.alert-danger
+        %ul
+          -# - filtered_user_messages(@user).each do |message|
+          - @user.errors.full_messages.each do |message|
+            %li= message
