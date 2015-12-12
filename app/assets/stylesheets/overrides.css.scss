@@ -20,7 +20,16 @@ body.front{
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
   }
+  .logo{
+    position: absolute;
+    top: -31px;
+    left: 6px;
+  }
   .white{
+    background-color: white;    
+  }
+  .content{
+    padding-top: 18px;
     background-color: white;
   }
   .predictions{
@@ -70,13 +79,4 @@ img.team{
 
 .select2{
   width: 100%;
-}
-
-.logo{
-  position: absolute;
-  top: -31px;
-  left: 6px;
-}
-.margin_top{
-  margin-top: 12px;
 }
