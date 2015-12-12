@@ -2,23 +2,24 @@
   .table-responsive.white
     %table.table.table-striped
       %thead
-        %tr.player
+        %tr
           %th
           %th
           %th="Jugador"
-          %th= f.submit "Valoración", class: 'btn btn-info'
+          %th= f.submit "Valoración", class: 'btn btn-info optimizar'
           %th= f.submit "Puntos", class: 'btn btn-info'
           %th= f.submit "Rebotes", class: 'btn btn-info'
           %th= f.submit "Asistencias", class: 'btn btn-info'
           %th= f.submit "3Puntos", class: 'btn btn-info'
           %th
+          %th
       %tbody
         = f.fields_for :bases do |builder|
-          =render "user_team_player/new_edit", :f => builder, players: Player.active.bases
+          =render "user_team_player/new_edit", :f => builder, players: Player.active.bases, type: "base"
         = f.fields_for :aleros do |builder|
-          =render "user_team_player/new_edit", :f => builder, players: Player.active.aleros
+          =render "user_team_player/new_edit", :f => builder, players: Player.active.aleros, type: "alero"
         = f.fields_for :pivots do |builder|
-          =render "user_team_player/new_edit", :f => builder, players: Player.active.pivots
+          =render "user_team_player/new_edit", :f => builder, players: Player.active.pivots, type: "pivot"
         %tr.totals
           =render "user_team_player/totals"
 #result.table-responsive.white

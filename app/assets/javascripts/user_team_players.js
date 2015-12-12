@@ -12,14 +12,20 @@ $(document).ready(function(){
   });
 
   function calculate_totals() {
-    console.log("--->");
     fields = ["value", "points", "rebounds", "assists", "assists", "3pm"]
-    $.each(fields, function( index, value ) {
-      console.log( index + ": " + value );
-        $( ".player.value" ).each(function( index ) {
-          console.log( index + ": " + $( this ).text() );
-        });
-      
+    acumulat = 0
+    $.each(fields, function( index, field ) {
+      acumulat = 0
+      $( ".player ."+field ).each(function( index ) {
+        valor = $( this ).text()
+        if (valor == "") {
+          valor = 0; 
+        } else {
+          valor = parseInt( valor );
+        } 
+        acumulat += valor;
+      });
+      $( ".totals ."+field).html(acumulat);
     });
   }
 

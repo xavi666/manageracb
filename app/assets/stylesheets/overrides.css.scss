@@ -72,6 +72,32 @@ img.team{
   border-top-left-radius: 50%;
   border-top-right-radius: 50%;
 }
+.position{
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  color: white;
+  padding: 4px 4px 4px 10px;
+}
+.ico_base{
+  background-color: #66B4E8;  
+}
+.ico_base::after{
+  content: "B";
+}
+.ico_alero{
+  background-color: #21C130;
+}
+.ico_alero::after{
+  content: "A";
+}
+.ico_pivot{
+  background-color: #ED1C24;
+}
+.ico_pivot::after{
+  content: "P";
+}
 
 .nav > li{
   padding: 0px;
