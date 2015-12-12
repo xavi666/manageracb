@@ -8,6 +8,19 @@ $(document).ready(function(){
     $(this).parents('tr').children('.rebounds').html($(this).select2().find(":selected").data("rebounds"));
     $(this).parents('tr').children('.assists').html($(this).select2().find(":selected").data("assists"));
     $(this).parents('tr').children('.three_pm').html($(this).select2().find(":selected").data("three-pm"));
+    calculate_totals();
   });
+
+  function calculate_totals() {
+    console.log("--->");
+    fields = ["value", "points", "rebounds", "assists", "assists", "3pm"]
+    $.each(fields, function( index, value ) {
+      console.log( index + ": " + value );
+        $( ".player.value" ).each(function( index ) {
+          console.log( index + ": " + $( this ).text() );
+        });
+      
+    });
+  }
 
 });
