@@ -1,0 +1,8 @@
+es:
+  users:
+    login:
+      contrasena_olvidada: "¿Has olvidado tu contraseña?"
+      entrar: "Entrar"
+      iniciar_sesion: "Iniciar Sesión"
+    new:
+      registrar: "Registrar"

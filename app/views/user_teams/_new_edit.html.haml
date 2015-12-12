@@ -2,15 +2,15 @@
   .table-responsive.white
     %table.table.table-striped
       %thead
-        %tr
+        %tr.player
           %th
           %th
-          %th="Jugador / Equipo"
-          %th="VALORACIÓN"
-          %th="PUNTOS"
-          %th="REBOTES"
-          %th="ASISTENCIAS"
-          %th="3PM"
+          %th="Jugador"
+          %th= f.submit "Valoración", class: 'btn btn-info'
+          %th= f.submit "Puntos", class: 'btn btn-info'
+          %th= f.submit "Rebotes", class: 'btn btn-info'
+          %th= f.submit "Asistencias", class: 'btn btn-info'
+          %th= f.submit "3Puntos", class: 'btn btn-info'
           %th
       %tbody
         = f.fields_for :bases do |builder|
@@ -19,5 +19,6 @@
           =render "user_team_player/new_edit", :f => builder, players: Player.active.aleros
         = f.fields_for :pivots do |builder|
           =render "user_team_player/new_edit", :f => builder, players: Player.active.pivots
-    = f.submit "Submit", class: 'btn btn-info'
+        %tr.totals
+          =render "user_team_player/totals"
 #result.table-responsive.white

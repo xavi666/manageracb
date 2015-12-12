@@ -16,7 +16,9 @@ body.front{
       }
   }
   .navbar, .navbar-brand{
-    //height: 100px;
+    margin-bottom: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
   }
   .white{
     background-color: white;
@@ -74,4 +76,7 @@ img.team{
   position: absolute;
   top: -31px;
   left: 6px;
+}
+.margin_top{
+  margin-top: 12px;
 }

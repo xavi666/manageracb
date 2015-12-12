@@ -12,4 +12,6 @@ es:
             password:
               blank: "- Debes introducir una contraseña."
             password_confirmation:
+              blank: "- Debes introduir una confirmación de contraseña."
               confirmation: "- Las contraseñas no coinciden."
+

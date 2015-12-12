@@ -3,7 +3,6 @@ class PredictionsController < ApplicationController
   include SortableFilterHelper
   require 'rubygems'
   require "bundler/setup"
-  #require 'descriptive_statistics'
 
   def index
     #@predictions = Prediction.all
@@ -59,24 +58,25 @@ class PredictionsController < ApplicationController
         end
       end
       # Analyzing phase
+      puts "-1"
       @coefficient = model.coefficient
+      puts "-2"
       @bias =  model.bias
-
-      # Cross Validation
+      puts "-3"
+      # Cross Validation  
       fold = 2
+      puts "-4"
       cv = Liblinear::CrossValidator.new(prob, param, fold)
+      puts "-5"
       cv.execute
 
+      puts "-6"
       # for regression
       @mean_squared_error = cv.mean_squared_error
+      puts "-7"
       # for regression
       @squared_correlation_coefficient = cv.squared_correlation_coefficient
-
-
-      puts "----------------------"
-      puts mean_and_standard_deviation([1,2,3,1,1,2,1])
-      puts mean_and_standard_deviation([1,2,3,1,1,2,1000])
-      puts "----------------------"
+      puts "-8"
     end
   end
 
@@ -209,14 +209,4 @@ class PredictionsController < ApplicationController
       end 
       prediction  
     end
-
-    def mean(array)
-      array.inject(0) { |sum, x| sum += x } / array.size.to_f
-    end
-    def mean_and_standard_deviation(array)
-      m = mean(array)
-      variance = array.inject(0) { |variance, x| variance += (x - m) ** 2 }
-      return m, Math.sqrt(variance/(array.size-1))
-    end
-
 end

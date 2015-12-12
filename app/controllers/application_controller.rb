@@ -35,7 +35,6 @@ class ApplicationController < ActionController::Base
   end
 
   def load_top_data
-    puts "---------> LOAD TOP DATA"
     @top_ten =  {
                   values: {
                             bases: Prediction.joins(:player).merge(Player.bases).top_ten_value,

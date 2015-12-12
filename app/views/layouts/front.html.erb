@@ -24,8 +24,7 @@
                 <span class="icon-bar"></span>
               </button>
               <a class="navbar-brand" href="/home">
-                <!--<img src="http://placehold.it/150x50&text=Logo" alt="">-->
-                MANAGER ACB
+                <img src="assets/logo.png " alt="Manager ACB" class="logo">
               </a>
             </div>
           </div>
@@ -48,19 +47,21 @@
       </div>
       <!-- Page Content -->
       <div class="row white">
-        <div class="col-md-9">
-          <%= yield %>
-        </div>
-        <div class="col-md-3">
-          <div class="row">
-            <% if cookies[:auth_token] %>
-              <%= render partial: "users/user_panel" %>
-            <% else %>  
-              <%= render partial: "inc/login" %>
-            <% end %>
-            <%= render partial: "inc/recomendaciones" %>
+        <div class="col-md-12 margin_top">
+          <div class="col-md-9">
+            <%= yield %>
           </div>
-        </div>   
+          <div class="col-md-3">
+            <div class="row">
+              <% if cookies[:auth_token] %>
+                <%= render partial: "users/user_panel" %>
+              <% else %>  
+                <%= render partial: "users/login" %>
+              <% end %>
+              <%= render partial: "inc/recomendaciones" %>
+            </div>
+          </div>   
+        </div>
       </div>
     </div>
   </body>

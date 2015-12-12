@@ -4,19 +4,19 @@
   .row
     = form_for @user do |f|
       .form-group
-        = f.label :name
+        = f.label :nombre
         = f.text_field :name, class: "form-control"
       .form-group
         = f.label :email
         = f.email_field :email, class: "form-control"
       .form-group
-        = f.label :password
+        = f.label :contraseña
         = f.password_field :password, class: "form-control"
       .form-group
-        = f.label :password_confirmation
+        = f.label :conrfirmar_contraseña
         = f.password_field :password_confirmation, class: "form-control"
       .form-group
-        = f.submit 'Register', class: 'btn btn-info pull-right'
+        = f.submit "#{t(".registrar")}", class: 'btn btn-info pull-right'
 .col-xs-12.col-sm-12.col-md-6
   .col-xs-12.col-sm-12.col-md-12
     - if @user.errors.any?

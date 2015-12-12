@@ -1,4 +1,4 @@
-POPULATION_SIZE = 1
+POPULATION_SIZE = 500
 NUM_BITS = 64
 NUM_GENERATIONS = 1
 CROSSOVER_RATE = 0.4
@@ -95,15 +95,10 @@ class UserTeamsController < ApplicationController
     end
 
     @population = population
-    puts @population.max_fitness_ids
-    @players = Player.all.where(:id => @population.max_fitness_ids)
-    puts "players ===> "
-    puts @players.inspect
-    #@population.max_fitness_ids.each do |player|
-    #  @players
-    #  console.log("<%= Plaeplayer %>");
-    #end
-
+    @players = []
+    @population.max_fitness_ids.each do |player|
+      @players << Player.find(player)
+    end
   end
 
   def new

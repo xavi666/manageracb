@@ -55,9 +55,9 @@ class Chromosome
         when 0..2
           genes[i] = players[:bases][rand(0..players[:bases].count)]
         when 3..6 
-          genes[i] = players[:bases][rand(0..players[:aleros].count)]
+          genes[i] = players[:aleros][rand(0..players[:aleros].count)]
         else
-          genes[i] = players[:bases][rand(0..players[:pivots].count)]
+          genes[i] = players[:pivots][rand(0..players[:pivots].count)]
         end        
       end
       mutated = genes
