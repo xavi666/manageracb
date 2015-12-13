@@ -1,12 +1,13 @@
 body.front{
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
+  color: #272a2f;;
+  background-color: #272a2f;
 
   h1, h2, h3, h4, h5{
     font-weight: 500;
   }
 
-  background-color: #272a2f;
   .nav{
     li{
       a:hover{
