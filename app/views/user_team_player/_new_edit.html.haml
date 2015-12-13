@@ -1,6 +1,7 @@
 %tr.player
   %td
-    %div{:class => "position ico_"+type}
+    %div{:class => "position ico_"+type}=type.first
+
   %td.player_image
   %td=f.select :player_id, options_for_select(players.includes(predictions: :game).where("games.season = ?", Setting.find_by_name(:season).value).where("games.game_number = ?", Setting.find_by_name(:game_number).value).order(:name).map {|p| [p.name, p.id, {'data-team-image' => p.predictions.last.player.team.short_code, 'data-player-image' => p.predictions.last.player.image, 'data-value' => p.predictions.last.value, 'data-points' => p.predictions.last.points, 'data-assists' => p.predictions.last.assists, 'data-rebounds' => p.predictions.last.rebounds, 'data-rebounds' => p.predictions.last.rebounds, 'data-three-pm' => p.predictions.last.three_pm}]}), {:include_blank => "Selecciona Jugador"}, {class: "select2 user_team_player"}
   %td.value
