@@ -78,3 +78,7 @@ DETAIL:  There is 1 other session using the database.
 STATEMENT:  DROP DATABASE IF EXISTS "manageracb_development"
 ERROR:  database "manageracb_development" already exists
 STATEMENT:  CREATE DATABASE "manageracb_development" ENCODING = 'unicode' TEMPLATE = "template0"
+LOG:  autovacuum launcher shutting down
+LOG:  received smart shutdown request
+LOG:  shutting down
+LOG:  database system is shut down

@@ -32,6 +32,7 @@ class Population
   end 
 
   def total_fitness
+    puts fitness_values
     fitness_values.inject{|total, value| total + value }
   end
   

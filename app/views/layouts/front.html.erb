@@ -10,12 +10,13 @@
     <%= stylesheet_link_tag "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
   </head>
   <body class="front" id="<%= params[:controller].parameterize %>_controller" data-current-section="<%= @current_section %>">
     <div class="container"o>
       <div class="row">
         <nav class="navbar" role="navigation">
-          <div class="col-sm-4">
+          <div class="col-xs-12 col-sm-3 col-md-2">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
@@ -24,11 +25,11 @@
                 <span class="icon-bar"></span>
               </button>
               <a class="navbar-brand" href="/home">
-                <img src="assets/logo/logo.png " alt="Manager ACB" class="logo">
+                <img src="/assets/logo/logo.png " alt="Manager ACB" class="logo">
               </a>
             </div>
           </div>
-          <div class="col-sm-8">
+          <div class="col-xs-0 col-sm-9 col-md-10">
             <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
               <ul class="nav navbar-nav">
                 <li>

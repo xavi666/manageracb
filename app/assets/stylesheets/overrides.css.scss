@@ -1,6 +1,12 @@
 body.front{
-  background-color: #272a2f;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
 
+  h1, h2, h3, h4, h5{
+    font-weight: 500;
+  }
+
+  background-color: #272a2f;
   .nav{
     li{
       a:hover{
@@ -10,6 +16,8 @@ body.front{
   }
 
   .navbar{
+    font-weight: 500;
+    font-size: 20px;
     background-color: #66b4e8;
     a{
       color: #fff;
