@@ -1,83 +1,12 @@
 class PredictionsController < ApplicationController
   layout "front", only: [:game, :show]
   include SortableFilterHelper
+  include EnumerableHelper
   require 'rubygems'
   require "bundler/setup"
 
   def index
     #@predictions = Prediction.all
-  end
-
-  def predict
-    if params[:search]
-      ####################################
-      ####### LIBLINEAR
-      ####### https://github.com/kei500/liblinear-ruby
-      ####################################
-
-      #params
-      num_elements = params[:search][:num_elements].to_i
-      season = params[:search][:season]
-      game_number = params[:search][:num_games].to_i
-      type = params[:search][:type]
-      season_data = Setting.find_by_name("season_data").value
-
-      # Setting parameters
-      param = Liblinear::Parameter.new
-      #param.solver_type = Liblinear::L2R_L2LOSS_SVR
-      #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
-      param.solver_type = Liblinear::L2R_L1LOSS_SVR_DUAL
-
-      @statistics = Statistic.game.find_season(season_data).where("statistics.seconds > 0")
-      @statistics = @statistics.shuffle.first(num_elements)
-
-      labels = labels(@statistics, type) 
-      test = []
-      @statistics.each do |statistic|
-        if statistic.seconds > 0
-          test << values(statistic, statistic.game_number, season_data, type)
-        end
-      end
-
-      bias = 0.5
-      @labels = labels
-      @test = test
-      prob = Liblinear::Problem.new(labels, test, bias)
-      model = Liblinear::Model.new(prob, param)
-
-      prediccions = Prediction.where("games.season = ?", season).where("games.game_number = ?",game_number.to_i).includes(:game)
-      prediccions.each do |prediccio|
-        player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
-        team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
-        if player_statistic and team_statistic
-          prediccio_values = values(prediccio, game_number, season, type)
-          # Predicting phase
-          prediccio_label =  model.predict(prediccio_values)
-          prediccio = update_field_prediction(prediccio, prediccio_label, type)
-          prediccio.save!
-        end
-      end
-      # Analyzing phase
-      puts "-1"
-      @coefficient = model.coefficient
-      puts "-2"
-      @bias =  model.bias
-      puts "-3"
-      # Cross Validation  
-      fold = 2
-      puts "-4"
-      cv = Liblinear::CrossValidator.new(prob, param, fold)
-      puts "-5"
-      cv.execute
-
-      puts "-6"
-      # for regression
-      @mean_squared_error = cv.mean_squared_error
-      puts "-7"
-      # for regression
-      @squared_correlation_coefficient = cv.squared_correlation_coefficient
-      puts "-8"
-    end
   end
 
   def init
@@ -110,6 +39,72 @@ class PredictionsController < ApplicationController
           end
         end
       end
+    end
+  end
+
+  def predict
+    if params[:search]
+      ####################################
+      ####### LIBLINEAR
+      ####### https://github.com/kei500/liblinear-ruby
+      ####################################
+
+      #params
+      num_elements = params[:search][:num_elements].to_i
+      season = params[:search][:season]
+      game_number = params[:search][:num_games].to_i
+      type = params[:search][:type]
+      season_data = Setting.find_by_name("season_data").value
+
+      # Setting parameters
+      param = Liblinear::Parameter.new
+      #param.solver_type = Liblinear::L2R_L2LOSS_SVR
+      param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
+      #param.solver_type = Liblinear::L2R_L1LOSS_SVR_DUAL
+
+      @statistics = Statistic.game.find_season(season_data).where("statistics.seconds > 0")
+      @statistics = @statistics.shuffle.first(num_elements)
+
+      labels = labels(@statistics, type) 
+      test = []
+      @statistics.each do |statistic|
+        if statistic.seconds > 0
+          test << values(statistic, statistic.game_number, season_data, type)
+        end
+      end
+
+      test = normalize test
+
+      bias = 0.5
+      @labels = labels
+      @test = test
+      prob = Liblinear::Problem.new(labels, test, bias)
+      model = Liblinear::Model.new(prob, param)
+
+      #prediccions = Prediction.where("games.season = ?", season).where("games.game_number = ?",game_number.to_i).includes(:game)
+      #prediccions.each do |prediccio|
+      #  player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
+      #  team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
+      #  if player_statistic and team_statistic
+      #    prediccio_values = values(prediccio, game_number, season, type)
+          # Predicting phase
+      #    prediccio_label = model.predict(prediccio_values)
+      #    prediccio = update_field_prediction(prediccio, prediccio_label, type)
+      #    prediccio.save!
+      #  end
+      #end
+      # Analyzing phase
+      #@coefficient = model.coefficient
+      #@bias =  model.bias
+      # Cross Validation  
+      #fold = 2
+      #cv = Liblinear::CrossValidator.new(prob, param, fold)
+      #cv.execute
+
+      # for regression
+      #@mean_squared_error = cv.mean_squared_error
+      # for regression
+      #@squared_correlation_coefficient = cv.squared_correlation_coefficient
     end
   end
 
@@ -208,5 +203,54 @@ class PredictionsController < ApplicationController
         prediction.value = prediccio_label
       end 
       prediction  
+    end
+
+    def normalize test
+      puts "---------> TEST"
+      fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
+      normalized = {}
+      fields.each do |field|
+        normalized[field] = {
+                        "values" => Array.new,
+                        "sum" => 0,
+                        "mean" => 0,
+                        "sample_variance" => 0,
+                        "standard_deviation" => 0
+                      }
+      end
+      
+      test.each do |row|
+        normalized["player_statistic"]["values"] << row[0]
+        normalized["team_statistic"]["values"] << row[1]
+        normalized["team_against_statistic"]["values"] << row[2]
+        normalized["player_position"]["values"] << row[3]
+      end
+
+      fields.each do |field|
+        normalized[field]["sum"] = sum(normalized[field]["values"])
+        normalized[field]["mean"] = mean(normalized[field]["values"])
+        normalized[field]["sample_variance"] = sample_variance(normalized[field]["values"])
+        normalized[field]["standard_deviation"] = standard_deviation(normalized[field]["values"])
+      end
+
+      test
+    end
+
+    def sum(a)
+      a.inject(0){ |accum, i| accum + i }
+    end
+
+    def mean(a)
+      sum(a) / a.length.to_f
+    end
+
+    def sample_variance(a)
+      m = mean(a)
+      sum = a.inject(0){ |accum, i| accum + (i - m) ** 2 }
+      sum / (a.length - 1).to_f
+    end
+
+    def standard_deviation(a)
+      Math.sqrt(sample_variance(a))
     end
 end
