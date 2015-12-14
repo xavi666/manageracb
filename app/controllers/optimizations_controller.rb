@@ -1,10 +1,10 @@
 #http://mattmazur.com/2013/08/18/a-simple-genetic-algorithm-written-in-ruby/
 
-POPULATION_SIZE = 10
-NUM_BITS = 64
-NUM_GENERATIONS = 10
-CROSSOVER_RATE = 2
-MUTATION_RATE = 20
+#POPULATION_SIZE = 10
+#NUM_BITS = 64
+#NUM_GENERATIONS = 10
+#CROSSOVER_RATE = 2
+#MUTATION_RATE = 20
 
 class OptimizationsController < ApplicationController
 

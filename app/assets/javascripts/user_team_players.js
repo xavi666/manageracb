@@ -12,7 +12,7 @@ $(document).ready(function(){
   });
 
   function calculate_totals() {
-    fields = ["value", "points", "rebounds", "assists", "assists", "3pm"]
+    fields = ["value", "points", "rebounds", "assists", "assists", "three_pm"]
     acumulat = 0
     $.each(fields, function( index, field ) {
       acumulat = 0

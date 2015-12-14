@@ -4,7 +4,6 @@ class Chromosome
 
   def initialize(genes = "", players = nil)
     if genes == ""
-      #self.genes = (1..NUM_BITS).map{ rand(2) }.join
       bases = 3.times.map{ players[:bases][rand(0..players[:bases].count)] } 
       aleros = 4.times.map{ players[:aleros][rand(0..players[:aleros].count)] } 
       pivots = 4.times.map{ players[:pivots][rand(0..players[:pivots].count)] } 
