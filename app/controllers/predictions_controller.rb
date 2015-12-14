@@ -60,7 +60,7 @@ class PredictionsController < ApplicationController
       param = Liblinear::Parameter.new
       #param.solver_type = Liblinear::L2R_L2LOSS_SVR
       param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
-      #param.solver_type = Liblinear::L2R_L1LOSS_SVR_DUAL
+      #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
 
       @statistics = Statistic.game.find_season(season_data).where("statistics.seconds > 0")
       @statistics = @statistics.shuffle.first(num_elements)
@@ -79,32 +79,36 @@ class PredictionsController < ApplicationController
       @labels = labels
       @test = test
       prob = Liblinear::Problem.new(labels, test, bias)
+      # https://github.com/kei500/liblinear-ruby
+      param.p = 1
+      param.C = 1
+      param.eps = 1
       model = Liblinear::Model.new(prob, param)
 
-      #prediccions = Prediction.where("games.season = ?", season).where("games.game_number = ?",game_number.to_i).includes(:game)
-      #prediccions.each do |prediccio|
-      #  player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
-      #  team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
-      #  if player_statistic and team_statistic
-      #    prediccio_values = values(prediccio, game_number, season, type)
+      prediccions = Prediction.where("games.season = ?", season).where("games.game_number = ?",game_number.to_i).includes(:game)
+      prediccions.each do |prediccio|
+        player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
+        team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
+        if player_statistic and team_statistic
+          prediccio_values = values(prediccio, game_number, season, type)
           # Predicting phase
-      #    prediccio_label = model.predict(prediccio_values)
-      #    prediccio = update_field_prediction(prediccio, prediccio_label, type)
-      #    prediccio.save!
-      #  end
-      #end
+          prediccio_label = model.predict(prediccio_values)
+          prediccio = update_field_prediction(prediccio, prediccio_label, type)
+          prediccio.save!
+        end
+      end
       # Analyzing phase
-      #@coefficient = model.coefficient
-      #@bias =  model.bias
+      @coefficient = model.coefficient
+      @bias =  model.bias
       # Cross Validation  
-      #fold = 2
-      #cv = Liblinear::CrossValidator.new(prob, param, fold)
-      #cv.execute
+      fold = 2
+      cv = Liblinear::CrossValidator.new(prob, param, fold)
+      cv.execute
 
       # for regression
-      #@mean_squared_error = cv.mean_squared_error
+      @mean_squared_error = cv.mean_squared_error
       # for regression
-      #@squared_correlation_coefficient = cv.squared_correlation_coefficient
+      @squared_correlation_coefficient = cv.squared_correlation_coefficient
     end
   end
 
@@ -182,7 +186,7 @@ class PredictionsController < ApplicationController
               1 => team_statistic.value / game_number,
               2 => team_against_statistic.value_received / game_number }
         end 
-        label[3] = player_statistic.player.position_integer
+        #label[3] = player_statistic.player.position_integer
       end
       label
     end
@@ -206,8 +210,8 @@ class PredictionsController < ApplicationController
     end
 
     def normalize test
-      puts "---------> TEST"
-      fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
+      #fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
+      fields = ["player_statistic", "team_statistic", "team_against_statistic"]
       normalized = {}
       fields.each do |field|
         normalized[field] = {
@@ -223,7 +227,7 @@ class PredictionsController < ApplicationController
         normalized["player_statistic"]["values"] << row[0]
         normalized["team_statistic"]["values"] << row[1]
         normalized["team_against_statistic"]["values"] << row[2]
-        normalized["player_position"]["values"] << row[3]
+        #normalized["player_position"]["values"] << row[3]
       end
 
       fields.each do |field|
@@ -233,6 +237,12 @@ class PredictionsController < ApplicationController
         normalized[field]["standard_deviation"] = standard_deviation(normalized[field]["values"])
       end
 
+      test.map{|row| 
+                    row[0] = (row[0] - normalized["player_statistic"]["mean"]) / normalized["player_statistic"]["standard_deviation"] 
+                    row[1] = (row[1] - normalized["team_statistic"]["mean"]) / normalized["team_statistic"]["standard_deviation"]
+                    row[2] = (row[2] - normalized["team_against_statistic"]["mean"]) / normalized["team_against_statistic"]["standard_deviation"]
+                    #row[3] = (row[3] - normalized["player_position"]["mean"]) / normalized["player_position"]["standard_deviation"]
+              }
       test
     end
 
