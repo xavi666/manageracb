@@ -127,9 +127,11 @@ class StatisticsController < ApplicationController
         team = statistic[:team] == "local" ? local : visitant
         team_against = statistic[:team] == "local" ? visitant : local
 
-        unless jugador = Player.find_by_name(statistic[:name])
+        name = parse_name statistic[:name]
+
+        unless jugador = Player.find_by_name(name)
           statistic[:season] == "2015" ? active = true : active = false
-          jugador = Player.create!(:name => statistic[:name], :team_id => team.id, :number => statistic[:number], :active => active)
+          jugador = Player.create!(:name => name, :team_id => team.id, :number => statistic[:number], :active => active)
         end
 
         new_statistic = Statistic.where(:player_id => jugador.id, :season => statistic[:season], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).first
@@ -162,6 +164,7 @@ class StatisticsController < ApplicationController
       teams = Team.all
       teams.each do |team|
         team.players.each do |player|
+          played_games = 0
           (1..34).each do |game_number|
             prev_statistic = Statistic.where(:player_id => player.id, :season => season, :game_number => game_number - 1, :type_statistic => "player").first
             unless prev_statistic
@@ -255,6 +258,7 @@ class StatisticsController < ApplicationController
               rfaults = statistic.rfaults
               positive_negative = statistic.positive_negative
               value = statistic.value
+              played_games += 1 if statistic.seconds > 0
             end
 
             game = Game.where("local_team_id = ? OR visitant_team_id = ?", team.id, team.id).where(:season => season, :game_number => game_number).first
@@ -266,7 +270,7 @@ class StatisticsController < ApplicationController
             new_statistic = Statistic.where(:player_id => player.id, 
                             :team_id => team.id, :team_against_id => team_against_id,
                             :season => season, :game_number => game_number,
-                            :type_statistic => "player").first_or_create
+                            :type_statistic => "player", played_games: played_games).first_or_create
 
             new_statistic.update_attributes(:seconds => prev_seconds + seconds, :points => prev_points + points, 
                             :two_p => prev_two_p + two_p, :two_pm => prev_two_pm + two_pm,
@@ -480,6 +484,27 @@ class StatisticsController < ApplicationController
 
     def statistic_params
       params.require(:statistic).permit([:name])
+    end
+
+    def parse_name name 
+      name = name.gsub('&#xE0;', 'à')
+      name = name.gsub('&#xE1;', 'á')
+      name = name.gsub(/&#xC1;/, 'Á')
+
+      name = name.gsub('&#xE9;', 'é')
+
+      name = name.gsub(/&#xED;/, 'í')
+
+      name = name.gsub(/&#xD3;/, 'Ó')
+      name = name.gsub(/&#xF3;/, 'ó')
+
+      name = name.gsub(/&#xFC;/, 'ú')
+      name = name.gsub(/&#xFA;/, 'ú')
+      name = name.gsub(/&#xDA;/, 'Ú') 
+
+      name = name.gsub(/&#xF1;/, 'ñ')    
+
+      name
     end
 
 end
