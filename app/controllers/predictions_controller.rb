@@ -39,6 +39,8 @@ class PredictionsController < ApplicationController
         end
       end
 
+      #test = normalize test
+
       bias = 0.5
       @labels = labels
       @test = test
@@ -208,5 +210,61 @@ class PredictionsController < ApplicationController
         prediction.value = prediccio_label
       end 
       prediction  
+    end
+
+    def normalize test
+      fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
+      #fields = ["player_statistic", "team_statistic", "team_against_statistic"]
+      normalized = {}
+      fields.each do |field|
+        normalized[field] = {
+                        "values" => Array.new,
+                        "sum" => 0,
+                        "mean" => 0,
+                        "sample_variance" => 0,
+                        "standard_deviation" => 0
+                      }
+      end
+      
+      test.each do |row|
+        normalized["player_statistic"]["values"] << row[0]
+        normalized["team_statistic"]["values"] << row[1]
+        normalized["team_against_statistic"]["values"] << row[2]
+        normalized["player_position"]["values"] << row[3]
+      end
+
+      fields.each do |field|
+        normalized[field]["sum"] = sum(normalized[field]["values"])
+        normalized[field]["mean"] = mean(normalized[field]["values"])
+        normalized[field]["sample_variance"] = sample_variance(normalized[field]["values"])
+        normalized[field]["standard_deviation"] = standard_deviation(normalized[field]["values"])
+      end
+
+      test.map{|row| 
+                    row[0] = (row[0] - normalized["player_statistic"]["mean"]) / normalized["player_statistic"]["standard_deviation"] 
+                    row[1] = (row[1] - normalized["team_statistic"]["mean"]) / normalized["team_statistic"]["standard_deviation"]
+                    row[2] = (row[2] - normalized["team_against_statistic"]["mean"]) / normalized["team_against_statistic"]["standard_deviation"]
+                    row[3] = (row[3] - normalized["player_position"]["mean"]) / normalized["player_position"]["standard_deviation"]
+              }
+
+      test
+    end
+
+    def sum(a)
+      a.inject(0){ |accum, i| accum + i }
+    end
+
+    def mean(a)
+      sum(a) / a.length.to_f
+    end
+
+    def sample_variance(a)
+      m = mean(a)
+      sum = a.inject(0){ |accum, i| accum + (i - m) ** 2 }
+      sum / (a.length - 1).to_f
+    end
+
+    def standard_deviation(a)
+      Math.sqrt(sample_variance(a))
     end
 end
