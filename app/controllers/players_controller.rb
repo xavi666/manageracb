@@ -58,13 +58,13 @@ class PlayersController < ApplicationController
       team_id = teams[team]
       name = player_row.css(".jugador").text
       price_cents = player_row.css(".precio").text.delete('.').to_i*100
-      player = Player.find_by_name(name)
+      player = Player.where("name = ? or second_name = ?", name, name).first
       unless player
         player = Player.create!(name: name, team_id: team_id, active: true, position: position, image: image, price_cents: price_cents, nacionality: nacionality, active: true)
       else
         player.position = position
         player.active = true
-        player.image = image
+        #player.image = image
         player.nacionality = nacionality
         player.price_cents = price_cents
         player.save!
