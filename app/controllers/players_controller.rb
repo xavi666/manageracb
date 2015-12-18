@@ -3,7 +3,7 @@ class PlayersController < ApplicationController
   include SortableFilterHelper
   
   def index
-    @players = Player.all
+    @players = Player.active.all
   end
 
   def create
