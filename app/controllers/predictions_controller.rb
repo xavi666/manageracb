@@ -43,6 +43,8 @@ class PredictionsController < ApplicationController
   end
 
   def predict
+    @predictions_labels = Array.new
+
     if params[:search]
       ####################################
       ####### LIBLINEAR
@@ -59,8 +61,8 @@ class PredictionsController < ApplicationController
       # Setting parameters
       param = Liblinear::Parameter.new
       #param.solver_type = Liblinear::L2R_L2LOSS_SVR
-      param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
       #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
+      param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
 
       @statistics = Statistic.game.find_season(season_data).where("statistics.seconds > 0")
       @statistics = @statistics.shuffle.first(num_elements)
@@ -74,19 +76,21 @@ class PredictionsController < ApplicationController
       end
 
       test = normalize test
+      ap test
 
       bias = 0.5
       @labels = labels
       @test = test
       prob = Liblinear::Problem.new(labels, test, bias)
       # https://github.com/kei500/liblinear-ruby
-      param.p = 1
-      param.C = 1
-      param.eps = 1
+      #param.p = 1
+      #param.C = 1
+      #param.eps = 1
       model = Liblinear::Model.new(prob, param)
 
-      prediccions = Prediction.where("games.season = ?", season).where("games.game_number = ?",game_number.to_i).includes(:game)
-      prediccions.each do |prediccio|
+      @prediccions = Prediction.where("games.season = ?", season).where("games.game_number = ?",game_number.to_i).includes(:game)
+      ap @prediccions
+      @prediccions.each do |prediccio|
         player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
         team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
         if player_statistic and team_statistic
@@ -94,6 +98,7 @@ class PredictionsController < ApplicationController
           # Predicting phase
           prediccio_label = model.predict(prediccio_values)
           prediccio = update_field_prediction(prediccio, prediccio_label, type)
+          @predictions_labels << prediccio_label
           prediccio.save!
         end
       end
@@ -154,6 +159,8 @@ class PredictionsController < ApplicationController
       player_statistic = Statistic.player.where(player_id: statistic_prediction.player_id, game_number: game_number, season: season).first
       
       if player_statistic and team_statistic
+        #player_statistic.played_games == 0 ? played_games = 1 : played_games = player_statistic.played_games 
+
         case type
         when "value"
           label = {
