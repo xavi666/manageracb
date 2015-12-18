@@ -270,7 +270,8 @@ class StatisticsController < ApplicationController
             new_statistic = Statistic.where(:player_id => player.id, 
                             :team_id => team.id, :team_against_id => team_against_id,
                             :season => season, :game_number => game_number,
-                            :type_statistic => "player", played_games: played_games).first_or_create
+                            :type_statistic => "player", 
+                            played_games: played_games).first_or_create).first_or_create
 
             new_statistic.update_attributes(:seconds => prev_seconds + seconds, :points => prev_points + points, 
                             :two_p => prev_two_p + two_p, :two_pm => prev_two_pm + two_pm,

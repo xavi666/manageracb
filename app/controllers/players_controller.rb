@@ -63,6 +63,8 @@ class PlayersController < ApplicationController
         player = Player.create!(name: name, team_id: team_id, active: true, position: position, image: image, price_cents: price_cents, nacionality: nacionality, active: true)
       else
         player.active = true
+        #player.image = image
+        player.nacionality = nacionality
         player.price_cents = price_cents
         player.save!
       end

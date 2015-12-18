@@ -75,8 +75,7 @@ class PredictionsController < ApplicationController
         end
       end
 
-      test = normalize test
-      ap test
+      #test = normalize test
 
       bias = 0.5
       @labels = labels
@@ -217,8 +216,9 @@ class PredictionsController < ApplicationController
     end
 
     def normalize test
-      #fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
-      fields = ["player_statistic", "team_statistic", "team_against_statistic"]
+      fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
+      #fields = ["player_statistic", "team_statistic", "team_against_statistic"]
+
       normalized = {}
       fields.each do |field|
         normalized[field] = {
@@ -234,7 +234,7 @@ class PredictionsController < ApplicationController
         normalized["player_statistic"]["values"] << row[0]
         normalized["team_statistic"]["values"] << row[1]
         normalized["team_against_statistic"]["values"] << row[2]
-        #normalized["player_position"]["values"] << row[3]
+        normalized["player_position"]["values"] << row[3]
       end
 
       fields.each do |field|
@@ -248,8 +248,9 @@ class PredictionsController < ApplicationController
                     row[0] = (row[0] - normalized["player_statistic"]["mean"]) / normalized["player_statistic"]["standard_deviation"] 
                     row[1] = (row[1] - normalized["team_statistic"]["mean"]) / normalized["team_statistic"]["standard_deviation"]
                     row[2] = (row[2] - normalized["team_against_statistic"]["mean"]) / normalized["team_against_statistic"]["standard_deviation"]
-                    #row[3] = (row[3] - normalized["player_position"]["mean"]) / normalized["player_position"]["standard_deviation"]
+                    row[3] = (row[3] - normalized["player_position"]["mean"]) / normalized["player_position"]["standard_deviation"]
               }
+
       test
     end
 
