@@ -1,5 +1,5 @@
 # population POPULATION_SIZE = 2391444
-POPULATION_SIZE = 200
+POPULATION_SIZE = 10
 NUM_GENERATIONS = 10
 CROSSOVER_RATE = 0.4
 MUTATION_RATE = 0.1
@@ -115,7 +115,6 @@ class UserTeamsController < ApplicationController
 
     def get_all_players type, season, game_number
       type ||= "value"
-
       {
         :bases => Player.active.bases.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] },
         :aleros => Player.active.aleros.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] },
