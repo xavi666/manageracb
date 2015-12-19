@@ -61,8 +61,8 @@ class PredictionsController < ApplicationController
       # Setting parameters
       param = Liblinear::Parameter.new
       #param.solver_type = Liblinear::L2R_L2LOSS_SVR
-      #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
       param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
+      #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
 
       @statistics = Statistic.game.find_season(season_data).where("statistics.seconds > 0")
       @statistics = @statistics.shuffle.first(num_elements)
@@ -158,12 +158,12 @@ class PredictionsController < ApplicationController
       player_statistic = Statistic.player.where(player_id: statistic_prediction.player_id, game_number: game_number, season: season).first
       
       if player_statistic and team_statistic
-        #player_statistic.played_games == 0 ? played_games = 1 : played_games = player_statistic.played_games 
+        player_statistic.played_games == 0 ? played_games = 1 : played_games = player_statistic.played_games 
 
         case type
         when "value"
           label = {
-              0 => player_statistic.value / game_number,
+              0 => player_statistic.value / played_games,
               1 => team_statistic.value / game_number,
               2 => team_against_statistic.value_received / game_number }
         when "points"

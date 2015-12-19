@@ -12,7 +12,7 @@
             %th.col-xs-2= "Rival"
             %th.col-xs-2= "Valoració"
             %th.col-xs-1= "#"
-        %tbody= render @player.statistics.game.where(season: "2015")
+        %tbody= render @player.statistics.game.where(season: "2015").order(:game_number)
   .col-xs-12
     %h1= "Acumulats 2015"
   .col-xs-12
@@ -26,7 +26,7 @@
             %th.col-xs-2= "Rival"
             %th.col-xs-2= "Valoració"
             %th.col-xs-1= "#"
-        %tbody= render @player.statistics.player.where(season: "2015")
+        %tbody= render @player.statistics.player.where(season: "2015").order(:game_number)
   .col-xs-12
     %h1= "Acumulats 2014"
   .col-xs-12
@@ -40,4 +40,4 @@
             %th.col-xs-2= "Rival"
             %th.col-xs-2= "Valoració"
             %th.col-xs-1= "#"
-        %tbody= render @player.statistics.player.where(season: "2014")
+        %tbody= render @player.statistics.player.where(season: "2014").order(:game_number)

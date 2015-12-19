@@ -584,3 +584,26 @@ task :set_position => :environment do
   p.position = 'alero' if p
   p.save! if p
 end
+
+task :set_played_games => :environment do
+  season="2015"
+  teams = Team.all
+  teams.each do |team|
+    team.players.each do |player|
+      played_games = 0
+      (1..34).each do |game_number|
+        statistic = Statistic.where(:player_id => player.id, :season => season, :game_number => game_number, :type_statistic => "game").first
+
+        played_games += 1 if statistic and statistic.seconds > 0
+        s = Statistic.where(:player_id => player.id, 
+                          :team_id => team.id,
+                          :season => season, :game_number => game_number,
+                          :type_statistic => "player").first
+        if s
+          s.played_games = played_games
+          s.save!
+        end
+      end
+    end
+  end
+end

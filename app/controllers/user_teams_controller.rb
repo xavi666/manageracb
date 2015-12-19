@@ -1,8 +1,8 @@
 # population POPULATION_SIZE = 2391444
-POPULATION_SIZE = 500
-NUM_GENERATIONS = 100
+POPULATION_SIZE = 200
+NUM_GENERATIONS = 10
 CROSSOVER_RATE = 0.4
-MUTATION_RATE = 0.000001
+MUTATION_RATE = 0.1
 
 # http://mattmazur.com/2013/08/18/a-simple-genetic-algorithm-written-in-ruby/
 # http://gems.sciruby.com/

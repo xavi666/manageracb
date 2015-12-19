@@ -13,12 +13,11 @@
 <br>
 = "NRMSE = "+(@mean_squared_error / (@predictions_labels.max - @predictions_labels.min)).to_s if @predictions_labels and @mean_squared_error
 <br>
-= "predictions_labels = "+@predictions_labels.to_s
+=# "predictions_labels = "+@predictions_labels.to_s
 <br>
 = "labels = "+@labels.to_s
 <br>
-<br>
-= "prediccio = "+@prediccio.to_s
+=# "prediccio = "+@prediccio.to_s
 <br>
 = "coefficient = "+@coefficient.to_s
 <br>
@@ -28,6 +27,6 @@
 <br>
 = "squared_correlation_coefficient = "+@squared_correlation_coefficient.to_s
 <br>
-= "test = "+@test.inspect
+=# "test = "+@test.inspect
 <br>
-= "prediccions = "+@prediccions.inspect
+=# "prediccions = "+@prediccions.inspect
