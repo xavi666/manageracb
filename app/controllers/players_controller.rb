@@ -41,6 +41,22 @@ class PlayersController < ApplicationController
     end
   end
 
+  def set_position
+    season = "2015"
+    game_number = 7
+    doc = Nokogiri::HTML(open("#{Rails.root}/mercado_"+season.to_s+game_number.to_s+".html"))
+    doc.css("table#posicion1 tbody tr").each do |player_row|
+      update_player(player_row)
+    end
+    doc.css("table#posicion3 tbody tr").each do |player_row|
+      update_player(player_row)
+    end
+    doc.css("table#posicion5 tbody tr").each do |player_row|
+      update_player(player_row)
+    end
+    redirect_to action: "index"
+  end
+
   private
     def player_params
       params.require(:player).permit([:name])
@@ -76,6 +92,14 @@ class PlayersController < ApplicationController
         price.price_cents = price_cents
         price.save!
       end
+    end
 
+    def update_player player_row
+      name = player_row.css(".jugador").text
+      player = Player.where("name = ? or second_name = ?", name, name).first
+      image = player_row.css(".foto img")[0]['src'].split('/')[2]
+
+      player.image = image
+      player.save!
     end
 end
