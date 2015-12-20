@@ -48,19 +48,32 @@ class Chromosome
   
   def mutate!(players = nil)
     mutated = ""
-    0.upto(genes.count - 1).each do |i|
+    1.upto(3).each do |i|
       if rand <= MUTATION_RATE
-        case i
+        index_player = rand(0..10)
+        case index_player
         when 0..2
-          genes[i] = players[:bases][rand(0..players[:bases].count)]
+          genes[index_player] = players[:bases][rand(0..players[:bases].count-1)]
         when 3..6 
-          genes[i] = players[:aleros][rand(0..players[:aleros].count)]
+          genes[index_player] = players[:aleros][rand(0..players[:aleros].count-1)]
         else
-          genes[i] = players[:pivots][rand(0..players[:pivots].count)]
-        end        
+          genes[index_player] = players[:pivots][rand(0..players[:pivots].count-1)]
+        end 
       end
-      mutated = genes
     end
+    #0.upto(genes.count - 1).each do |i|
+    #  if rand <= MUTATION_RATE
+    #    case i
+    #    when 0..2
+    #      genes[i] = players[:bases][rand(0..players[:bases].count-1)]
+    #    when 3..6 
+    #      genes[i] = players[:aleros][rand(0..players[:aleros].count-1)]
+    #    else
+    #      genes[i] = players[:pivots][rand(0..players[:pivots].count-1)]
+    #    end        
+    #  end
+    #  mutated = genes
+    #end
   
     #mutated = ""
     #puts "size = "+genes.length.to_s
@@ -76,7 +89,7 @@ class Chromosome
     #puts "genes  = "+self.genes.to_s
     #puts "mutated ="+mutated
 
-    self.genes = mutated    
+    self.genes = genes    
   end
   
   def &(other)

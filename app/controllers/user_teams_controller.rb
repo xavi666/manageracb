@@ -1,8 +1,8 @@
 # population POPULATION_SIZE = 2391444
-POPULATION_SIZE = 10
+POPULATION_SIZE = 100
 NUM_GENERATIONS = 10
-CROSSOVER_RATE = 0.4
-MUTATION_RATE = 0.1
+CROSSOVER_RATE = 0.7
+MUTATION_RATE = 5
 
 # http://mattmazur.com/2013/08/18/a-simple-genetic-algorithm-written-in-ruby/
 # http://gems.sciruby.com/
@@ -66,9 +66,14 @@ class UserTeamsController < ApplicationController
     
     all_players = get_all_players type, season, game_number
 
-    population = players
+    initial_genes = Array.new
+    players_ids.each do |player_id|
+      player = Player.where(id: player_id).includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] }.first
+      initial_genes.push(player)
+    end
+
     population = Population.new
-    population.seed! all_players
+    population.seed! initial_genes, all_players
 
     1.upto(NUM_GENERATIONS).each do |generation|
       offspring = Population.new      
@@ -114,11 +119,50 @@ class UserTeamsController < ApplicationController
     end
 
     def get_all_players type, season, game_number
-      type ||= "value"
-      {
-        :bases => Player.active.bases.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] },
-        :aleros => Player.active.aleros.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] },
-        :pivots => Player.active.pivots.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] }
-      }
+      #type ||= "value"
+      #{
+      #  :bases => Player.active.bases.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] },
+      #  :aleros => Player.active.aleros.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] },
+      #  :pivots => Player.active.pivots.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] }
+      #}
+      case type
+      when "value"
+        all_players = {
+                  :bases => Player.active.bases.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.value] },
+                  :aleros => Player.active.aleros.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.value] },
+                  :pivots => Player.active.pivots.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.value] }
+                }
+      when "points"
+        all_players = {
+                  :bases => Player.active.bases.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.points] },
+                  :aleros => Player.active.aleros.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.points] },
+                  :pivots => Player.active.pivots.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.points] }
+                }
+      when "rebounds"
+        all_players = {
+                  :bases => Player.active.bases.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.rebounds] },
+                  :aleros => Player.active.aleros.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.rebounds] },
+                  :pivots => Player.active.pivots.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.rebounds] }
+                }
+      when "assists"
+        all_players = {
+                  :bases => Player.active.bases.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.assists] },
+                  :aleros => Player.active.aleros.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.assists] },
+                  :pivots => Player.active.pivots.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.assists] }
+                }
+      when "three_pm"
+        all_players = {
+                  :bases => Player.active.bases.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.three_pm] },
+                  :aleros => Player.active.aleros.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.three_pm] },
+                  :pivots => Player.active.pivots.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.three_pm] }
+                }
+      else
+        all_players = {
+                  :bases => Player.active.bases.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.value] },
+                  :aleros => Player.active.aleros.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.value] },
+                  :pivots => Player.active.pivots.includes(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.value] }
+                }
+      end 
+      all_players
     end
 end

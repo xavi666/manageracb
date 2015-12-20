@@ -10,10 +10,10 @@ class Population
     chromosomes.join(" ")
   end
   
-  def seed! all_players
+  def seed! initial_genes, all_players
     chromosomes = Array.new
     1.upto(POPULATION_SIZE).each do
-      chromosomes << Chromosome.new("", all_players)
+      chromosomes << Chromosome.new(initial_genes, all_players)
     end
 
     self.chromosomes = chromosomes    
