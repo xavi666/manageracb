@@ -1,6 +1,6 @@
 class Population
   
-  attr_accessor :chromosomes
+  attr_accessor :chromosomes, :initial_genes, :all_players
   
   def initialize 
     self.chromosomes = Array.new
@@ -10,13 +10,14 @@ class Population
     chromosomes.join(" ")
   end
   
-  def seed! initial_genes, all_players
+  def seed! all_players
     chromosomes = Array.new
     1.upto(POPULATION_SIZE).each do
-      chromosomes << Chromosome.new(initial_genes, all_players)
+      chromosomes << Chromosome.new(self.initial_genes)
     end
-
     self.chromosomes = chromosomes    
+    puts "CROMOSOMES"
+    puts chromosomes.inspect
   end
   
   def count

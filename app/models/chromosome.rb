@@ -2,15 +2,10 @@ class Chromosome
   
   attr_accessor :genes
 
-  def initialize(genes = "", players = nil)
-    if genes == ""
-      bases = 3.times.map{ players[:bases][rand(0..players[:bases].count)] } 
-      aleros = 4.times.map{ players[:aleros][rand(0..players[:aleros].count)] } 
-      pivots = 4.times.map{ players[:pivots][rand(0..players[:pivots].count)] } 
-      self.genes = bases + aleros + pivots
-    else
-      self.genes = genes
-    end
+  def initialize(genes = "")
+    puts "INITIALIZE"
+    puts genes.to_s
+    self.genes = genes
   end
   
   def to_s
@@ -30,7 +25,6 @@ class Chromosome
         total += value
       end
     end
-    #genes.count("1")
     total
   end
 
@@ -47,7 +41,8 @@ class Chromosome
   end
   
   def mutate!(players = nil)
-    mutated = ""
+    puts "INIT--- MUTATE"
+    puts genes.to_s
     1.upto(3).each do |i|
       if rand <= MUTATION_RATE
         index_player = rand(0..10)
@@ -61,6 +56,8 @@ class Chromosome
         end 
       end
     end
+    puts genes.to_s
+    puts "END--- MUTATE"
     #0.upto(genes.count - 1).each do |i|
     #  if rand <= MUTATION_RATE
     #    case i
@@ -95,12 +92,15 @@ class Chromosome
   def &(other)
     locus = rand(genes.length) + 1
 
+    puts "CHILDS"
+
     child1 = genes[0, locus] + other.genes[locus, other.genes.length]
     child2 = other.genes[0, locus] + genes[locus, other.genes.length]
+    puts child1.to_s
 
     return [
-      Chromosome.new(child1, nil),
-      Chromosome.new(child2, nil),
+      Chromosome.new(child1),
+      Chromosome.new(child2),
     ]
   end
 end
