@@ -30,7 +30,6 @@ class Chromosome
         total += value
       end
     end
-    #genes.count("1")
     total
   end
 

@@ -40,7 +40,19 @@ class Population
   end
 
   def max_fitness_ids
-    fitness_ids.max
+    chromosomes.each do |chromosoma|
+      ids = []
+      total = 0
+      0.upto(chromosoma.genes.count - 1).each do |i|
+        unless chromosoma.genes[i].nil?
+          id = chromosoma.genes[i].first
+          value = chromosoma.genes[i].second.to_s.blank? ? 0 : chromosoma.genes[i].second
+          total += value 
+          ids.push(id)
+        end
+      end
+      return ids if total == max_fitness
+    end
   end
   
   def average_fitness
