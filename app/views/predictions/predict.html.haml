@@ -9,10 +9,7 @@
 
 = "num_predictions = "+@predictions_labels.size.to_s
 <br>
-= "min = "+@predictions_labels.min.to_s + " - max = "+@predictions_labels.max.to_s
-<br>
-= "NRMSE = "+(@mean_squared_error / (@predictions_labels.max - @predictions_labels.min)).to_s if @predictions_labels and @mean_squared_error
-<br>
+
 =# "predictions_labels = "+@predictions_labels.to_s
 <br>
 = "labels = "+@labels.to_s
@@ -26,6 +23,12 @@
 = "mean_squared_error = "+@mean_squared_error.to_s
 <br>
 = "squared_correlation_coefficient = "+@squared_correlation_coefficient.to_s
+<br>
+= "min = "+@labels.min.to_s + " - max = "+@labels.max.to_s
+<br>
+= "Max - Min = "+@max_min.to_s
+<br>
+= "NRMSE = "+@nrmse.to_s
 <br>
 =# "test = "+@test.inspect
 <br>

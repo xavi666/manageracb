@@ -116,7 +116,7 @@ class PredictionsController < ApplicationController
       @coefficient = model.coefficient
       @bias =  model.bias
       # Cross Validation  
-      fold = 2
+      fold = 3
       cv = Liblinear::CrossValidator.new(prob, param, fold)
       cv.execute
 
@@ -124,6 +124,15 @@ class PredictionsController < ApplicationController
       @mean_squared_error = cv.mean_squared_error
       # for regression
       @squared_correlation_coefficient = cv.squared_correlation_coefficient
+
+      if @predictions_labels and @mean_squared_error
+        if @labels.min < 0
+          @max_min = @labels.max + @labels.min * -1
+        else
+          @max_min = @labels.max - @labels.min
+        end
+        @nrmse = @mean_squared_error / @max_min 
+      end
     end
   end
 
@@ -227,8 +236,8 @@ class PredictionsController < ApplicationController
     end
 
     def normalize test
-      fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
-      #fields = ["player_statistic", "team_statistic", "team_against_statistic"]
+      #fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
+      fields = ["player_statistic", "team_statistic", "team_against_statistic"]
 
       normalized = {}
       fields.each do |field|
@@ -245,7 +254,7 @@ class PredictionsController < ApplicationController
         normalized["player_statistic"]["values"] << row[0]
         normalized["team_statistic"]["values"] << row[1]
         normalized["team_against_statistic"]["values"] << row[2]
-        normalized["player_position"]["values"] << row[3]
+        #normalized["player_position"]["values"] << row[3]
       end
 
       fields.each do |field|
@@ -259,7 +268,7 @@ class PredictionsController < ApplicationController
                     row[0] = (row[0] - normalized["player_statistic"]["mean"]) / normalized["player_statistic"]["standard_deviation"] 
                     row[1] = (row[1] - normalized["team_statistic"]["mean"]) / normalized["team_statistic"]["standard_deviation"]
                     row[2] = (row[2] - normalized["team_against_statistic"]["mean"]) / normalized["team_against_statistic"]["standard_deviation"]
-                    row[3] = (row[3] - normalized["player_position"]["mean"]) / normalized["player_position"]["standard_deviation"]
+                    #row[3] = (row[3] - normalized["player_position"]["mean"]) / normalized["player_position"]["standard_deviation"]
               }
       test
     end

@@ -1,52 +1,51 @@
-.col-xs-12.col-sm-6.col-md-12
-  %h1="JUGADORES"
-  %ul.nav.nav-tabs{:role => "tablist"}
-    %li.active
-      %a{"data-toggle" => "tab", :href => "#tabs-bases"}= "Bases"
-    %li
-      %a{"data-toggle" => "tab", :href => "#tabs-aleros"}= "Aleros"
-    %li
-      %a{"data-toggle" => "tab", :href => "#tabs-pivots"}= "Pivots"
-  .tab-content
-    #tabs-bases.tab-pane.active
-      .table-responsive#recomendations
-        %table.table.table-striped.table-condensed
-          %thead
-            %th=""
-            %th=""
-            %th=""
-            %th="Valoración"
-            %th="Puntos"
-            %th="Asistencias"
-            %th="Rebotes"
-            %th="Precio"
-          %tbody
-            =render partial: "players/list/player", locals: {players: @players.bases.order("predictions.value DESC")}
-    #tabs-aleros.tab-pane
-      .table-responsive#recomendations
-        %table.table.table-striped.table-condensed
-          %thead
-            %th=""
-            %th=""
-            %th=""
-            %th="Valoración"
-            %th="Puntos"
-            %th="Asistencias"
-            %th="Rebotes"
-            %th="Precio"
-          %tbody
-            =render partial: "players/list/player", locals: {players: @players.aleros.order("predictions.value DESC")}
-    #tabs-pivots.tab-pane
-      .table-responsive#recomendations
-        %table.table.table-striped.table-condensed
-          %thead
-            %th=""
-            %th=""
-            %th=""
-            %th="Valoración"
-            %th="Puntos"
-            %th="Asistencias"
-            %th="Rebotes"
-            %th="Precio"
-          %tbody
-            =render partial: "players/list/player", locals: {players: @players.pivots.order("predictions.value DESC")}
+%h2="JUGADORES"
+%ul.nav.nav-tabs{:role => "tablist"}
+  %li.active
+    %a{"data-toggle" => "tab", :href => "#tabs-bases"}= "Bases"
+  %li
+    %a{"data-toggle" => "tab", :href => "#tabs-aleros"}= "Aleros"
+  %li
+    %a{"data-toggle" => "tab", :href => "#tabs-pivots"}= "Pivots"
+.tab-content
+  #tabs-bases.tab-pane.active
+    .table-responsive#recomendations
+      %table.table.table-striped.table-condensed
+        %thead
+          %th=""
+          %th=""
+          %th=""
+          %th="Valoración"
+          %th="Puntos"
+          %th="Asistencias"
+          %th="Rebotes"
+          %th="Precio"
+        %tbody
+          =render partial: "players/list/player", locals: {players: @players.bases.order("predictions.value DESC")}
+  #tabs-aleros.tab-pane
+    .table-responsive#recomendations
+      %table.table.table-striped.table-condensed
+        %thead
+          %th=""
+          %th=""
+          %th=""
+          %th="Valoración"
+          %th="Puntos"
+          %th="Asistencias"
+          %th="Rebotes"
+          %th="Precio"
+        %tbody
+          =render partial: "players/list/player", locals: {players: @players.aleros.order("predictions.value DESC")}
+  #tabs-pivots.tab-pane
+    .table-responsive#recomendations
+      %table.table.table-striped.table-condensed
+        %thead
+          %th=""
+          %th=""
+          %th=""
+          %th="Valoración"
+          %th="Puntos"
+          %th="Asistencias"
+          %th="Rebotes"
+          %th="Precio"
+        %tbody
+          =render partial: "players/list/player", locals: {players: @players.pivots.order("predictions.value DESC")}

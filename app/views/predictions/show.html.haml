@@ -13,14 +13,10 @@
           %th="3PM"
       %tbody
         = render @game.predictions.where("predictions.team_id = "+@game.visitant_team_id.to_s)
-
-%div.row.prediction
-  .col-md-12.table-responsive.white
-    %table.table.table-striped
       %thead
         %tr
-          %th=team_image @game.visitant_team
-          %th=@game.visitant_team.name
+          %th=team_image @game.local_team
+          %th=@game.local_team.name
           %th="VALORACIÓN"
           %th="PUNTOS"
           %th="ASISTENCIAS"
