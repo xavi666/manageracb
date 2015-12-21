@@ -1,9 +1,16 @@
 class PlayersController < ApplicationController
   require 'open-uri'  
   include SortableFilterHelper
+  layout "front", only: [:list]
   
   def index
     @players = Player.active.all
+  end
+
+  def list
+    season = Setting.find_by_name(:season).value
+    game_number = Setting.find_by_name(:game_number).value
+    @players = Player.active.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number)
   end
 
   def create

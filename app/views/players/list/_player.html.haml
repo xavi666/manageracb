@@ -1,0 +1,10 @@
+- players.each do |player|
+  %tr
+    %td.player_image= player_image player        
+    %td.team_image=team_image player.team
+    %td= player.name
+    %td= player.predictions.first.value
+    %td= player.predictions.first.points
+    %td= player.predictions.first.assists
+    %td= player.predictions.first.rebounds
+    %td= player.print_price

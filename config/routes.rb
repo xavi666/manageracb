@@ -61,6 +61,7 @@ Manageracb::Application.routes.draw do
     collection do
       get 'money'
       get 'set_position'
+      get 'list'
     end
   end
   resources :predictions do

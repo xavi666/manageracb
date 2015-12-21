@@ -82,3 +82,8 @@ LOG:  autovacuum launcher shutting down
 LOG:  received smart shutdown request
 LOG:  shutting down
 LOG:  database system is shut down
+LOG:  database system was shut down at 2015-12-20 15:05:20 CET
+LOG:  autovacuum launcher started
+LOG:  database system is ready to accept connections
+ERROR:  column predictions.season does not exist at character 996
+STATEMENT:  SELECT "players"."id" AS t0_r0, "players"."name" AS t0_r1, "players"."date_of_birth" AS t0_r2, "players"."team_id" AS t0_r3, "players"."number" AS t0_r4, "players"."position" AS t0_r5, "players"."nationality" AS t0_r6, "players"."active" AS t0_r7, "players"."created_at" AS t0_r8, "players"."updated_at" AS t0_r9, "players"."image" AS t0_r10, "players"."nacionality" AS t0_r11, "players"."price_cents" AS t0_r12, "players"."second_name" AS t0_r13, "predictions"."id" AS t1_r0, "predictions"."player_id" AS t1_r1, "predictions"."team_id" AS t1_r2, "predictions"."value" AS t1_r3, "predictions"."points" AS t1_r4, "predictions"."rebounds" AS t1_r5, "predictions"."assists" AS t1_r6, "predictions"."price_cents" AS t1_r7, "predictions"."active" AS t1_r8, "predictions"."created_at" AS t1_r9, "predictions"."updated_at" AS t1_r10, "predictions"."game_id" AS t1_r11, "predictions"."three_pm" AS t1_r12 FROM "players" LEFT OUTER JOIN "predictions" ON "predictions"."player_id" = "players"."id" WHERE (predictions.season = '2015') AND (predictions.game_number = '7') AND "players"."position" = 'base'
