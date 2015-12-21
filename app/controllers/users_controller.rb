@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+  class UsersController < ApplicationController
   before_action :require_authentication, only: [:show]
   layout "front"
 
@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       cookies[:auth_token] = @user.auth_token
-      redirect_to root_path, success: 'Thanks for signing up!'
+      redirect_to root_path, success: 'Gracias por registrarte!'
     else
       render :new
     end

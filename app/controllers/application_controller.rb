@@ -37,14 +37,14 @@ class ApplicationController < ActionController::Base
   def load_top_data
     @top_ten =  {
                   values: {
-                            bases: Prediction.joins(:player).merge(Player.bases).top_ten_value,
-                            aleros: Prediction.joins(:player).merge(Player.aleros).top_ten_value,
-                            pivots: Prediction.joins(:player).merge(Player.pivots).top_ten_value
+                            bases: Prediction.joins(:player, :game).merge(Player.bases).top_ten_value,
+                            aleros: Prediction.joins(:player, :game).merge(Player.aleros).top_ten_value,
+                            pivots: Prediction.joins(:player, :game).merge(Player.pivots).top_ten_value
                           },                          
                   points: {
-                            bases: Prediction.joins(:player).merge(Player.bases).top_ten_points,
-                            aleros: Prediction.joins(:player).merge(Player.aleros).top_ten_points,
-                            pivots: Prediction.joins(:player).merge(Player.pivots).top_ten_points
+                            bases: Prediction.joins(:player, :game).merge(Player.bases).top_ten_points,
+                            aleros: Prediction.joins(:player, :game).merge(Player.aleros).top_ten_points,
+                            pivots: Prediction.joins(:player, :game).merge(Player.pivots).top_ten_points
                           }
                 }
   end

@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
       set_cookie(user, params)
       redirect_to(sign_in_destination)
     else
-      flash.now[:error] = 'Invalid sign in attempt!'
+      flash.now[:error] = 'Los datos introducidos no son correctos!'
       @user = User.new
       render 'users/new'
     end
@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
 
   def destroy
     cookies.delete(:auth_token)
-    redirect_to sign_in_path, success: 'Successfully signed out!'
+    redirect_to sign_in_path, success: 'Sesión cerrada!'
   end
 
   private

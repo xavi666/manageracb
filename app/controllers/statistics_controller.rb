@@ -130,8 +130,7 @@ class StatisticsController < ApplicationController
         name = parse_name statistic[:name]
 
         unless jugador = Player.find_by_name(name)
-          statistic[:season] == "2015" ? active = true : active = false
-          jugador = Player.create!(:name => name, :team_id => team.id, :number => statistic[:number], :active => active)
+          jugador = Player.create!(:name => name, :team_id => team.id, :number => statistic[:number])
         end
 
         new_statistic = Statistic.where(:player_id => jugador.id, :season => statistic[:season], :game_number => statistic[:game_number], :team_id => team.id, :team_against_id => team_against.id).first
@@ -491,21 +490,14 @@ class StatisticsController < ApplicationController
       name = name.gsub('&#xE0;', 'à')
       name = name.gsub('&#xE1;', 'á')
       name = name.gsub(/&#xC1;/, 'Á')
-
       name = name.gsub('&#xE9;', 'é')
-
       name = name.gsub(/&#xED;/, 'í')
-
       name = name.gsub(/&#xD3;/, 'Ó')
       name = name.gsub(/&#xF3;/, 'ó')
-
       name = name.gsub(/&#xFC;/, 'ú')
       name = name.gsub(/&#xFA;/, 'ú')
       name = name.gsub(/&#xDA;/, 'Ú') 
-
       name = name.gsub(/&#xF1;/, 'ñ')    
-
-      name
     end
 
 end
