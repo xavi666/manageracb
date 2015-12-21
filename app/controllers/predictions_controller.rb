@@ -61,8 +61,8 @@ class PredictionsController < ApplicationController
       # Setting parameters
       param = Liblinear::Parameter.new
       #param.solver_type = Liblinear::L2R_L2LOSS_SVR
-      #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
       param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
+      #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
 
       @statistics = Statistic.game.find_season(season_data).where("statistics.seconds > 0")
       @statistics = @statistics.shuffle.first(num_elements)
@@ -85,11 +85,11 @@ class PredictionsController < ApplicationController
         end
       end
 
-      @data = @test + @prediccio_values
-      @data = normalize @data
+      @test = normalize @test
+      @prediccio_values = normalize @prediccio_values
 
       bias = 0.5
-      prob = Liblinear::Problem.new(@labels, @data[0..num_elements-1], bias)
+      prob = Liblinear::Problem.new(@labels, @test, bias)
       # https://github.com/kei500/liblinear-ruby
       #param.p = 1
       #param.C = 1
@@ -98,7 +98,7 @@ class PredictionsController < ApplicationController
 
       # Predicting phase
       index = 0
-      @data[num_elements..@data.count-1].each do |prediccio_values|
+      @prediccio_values.each do |prediccio_values|
         prediccio = @prediccions[index]
         player_statistic = Statistic.player.where(player_id: prediccio.player_id, game_number: game_number, season: season).first
         team_statistic = Statistic.team.where(team_id: prediccio.team_id, game_number: game_number, season: season).first
@@ -116,7 +116,7 @@ class PredictionsController < ApplicationController
       @coefficient = model.coefficient
       @bias =  model.bias
       # Cross Validation  
-      fold = 3
+      fold = 2
       cv = Liblinear::CrossValidator.new(prob, param, fold)
       cv.execute
 
