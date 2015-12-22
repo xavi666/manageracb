@@ -1,19 +1,21 @@
 class Population
   
-  attr_accessor :chromosomes
+  attr_accessor :chromosomes, :max_price, :all_players
   
-  def initialize 
+  def initialize max_price, all_players
     self.chromosomes = Array.new
+    self.max_price = max_price
+    self.all_players = all_players
   end
   
   def inspect
     chromosomes.join(" ")
   end
   
-  def seed! all_players
+  def seed!
     chromosomes = Array.new
     1.upto(POPULATION_SIZE).each do
-      chromosomes << Chromosome.new("", all_players)
+      chromosomes << Chromosome.new("", self.all_players)
     end
 
     self.chromosomes = chromosomes    
@@ -26,10 +28,6 @@ class Population
   def fitness_values
     chromosomes.collect(&:fitness)
   end
-
-  def fitness_ids
-    chromosomes.collect(&:fitness_ids)
-  end 
 
   def total_fitness
     fitness_values.inject{|total, value| total + value }

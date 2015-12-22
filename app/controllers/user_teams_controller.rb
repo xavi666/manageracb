@@ -1,8 +1,8 @@
 # population POPULATION_SIZE = 2391444
-POPULATION_SIZE = 100
-NUM_GENERATIONS = 10
-CROSSOVER_RATE = 0.4
-MUTATION_RATE = 0.1
+POPULATION_SIZE = 20
+NUM_GENERATIONS = 50
+CROSSOVER_RATE = 0.1
+MUTATION_RATE = 0.00001
 
 # http://mattmazur.com/2013/08/18/a-simple-genetic-algorithm-written-in-ruby/
 # http://gems.sciruby.com/
@@ -31,6 +31,7 @@ class UserTeamsController < ApplicationController
   end
 
   def optimize
+    max_price = 10000
     type = "value" if params["value"] 
     type = "points" if params["points"] 
     type = "rebounds" if params["rebounds"] 
@@ -67,11 +68,11 @@ class UserTeamsController < ApplicationController
     all_players = get_all_players type, season, game_number
 
     @population = players
-    @population = Population.new
-    @population.seed! all_players
+    @population = Population.new max_price, all_players
+    @population.seed!
 
     1.upto(NUM_GENERATIONS).each do |generation|
-      offspring = Population.new      
+      offspring = Population.new max_price, all_players    
       while offspring.count < @population.count
         parent1 = @population.select
         parent2 = @population.select
@@ -109,9 +110,9 @@ class UserTeamsController < ApplicationController
     def get_all_players type, season, game_number
       type ||= "value"
       {
-        :bases => Player.active.bases.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] },
-        :aleros => Player.active.aleros.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] },
-        :pivots => Player.active.pivots.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type)] }
+        :bases => Player.active.bases.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type), c.price_cents] },
+        :aleros => Player.active.aleros.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type), c.price_cents] },
+        :pivots => Player.active.pivots.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type), c.price_cents] }
       }
     end
 end

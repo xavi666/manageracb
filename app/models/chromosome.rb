@@ -32,49 +32,25 @@ class Chromosome
     end
     total
   end
-
-  def fitness_ids
-    ids = []
-    0.upto(genes.count - 1).each do |i|
-      unless genes[i].nil?
-        id = genes[i].first
-        value = genes[i].second.to_s.blank? ? 0 : genes[i].second
-        ids.push(id)
-      end
-    end
-    ids
-  end
   
   def mutate!(players = nil)
     mutated = ""
-    0.upto(genes.count - 1).each do |i|
-      if rand <= MUTATION_RATE
-        case i
-        when 0..2
-          genes[i] = players[:bases][rand(0..players[:bases].count)]
-        when 3..6 
-          genes[i] = players[:aleros][rand(0..players[:aleros].count)]
-        else
-          genes[i] = players[:pivots][rand(0..players[:pivots].count)]
-        end        
-      end
-      mutated = genes
-    end
-  
-    #mutated = ""
-    #puts "size = "+genes.length.to_s
-    #0.upto(genes.length - 1).each do |i|
-    #  allele = genes[i, 1]
-    #  puts genes[i].to_s+" = "+allele
-    #  if rand <= MUTATION_RATE
-    #    mutated += (allele == "0") ? "1" : "0"
-    #  else
-    #    mutated += allele
-    #  end
-    #end
-    #puts "genes  = "+self.genes.to_s
-    #puts "mutated ="+mutated
+    index = rand(0..10)
+    genes_transpose = genes
+    sum = genes_transpose.transpose.map {|x| x.min}
+    puts sum.to_s
 
+    if rand <= MUTATION_RATE
+      case index
+      when 0..2
+        genes[index] = players[:bases][rand(0..players[:bases].count)]
+      when 3..6 
+        genes[index] = players[:aleros][rand(0..players[:aleros].count)]
+      else
+        genes[index] = players[:pivots][rand(0..players[:pivots].count)]
+      end        
+    end
+    mutated = genes
     self.genes = mutated    
   end
   
