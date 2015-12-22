@@ -67,36 +67,17 @@ class UserTeamsController < ApplicationController
     
     all_players = get_all_players type, season, game_number
 
-    @population = players
-    @population = Population.new max_price, all_players
-    @population.seed!
-
-    1.upto(NUM_GENERATIONS).each do |generation|
-      offspring = Population.new max_price, all_players    
-      while offspring.count < @population.count
-        parent1 = @population.select
-        parent2 = @population.select
-
-        if rand <= CROSSOVER_RATE
-          child1, child2 = parent1 & parent2
-        else
-          child1 = parent1
-          child2 = parent2
-        end
-
-        child1.mutate! all_players
-        child2.mutate! all_players
-        
-        if POPULATION_SIZE.even?
-          offspring.chromosomes << child1 << child2
-        else
-          offspring.chromosomes << [child1, child2].sample
-        end
-      end
-
-      @population = offspring
-      @result = "Generation #{generation} - Average: #{@population.average_fitness.round(2)} - Max: #{@population.max_fitness} - Values: #{@population.max_fitness_ids}"
-    end
+      
+    # problem configuration
+    num_bits = 64
+    # algorithm configuration
+    max_gens = 100
+    pop_size = 100
+    p_crossover = 0.98
+    p_mutation = 1.0/num_bits
+    # execute the algorithm
+    best = search(max_gens, num_bits, pop_size, p_crossover, p_mutation)
+    @result = "done! Solution: f=#{best[:fitness]}, s=#{best[:bitstring]}"
   end
 
   def new
@@ -115,4 +96,69 @@ class UserTeamsController < ApplicationController
         :pivots => Player.active.pivots.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type), c.price_cents] }
       }
     end
+
+    def onemax(bitstring)
+      sum = 0
+      bitstring.size.times {|i| sum+=1 if bitstring[i].chr=='1'}
+      return sum
+    end
+
+    def random_bitstring(num_bits)
+      return (0...num_bits).inject(""){|s,i| s<<((rand<0.5) ? "1" : "0")}
+    end
+
+    def binary_tournament(pop)
+      i, j = rand(pop.size), rand(pop.size)
+      j = rand(pop.size) while j==i
+      return (pop[i][:fitness] > pop[j][:fitness]) ? pop[i] : pop[j]
+    end
+
+    def point_mutation(bitstring, rate=1.0/bitstring.size)
+      child = ""
+       bitstring.size.times do |i|
+         bit = bitstring[i].chr
+         child << ((rand()<rate) ? ((bit=='1') ? "0" : "1") : bit)
+      end
+      return child
+    end
+
+    def crossover(parent1, parent2, rate)
+      return ""+parent1 if rand()>=rate
+      point = 1 + rand(parent1.size-2)
+      return parent1[0...point]+parent2[point...(parent1.size)]
+    end
+
+    def reproduce(selected, pop_size, p_cross, p_mutation)
+      children = []
+      selected.each_with_index do |p1, i|
+        p2 = (i.modulo(2)==0) ? selected[i+1] : selected[i-1]
+        p2 = selected[0] if i == selected.size-1
+        child = {}
+        child[:bitstring] = crossover(p1[:bitstring], p2[:bitstring], p_cross)
+        child[:bitstring] = point_mutation(child[:bitstring], p_mutation)
+        children << child
+        break if children.size >= pop_size
+      end
+      return children
+    end
+
+    def search(max_gens, num_bits, pop_size, p_crossover, p_mutation)
+      population = Array.new(pop_size) do |i|
+        {:bitstring=>random_bitstring(num_bits)}
+      end
+      population.each{|c| c[:fitness] = onemax(c[:bitstring])}
+      best = population.sort{|x,y| y[:fitness] <=> x[:fitness]}.first
+      max_gens.times do |gen|
+        selected = Array.new(pop_size){|i| binary_tournament(population)}
+        children = reproduce(selected, pop_size, p_crossover, p_mutation)
+        children.each{|c| c[:fitness] = onemax(c[:bitstring])}
+        children.sort!{|x,y| y[:fitness] <=> x[:fitness]}
+        best = children.first if children.first[:fitness] >= best[:fitness]
+        population = children
+        puts " > gen #{gen}, best: #{best[:fitness]}, #{best[:bitstring]}"
+        break if best[:fitness] == num_bits
+      end
+      return best
+    end
+
 end
