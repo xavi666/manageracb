@@ -1,12 +1,4 @@
-# population POPULATION_SIZE = 2391444
-POPULATION_SIZE = 20
-NUM_GENERATIONS = 50
-CROSSOVER_RATE = 0.1
-MUTATION_RATE = 0.00001
-
-# http://mattmazur.com/2013/08/18/a-simple-genetic-algorithm-written-in-ruby/
-# http://gems.sciruby.com/
-
+#http://www.cleveralgorithms.com/nature-inspired/evolution/genetic_algorithm.html
 
 class UserTeamsController < ApplicationController
 
@@ -64,20 +56,18 @@ class UserTeamsController < ApplicationController
 
     season = Setting.find_by_name(:season).value
     game_number = Setting.find_by_name(:game_number).value.to_i
-    
-    all_players = get_all_players type, season, game_number
 
-      
-    # problem configuration
-    num_bits = 64
+    all_players = get_all_players type, season, game_number
+    
     # algorithm configuration
-    max_gens = 100
+    max_gens = 200
     pop_size = 100
     p_crossover = 0.98
-    p_mutation = 1.0/num_bits
+    p_mutation = 1.0/11
     # execute the algorithm
-    best = search(max_gens, num_bits, pop_size, p_crossover, p_mutation)
-    @result = "done! Solution: f=#{best[:fitness]}, s=#{best[:bitstring]}"
+    @best = search(max_gens, pop_size, p_crossover, p_mutation, all_players)
+    @result = "done! Solution: f=#{@best[:fitness]}, s=#{@best[:players]}"
+    puts @result
   end
 
   def new
@@ -91,20 +81,20 @@ class UserTeamsController < ApplicationController
     def get_all_players type, season, game_number
       type ||= "value"
       {
-        :bases => Player.active.bases.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type), c.price_cents] },
-        :aleros => Player.active.aleros.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type), c.price_cents] },
-        :pivots => Player.active.pivots.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| [c.id, c.predictions.first.send(type), c.price_cents] }
+        :bases => Player.active.bases.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| {id: c.id, value: c.predictions.first.send(type), price: c.price_cents} },
+        :aleros => Player.active.aleros.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| {id: c.id, value: c.predictions.first.send(type), price: c.price_cents} },
+        :pivots => Player.active.pivots.includes(predictions: :game).references(predictions: :game).where("games.season = ?", season).where("games.game_number = ?", game_number).map{ |c| {id: c.id, value: c.predictions.first.send(type), price: c.price_cents} }
       }
     end
 
-    def onemax(bitstring)
-      sum = 0
-      bitstring.size.times {|i| sum+=1 if bitstring[i].chr=='1'}
-      return sum
-    end
-
-    def random_bitstring(num_bits)
-      return (0...num_bits).inject(""){|s,i| s<<((rand<0.5) ? "1" : "0")}
+    def onemax(players)
+      price = 0
+      value = 0
+      players.each do |player|
+        price += player[:price]
+        value += player[:value]
+      end
+      return value
     end
 
     def binary_tournament(pop)
@@ -113,50 +103,64 @@ class UserTeamsController < ApplicationController
       return (pop[i][:fitness] > pop[j][:fitness]) ? pop[i] : pop[j]
     end
 
-    def point_mutation(bitstring, rate=1.0/bitstring.size)
-      child = ""
-       bitstring.size.times do |i|
-         bit = bitstring[i].chr
-         child << ((rand()<rate) ? ((bit=='1') ? "0" : "1") : bit)
+    def point_mutation(players, rate=1.0/players.size, all_players)
+      child = Array.new
+      players.size.times do |i|
+        player = players[i]
+        if rand()<rate
+          case i
+            when 0..2
+              player = all_players[:bases][rand(0..all_players[:bases].count-1)]
+            when 3..6 
+              player = all_players[:aleros][rand(0..all_players[:aleros].count-1)]
+            else
+              player = all_players[:pivots][rand(0..all_players[:pivots].count-1)]
+            end 
+        end
+        child[i] = player  
       end
       return child
     end
 
     def crossover(parent1, parent2, rate)
-      return ""+parent1 if rand()>=rate
+      return parent1 
+      #if rand()>=rate
       point = 1 + rand(parent1.size-2)
       return parent1[0...point]+parent2[point...(parent1.size)]
     end
 
-    def reproduce(selected, pop_size, p_cross, p_mutation)
+    def reproduce(selected, pop_size, p_cross, p_mutation, all_players)
       children = []
       selected.each_with_index do |p1, i|
         p2 = (i.modulo(2)==0) ? selected[i+1] : selected[i-1]
         p2 = selected[0] if i == selected.size-1
         child = {}
-        child[:bitstring] = crossover(p1[:bitstring], p2[:bitstring], p_cross)
-        child[:bitstring] = point_mutation(child[:bitstring], p_mutation)
+        child[:players] = crossover(p1[:players], p2[:players], p_cross)
+        child[:players] = point_mutation(child[:players], p_mutation, all_players)
         children << child
         break if children.size >= pop_size
       end
       return children
     end
 
-    def search(max_gens, num_bits, pop_size, p_crossover, p_mutation)
+    def search(max_gens, pop_size, p_crossover, p_mutation, all_players)
       population = Array.new(pop_size) do |i|
-        {:bitstring=>random_bitstring(num_bits)}
+        bases = 3.times.map{ all_players[:bases][rand(0..all_players[:bases].count-1)] } 
+        aleros = 4.times.map{ all_players[:aleros][rand(0..all_players[:aleros].count-1)] } 
+        pivots = 4.times.map{ all_players[:pivots][rand(0..all_players[:pivots].count-1)] } 
+        players = bases + aleros + pivots
+        {:players=>players}
       end
-      population.each{|c| c[:fitness] = onemax(c[:bitstring])}
+      population.each{|c| c[:fitness] = onemax(c[:players])}
       best = population.sort{|x,y| y[:fitness] <=> x[:fitness]}.first
       max_gens.times do |gen|
         selected = Array.new(pop_size){|i| binary_tournament(population)}
-        children = reproduce(selected, pop_size, p_crossover, p_mutation)
-        children.each{|c| c[:fitness] = onemax(c[:bitstring])}
+        children = reproduce(selected, pop_size, p_crossover, p_mutation, all_players)
+        children.each{|c| c[:fitness] = onemax(c[:players])}
         children.sort!{|x,y| y[:fitness] <=> x[:fitness]}
         best = children.first if children.first[:fitness] >= best[:fitness]
         population = children
-        puts " > gen #{gen}, best: #{best[:fitness]}, #{best[:bitstring]}"
-        break if best[:fitness] == num_bits
+        puts " > gen #{gen}, best: #{best[:fitness]}, #{best[:players]}"
       end
       return best
     end

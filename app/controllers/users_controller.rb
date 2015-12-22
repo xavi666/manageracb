@@ -1,4 +1,4 @@
-  class UsersController < ApplicationController
+class UsersController < ApplicationController
   before_action :require_authentication, only: [:show]
   layout "front"
 

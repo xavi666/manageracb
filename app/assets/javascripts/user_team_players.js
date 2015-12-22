@@ -8,24 +8,25 @@ $(document).ready(function(){
     $(this).parents('tr').children('.rebounds').html($(this).select2().find(":selected").data("rebounds"));
     $(this).parents('tr').children('.assists').html($(this).select2().find(":selected").data("assists"));
     $(this).parents('tr').children('.three_pm').html($(this).select2().find(":selected").data("three-pm"));
+    $(this).parents('tr').children('.price').html(addPoints($(this).select2().find(":selected").data("price")));
     calculate_totals();
   });
 
   function calculate_totals() {
-    fields = ["value", "points", "rebounds", "assists", "assists", "three_pm"]
-    acumulat = 0
+    fields = ["value", "points", "rebounds", "assists", "assists", "three_pm", "price"]
     $.each(fields, function( index, field ) {
       acumulat = 0
       $( ".player ."+field ).each(function( index ) {
-        valor = $( this ).text()
-        if (valor == "") {
+        valor = $( this ).text();        
+        if (valor == "" || valor == "undefined") {
           valor = 0; 
         } else {
-          valor = parseInt( valor );
+          valor = removePoints(valor);
+          valor = parseInt(valor);
         } 
         acumulat += valor;
       });
-      $( ".totals ."+field).html(acumulat);
+      $( ".totals ."+field).html(addPoints(acumulat));
     });
   }
 

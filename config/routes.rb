@@ -86,7 +86,6 @@ Manageracb::Application.routes.draw do
       get 'acumulats_equip_received'
     end
   end
-  resources :optimizations
 
   #get '/predictions/:id/game', to: 'predictions#game', as: 'predictions_game'
   get '/home', to: 'home#index'

@@ -108,3 +108,4 @@ ERROR:  missing FROM-clause entry for table "games" at character 152
 STATEMENT:  SELECT  "predictions".* FROM "predictions" INNER JOIN "players" ON "players"."id" = "predictions"."player_id" WHERE "players"."position" = 'base' AND (games.season = '2015') AND (games.game_number = '7')  ORDER BY predictions.value DESC LIMIT 10
 ERROR:  value "1057168768871352474830917866794635365182253706520507676682827998055651677798597866978095800976184834509135135527225374285217798666686853961544776846977881929234822573177388434918797509937766257042342384232911717921955398415722479616" is out of range for type integer
 STATEMENT:  UPDATE "predictions" SET "value" = $1, "updated_at" = $2, "price_cents" = $3 WHERE "predictions"."id" = 221
+LOG:  using stale statistics instead of current ones because stats collector is not responding
