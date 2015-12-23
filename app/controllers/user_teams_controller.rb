@@ -144,11 +144,6 @@ class UserTeamsController < ApplicationController
         i = 0
         price = 0
         while players.size < num_players do
-          if price > max_price
-            i -= 1
-            price -= players[i][:price]   
-            players.pop
-          end
           case i
             when 0..2
               player = all_players[:bases][rand(0..all_players[:bases].count-1)]
@@ -157,13 +152,17 @@ class UserTeamsController < ApplicationController
             else
               player = all_players[:pivots][rand(0..all_players[:pivots].count-1)]
             end 
-            unless players.include?(player)
+            unless players.include?(player) and player[:price] + price < max_price
               price += player[:price]
               players[i] = player
               i += 1
+            else
+              i -= 1
+              players.pop
             end
           break if players.size >= num_players
         end
+
         {:players=>players}
       end
       population.each{|c| c[:fitness] = onemax(c[:players])}
