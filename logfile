@@ -109,3 +109,10 @@ STATEMENT:  SELECT  "predictions".* FROM "predictions" INNER JOIN "players" ON "
 ERROR:  value "1057168768871352474830917866794635365182253706520507676682827998055651677798597866978095800976184834509135135527225374285217798666686853961544776846977881929234822573177388434918797509937766257042342384232911717921955398415722479616" is out of range for type integer
 STATEMENT:  UPDATE "predictions" SET "value" = $1, "updated_at" = $2, "price_cents" = $3 WHERE "predictions"."id" = 221
 LOG:  using stale statistics instead of current ones because stats collector is not responding
+LOG:  database system was shut down at 2015-12-23 11:50:59 CET
+LOG:  autovacuum launcher started
+LOG:  database system is ready to accept connections
+LOG:  unexpected EOF on client connection with an open transaction
+ERROR:  value "2648472014340737643934495032688726357142176562628008369015258688315940425809775431825926857644567732692367295543844200226844278139829937879514349812434499001889151732047495481567124001222223006865252455885770942459497919602956959744" is out of range for type integer
+STATEMENT:  UPDATE "predictions" SET "value" = $1, "updated_at" = $2, "price_cents" = $3 WHERE "predictions"."id" = 207
+LOG:  unexpected EOF on client connection with an open transaction

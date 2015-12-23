@@ -24,12 +24,12 @@
 <br>
 = "squared_correlation_coefficient = "+@squared_correlation_coefficient.to_s
 <br>
-= "min = "+@labels.min.to_s + " - max = "+@labels.max.to_s
-<br>
-= "Max - Min = "+@max_min.to_s
-<br>
 = "NRMSE = "+@nrmse.to_s
 <br>
 =# "test = "+@test.inspect
 <br>
 =# "prediccions = "+@prediccions.inspect
+<br>
+=# "min = "+@labels.min.to_s + " - max = "+@labels.max.to_s if @labels
+<br>
+=# "Max - Min = "+@max_min.to_s

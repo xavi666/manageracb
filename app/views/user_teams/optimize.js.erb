@@ -1,6 +1,3 @@
-$("#result").html('<%= @result %>');
-$("#result").append('<br>');
-
 set_player_select2("user_team_bases_attributes_0_player_id", <%= @best[:players][0][:id].to_i %>);
 set_player_select2("user_team_bases_attributes_1_player_id", <%= @best[:players][1][:id].to_i %>);
 set_player_select2("user_team_bases_attributes_2_player_id", <%= @best[:players][2][:id].to_i %>);

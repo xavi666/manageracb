@@ -61,8 +61,8 @@ class PredictionsController < ApplicationController
       # Setting parameters
       param = Liblinear::Parameter.new
       #param.solver_type = Liblinear::L2R_L2LOSS_SVR
-      param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
       #param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
+      param.solver_type = Liblinear::L2R_L2LOSS_SVR_DUAL
 
       @statistics = Statistic.game.find_season(season_data).where("statistics.seconds > 0")
       @statistics = @statistics.shuffle.first(num_elements)
@@ -92,7 +92,7 @@ class PredictionsController < ApplicationController
       prob = Liblinear::Problem.new(@labels, @test, bias)
       # https://github.com/kei500/liblinear-ruby
       #param.p = 1
-      #param.C = 1
+      #param.C = 1.5
       #param.eps = 1
       model = Liblinear::Model.new(prob, param)
 
@@ -236,8 +236,8 @@ class PredictionsController < ApplicationController
     end
 
     def normalize test
-      #fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
-      fields = ["player_statistic", "team_statistic", "team_against_statistic"]
+      fields = ["player_statistic", "team_statistic", "team_against_statistic", "player_position"]
+      #fields = ["player_statistic", "team_statistic", "team_against_statistic"]
 
       normalized = {}
       fields.each do |field|
@@ -254,7 +254,7 @@ class PredictionsController < ApplicationController
         normalized["player_statistic"]["values"] << row[0]
         normalized["team_statistic"]["values"] << row[1]
         normalized["team_against_statistic"]["values"] << row[2]
-        #normalized["player_position"]["values"] << row[3]
+        normalized["player_position"]["values"] << row[3]
       end
 
       fields.each do |field|
@@ -268,7 +268,7 @@ class PredictionsController < ApplicationController
                     row[0] = (row[0] - normalized["player_statistic"]["mean"]) / normalized["player_statistic"]["standard_deviation"] 
                     row[1] = (row[1] - normalized["team_statistic"]["mean"]) / normalized["team_statistic"]["standard_deviation"]
                     row[2] = (row[2] - normalized["team_against_statistic"]["mean"]) / normalized["team_against_statistic"]["standard_deviation"]
-                    #row[3] = (row[3] - normalized["player_position"]["mean"]) / normalized["player_position"]["standard_deviation"]
+                    row[3] = (row[3] - normalized["player_position"]["mean"]) / normalized["player_position"]["standard_deviation"]
               }
       test
     end

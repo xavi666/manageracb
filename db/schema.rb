@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130120935) do
+ActiveRecord::Schema.define(version: 20151223182459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20151130120935) do
     t.string   "image"
     t.string   "nacionality"
     t.integer  "price_cents"
+    t.string   "second_name"
   end
 
   create_table "predictions", force: true do |t|
@@ -132,6 +133,7 @@ ActiveRecord::Schema.define(version: 20151130120935) do
     t.integer  "assists_received"
     t.integer  "rebounds_received"
     t.integer  "three_pm_received"
+    t.integer  "played_games",      default: 0
   end
 
   create_table "teams", force: true do |t|
@@ -154,9 +156,10 @@ ActiveRecord::Schema.define(version: 20151130120935) do
 
   create_table "user_teams", force: true do |t|
     t.string   "name"
-    t.boolean  "active",     default: true
+    t.boolean  "active",          default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "max_price_cents"
   end
 
   create_table "users", force: true do |t|

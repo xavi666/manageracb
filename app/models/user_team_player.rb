@@ -22,5 +22,6 @@ class UserTeamPlayer < ActiveRecord::Base
   # !**************************************************
   # !                  Other
   # !**************************************************  
+  monetize :max_price_cents, allow_nil: true
 
 end

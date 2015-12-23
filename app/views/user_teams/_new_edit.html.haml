@@ -7,11 +7,11 @@
           %th
           %th="Jugador"
           %th= f.submit "Valoración", class: 'btn btn-info optimizar', name: "value"
-          %th= f.submit "Puntos", class: 'btn btn-info', name: "points"
-          %th= f.submit "Rebotes", class: 'btn btn-info', name: "rebounds"
-          %th= f.submit "Asistencias", class: 'btn btn-info', name: "assists"
-          %th= f.submit "3Puntos", class: 'btn btn-info', name: "three_pm"
-          %th= "Precio"
+          %th= f.submit "Puntos", class: 'btn btn-info optimizar', name: "points"
+          %th= f.submit "Rebotes", class: 'btn btn-info optimizar', name: "rebounds"
+          %th= f.submit "Asistencias", class: 'btn btn-info optimizar', name: "assists"
+          %th= f.submit "3Puntos", class: 'btn btn-info optimizar', name: "three_pm"
+          %th= f.text_field :max_price_cents, class: "form-control", placeholder: "Presupuesto"
           %th
           %th
       %tbody
