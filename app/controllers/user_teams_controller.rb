@@ -40,14 +40,15 @@ class UserTeamsController < ApplicationController
     # settings configuration
     num_players = 11
     # algorithm configuration
-    max_gens = 40
-    pop_size = 100
+    max_gens = 140
+    pop_size = 140
     p_crossover = 0.98
     p_mutation = 1.0/num_players
     # execute the algorithm
+    min_price = Player.active.minimum(:price_cents) / 100
     max_price = user_team_params[:max_price_cents].to_i
     max_price = 20000000 if max_price == 0
-    @best = search(max_gens, pop_size, p_crossover, p_mutation, all_players, num_players, max_price)
+    @best = search(max_gens, pop_size, p_crossover, p_mutation, all_players, num_players, max_price - min_price)
     @result = "done! Solution: f=#{@best[:fitness]}, s=#{@best[:players]}, price=#{@best[:players].map {|p| p[:price]}.reduce(0, :+)}"
     puts @result
   end
@@ -69,14 +70,15 @@ class UserTeamsController < ApplicationController
       }
     end
 
-    def onemax(players)
+    def onemax(players, max_price)
       price = 0
       value = 0
       players.each do |player|
         price += player[:price]
         value += player[:value]
       end
-      return value
+      return 0 if price > max_price
+      return value 
     end
 
     def tournament(pop)
@@ -91,7 +93,7 @@ class UserTeamsController < ApplicationController
         player = players[i]
         if rand() < rate
           price = players.map {|p| p[:price]}.reduce(0, :+)
-          while players.include?(player) and price > max_price
+          while players.include?(player) and price > max_price and rand() < rate
             case i
               when 0..2
                 player = all_players[:bases][rand(0..all_players[:bases].count-1)]
@@ -100,6 +102,7 @@ class UserTeamsController < ApplicationController
               else
                 player = all_players[:pivots][rand(0..all_players[:pivots].count-1)]
               end 
+              price = players.map {|p| p[:price]}.reduce(0, :+)
           end
         end
         child[i] = player  
@@ -112,14 +115,10 @@ class UserTeamsController < ApplicationController
       point = 1 + rand(parent1.size-2)
       new_parent = parent1[0...point]+parent2[point...(parent1.size)]
       price = new_parent.map {|p| p[:price]}.reduce(0, :+)
-      puts "price --->"
-      puts price
-      while new_parent.uniq.length != new_parent.length and price > max_price do
+      while new_parent.uniq.length != new_parent.length and price > max_price  and rand() >= rate do
         point = 1 + rand(parent1.size-2)
         new_parent = parent1[0...point]+parent2[point...(parent1.size)]
         price = new_parent.map {|p| p[:price]}.reduce(0, :+)
-        puts "iiin price"
-        puts price
       end
       return new_parent
     end
@@ -152,26 +151,22 @@ class UserTeamsController < ApplicationController
             else
               player = all_players[:pivots][rand(0..all_players[:pivots].count-1)]
             end 
-            unless players.include?(player) and player[:price] + price < max_price
-              price += player[:price]
+            if !players.include?(player) and price + player[:price] <= max_price
               players[i] = player
               i += 1
-            else
-              i -= 1
-              players.pop
+              price += player[:price]
             end
           break if players.size >= num_players
         end
-
         {:players=>players}
       end
-      population.each{|c| c[:fitness] = onemax(c[:players])}
+      population.each{|c| c[:fitness] = onemax(c[:players], max_price)}
       best = population.sort{|x,y| y[:fitness] <=> x[:fitness]}.first
 
       max_gens.times do |gen|
         selected = Array.new(pop_size){|i| tournament(population)}
         children = reproduce(selected, pop_size, p_crossover, p_mutation, all_players, max_price)
-        children.each{|c| c[:fitness] = onemax(c[:players])}
+        children.each{|c| c[:fitness] = onemax(c[:players], max_price)}
         children.sort!{|x,y| y[:fitness] <=> x[:fitness]}        
         best = children.first if children.first[:fitness] >= best[:fitness]
         population = children

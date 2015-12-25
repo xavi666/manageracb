@@ -1,0 +1,7 @@
+LOG:  database system was shut down at 2015-12-24 01:06:38 CET
+FATAL:  the database system is starting up
+FATAL:  the database system is starting up
+LOG:  autovacuum launcher started
+LOG:  database system is ready to accept connections
+ERROR:  column "price" does not exist at character 12
+STATEMENT:  SELECT MIN(price) AS min_id FROM "players"  WHERE "players"."active" = 't'
